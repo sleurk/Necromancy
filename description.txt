@@ -1,0 +1,19 @@
+Necromancy adds a new weapon class to the game!
+Instead of harnessing the power of mana, Necromancers utilize the energy of life force.
+A Necromancer can act as a tank, a damage-dealer, or a support, depending on your equipment.
+New weapons deal necrotic damage, and they are split up into several types, based on the original 5 classes:
+
+Necrotic melee weapons have much a more limited range than your average melee weapons that shoot projectiles everywhere, but steal life from hit enemies.
+Necrotic ranged weapons require no ammo and instead cost life to use, but will give the life back exactly if you hit your targets.
+Necrotic magic weapons cost life with no way of getting it back directly, but are also very powerful and can deal massive damage.
+Necrotic summon weapons cost a portion of your max life for each summon, but otherwise have no limit to the number of minions you have.
+Necrotic throwing weapons cost no life to shoot, but you can spend life to "reload" by right clicking.
+
+This mod also features integration with Thorium, including extra equipment from strange plating, the Lich, and the Ragnarök, as well as necrotic radiant and symphonic weapons!
+Necrotic radiant weapons cost a portion of your max life for each summon, but otherwise have no limit to the number of minions you have.
+Necrotic summon weapons cost a portion of your max life for each summon, but otherwise have no limit to the number of minions you have.
+
+Because most bonuses to necrotic damage are not specific to a specific type, you can choose whichever weapons you want to use at any time, but there are also some bonuses that allow you to specialize into a subclass.
+
+Every part of this mod is open-source, so if you're making your own mod and are wondering how to go about making a weapon class, or otherwise want to see how something in here is made, feel free to take a look!
+You can use tModReader to unpack the .tmod file. Google can help you if you don't know what that means.

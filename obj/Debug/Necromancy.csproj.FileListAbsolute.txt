@@ -1,0 +1,7 @@
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\Debug\Necromancy.csprojResolveAssemblyReference.cache
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\Debug\ClassLibrary.dll.config
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\Debug\ClassLibrary.dll
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\Debug\ClassLibrary.pdb
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\Debug\Terraria.exe
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\Debug\ClassLibrary.dll
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\Debug\ClassLibrary.pdb
