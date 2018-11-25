@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -63,10 +65,12 @@ namespace Necromancy.NPCs
 		}
 
 		public override bool CanTownNPCSpawn(int numTownNPCs, int money)
-		{
+        {
+            // Spawns after pirates have been defeated
             return NPC.downedPirates;
 		}
-
+        
+        // Valid house is made out of mostly Platinum/Gold bricks
 		public override bool CheckConditions(int left, int right, int top, int bottom)
 		{
             int score = 0;
@@ -75,13 +79,11 @@ namespace Necromancy.NPCs
                 int type = Main.tile[x, top - 1].type;
                 if (type != TileID.GoldBrick && type != TileID.PlatinumBrick)
                 {
-                    // Main.NewText("Missing tile at (" + x + ", " + top + ")");
                     score--;
                 }
                 type = Main.tile[x, bottom + 1].type;
                 if (type != TileID.GoldBrick && type != TileID.PlatinumBrick)
                 {
-                    // Main.NewText("Missing tile at (" + x + ", " + bottom + ")");
                     score--;
                 }
             }
@@ -91,14 +93,12 @@ namespace Necromancy.NPCs
                 int type = Main.tile[left - 1, y].type;
                 if (type != TileID.GoldBrick && type != TileID.PlatinumBrick)
                 {
-                    // Main.NewText("Missing tile at (" + left + ", " + y + ")");
                     score--;
                 }
                 type = Main.tile[right + 1, y].type;
                 if (type != TileID.GoldBrick && type != TileID.PlatinumBrick)
                 {
                     score--;
-                    // Main.NewText("Missing tile at (" + right + ", " + y + ")");
                 }
             }
 
@@ -108,28 +108,24 @@ namespace Necromancy.NPCs
 				{
 					if (Main.tile[x, y].wall != WallID.GoldBrick && Main.tile[x,y].wall != WallID.PlatinumBrick)
 					{
-                        // Main.NewText("Missing wall at (" + x + ", " + y + ")");
                         score--;
 					}
 				}
 			}
-            // Main.NewText(score + "(" + (score > -10) + ")");
 			return score > -10;
-		}
+        }
 
-		public override string TownNPCName()
+        public override string TownNPCName()
 		{
-			switch (WorldGen.genRand.Next(5))
+			switch (WorldGen.genRand.Next(4))
 			{
-				case 0:
-					return "Freddie";
+				default:
+					return "Ryan";
                 case 1:
                     return "Nicolas";
                 case 2:
-                    return "Jonathan";
+                    return "Freddie";
                 case 3:
-                    return "Brian";
-                default:
 					return "Freddie";
 			}
 		}
@@ -154,9 +150,9 @@ namespace Necromancy.NPCs
 		}
 
 		public override void SetChatButtons(ref string button, ref string button2)
-		{
-			button = Lang.inter[28].Value;
-		}
+        {
+            button = Language.GetTextValue("LegacyInterface.28");
+        }
 
 		public override void OnChatButtonClicked(bool firstButton, ref bool shop)
 		{
@@ -167,9 +163,182 @@ namespace Necromancy.NPCs
 		}
 
 		public override void SetupShop(Chest shop, ref int nextSlot)
-		{
-			shop.item[nextSlot].SetDefaults(mod.ItemType("GoldenLute"));
-			nextSlot++;
+        {
+            // Summon weapons aren't implemented yet because I still haven't fully figured them out
+            switch (GetZone())
+            {
+                case 6:
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("StaticFlail"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("ArcBow"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("PylonHarmonizer"));
+                        nextSlot++;
+                        /*
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("StormCaller"));
+                        nextSlot++;
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("BoltAxe"));
+                        nextSlot++;
+                        /*
+                        if (ModLoader.GetMod("ThoriumMod") != null)
+                        {
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Thunderbolt"));
+                            nextSlot++;
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("ElectricGuitar"));
+                            nextSlot++;
+                        }
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("LightningShock"));
+                        nextSlot++;
+                        break;
+                    }
+                case 5:
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("AcidDisc"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("ToxicCannon"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("SlimeCrystal"));
+                        nextSlot++;
+                        /*
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("GreenSwarm"));
+                        nextSlot++;
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("GunkCapsule"));
+                        nextSlot++;
+                        /*
+                        if (ModLoader.GetMod("ThoriumMod") != null)
+                        {
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Ooze"));
+                            nextSlot++;
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Goong"));
+                            nextSlot++;
+                        }
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("GooRod"));
+                        nextSlot++;
+                        break;
+                    }
+                case 4:
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("IceWhip"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("FrozenRailgun"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("GlacialTome"));
+                        nextSlot++;
+                        /*
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("ArcticTablet"));
+                        nextSlot++;
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("Frostbite"));
+                        nextSlot++;
+                        /*
+                        if (ModLoader.GetMod("ThoriumMod") != null)
+                        {
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("SnowShock"));
+                            nextSlot++;
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("ChillingHarmonica"));
+                            nextSlot++;
+                        }
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("CryonicJavelin"));
+                        shop.item[nextSlot].value = Item.buyPrice(1);
+                        nextSlot++;
+                        break;
+                    }
+                case 3:
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("Magmatica"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("InfernalBlaster"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("VolcanicEruption"));
+                        nextSlot++;
+                        /*
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("Firewall"));
+                        nextSlot++;
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("SearedDagger"));
+                        nextSlot++;
+                        /*
+                        if (ModLoader.GetMod("ThoriumMod") != null)
+                        {
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("MeteorEye"));
+                            nextSlot++;
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Martin"));
+                            nextSlot++;
+                        }
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("DevilTrident"));
+                        nextSlot++;
+                        break;
+                    }
+                case 2:
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("LivingBlade"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("Chloroflamethrower"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("FungalGrasp"));
+                        nextSlot++;
+                        /*
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("SporeStaff"));
+                        nextSlot++;
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("JungleThorn"));
+                        nextSlot++;
+                        /*
+                        if (ModLoader.GetMod("ThoriumMod") != null)
+                        {
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Bioluminescence"));
+                            nextSlot++;
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("VerdantViola"));
+                            nextSlot++;
+                        }
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("GaiaGatlingGun"));
+                        nextSlot++;
+                        break;
+                    }
+                case 1:
+                    {
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("SanguineLongsword"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("Blooderbuss"));
+                        nextSlot++;
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("Cruor"));
+                        nextSlot++;
+                        /*
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("?"));
+                        nextSlot++;
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("RedStar"));
+                        nextSlot++;
+                        /*
+                        if (ModLoader.GetMod("ThoriumMod") != null)
+                        {
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Plasm"));
+                            nextSlot++;
+                            shop.item[nextSlot].SetDefaults(mod.ItemType("Hemoharp"));
+                            nextSlot++;
+                        }
+                        */
+                        shop.item[nextSlot].SetDefaults(mod.ItemType("CrimsonFamiliar"));
+                        nextSlot++;
+                        break;
+                    }
+            }
+            
+            // Adds Golden Lute to the next open row if player is wearing full Necrodancer armor
+            if (ModLoader.GetMod("ThoriumMod") != null && Main.LocalPlayer.GetModPlayer<NecromancyPlayer>().necrodancer)
+            {
+                nextSlot = Math.Min(shop.item.Length - 1, (nextSlot + 9) - (nextSlot + 9) % 10);
+                shop.item[nextSlot].SetDefaults(mod.ItemType("GoldenLute"));
+                nextSlot++;
+            }
 		}
 
 		public override void TownNPCAttackStrength(ref int damage, ref float knockback)
@@ -195,5 +364,51 @@ namespace Necromancy.NPCs
 			multiplier = 12f;
 			randomOffset = 2f;
 		}
+
+        // Different items depending on what biome he is in; minimum boss requirements for each
+        public int GetZone()
+        {
+            if (NPC.downedGolemBoss && TempleWalls())
+            {
+                return 6;
+            }
+            else if (NPC.downedPlantBoss && Main.dungeonTiles >= 100)
+            {
+                return 5;
+            }
+            else if (NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && Main.LocalPlayer.ZoneSnow)
+            {
+                return 4;
+            }
+            else if (NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && Main.LocalPlayer.ZoneUnderworldHeight)
+            {
+                return 3;
+            }
+            else if (NPC.downedMechBossAny && Main.LocalPlayer.ZoneJungle)
+            {
+                return 2;
+            }
+            else if (Main.LocalPlayer.ZoneDirtLayerHeight)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        // if he is close to the temple
+        private bool TempleWalls()
+        {
+            Player player = Main.LocalPlayer;
+            for (int i = -20; i <= 20; i++)
+            {
+                for (int j = -20; j <= 20; j++)
+                {
+                    int x = (int)player.Center.X / 16 + i;
+                    int y = (int)player.Center.Y / 16 + j;
+                    if (x >= 0 && y >= 0 && Main.tile[x, y].wall == WallID.LihzahrdBrickUnsafe) return true;
+                }
+            }
+            return false;
+        }
     }
 }

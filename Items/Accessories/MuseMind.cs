@@ -18,20 +18,20 @@ namespace Necromancy.Items.Accessories
 		{
 			item.width = 36;
 			item.height = 40;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 6;
 			item.accessory = true;
 		}
          
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<NecromancyPlayer>(mod).symphAcc = true;
-            player.GetModPlayer<NecromancyPlayer>(mod).empowermentMaxTime = 300;
+            player.GetModPlayer<NecromancyPlayer>(mod).empowermentMaxTime = 300; // 5 seconds
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
             recipe.AddIngredient(ItemID.SoulofMight);
             recipe.AddIngredient(ItemID.SoulofSight);
             recipe.AddIngredient(ItemID.SoulofFright);

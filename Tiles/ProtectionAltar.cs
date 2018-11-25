@@ -14,7 +14,6 @@ namespace Necromancy.Tiles
         public override void SetDefaults()
         {
             base.SetDefaults();
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TEProtectionAltar>().Hook_AfterPlacement, -1, 0, false);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Protection Altar");
@@ -28,12 +27,14 @@ namespace Necromancy.Tiles
             Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType<Items.Placeable.ProtectionAltar>());
             int cornerX = i - (frameX / 18) + 1;
             int cornerY = j - (frameY / 18) + 1;
-            mod.GetTileEntity<TEProtectionAltar>().Kill(cornerX, cornerY);
         }
 
-        public override TEAltar GetNewTE()
+        public override bool CreateRitual(int chalk, int i, int j)
         {
-            return new TEProtectionAltar();
+            Vector2 pos = GetProjectilePosition(i, j);
+            Projectile projectile = Projectile.NewProjectileDirect(pos, Vector2.Zero, mod.ProjectileType("Protection" + chalkName[chalk]), 0, 0f, Main.myPlayer);
+            Main.PlaySound(SoundID.Item46, pos);
+            return true;
         }
     }
 }

@@ -8,6 +8,9 @@ namespace Necromancy.Tiles
 {
 	public class BloodAlchemyStation : ModTile
 	{
+        // alchemy station but with a greater discount
+        // using this discount also uses health per craft
+        // also opens extra recipes
 		public override void SetDefaults()
 		{
 			Main.tileFrameImportant[Type] = true;

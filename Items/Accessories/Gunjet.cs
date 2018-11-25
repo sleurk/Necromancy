@@ -24,8 +24,8 @@ namespace Necromancy.Items.Accessories
 		{
             item.width = 26;
 			item.height = 50;
-			item.value = Item.sellPrice(0, 8, 0, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 4);
+            item.rare = 6;
 			item.accessory = true;
             shootTimer = 0;
         }
@@ -38,10 +38,12 @@ namespace Necromancy.Items.Accessories
             {
                 if (shootTimer <= 0)
                 {
+                    // Shoots a projectile down every 4 frames of flight
                     shootTimer = 4;
                     Main.PlaySound(SoundID.Item11, player.Center);
                     Vector2 vel = new Vector2(0, 32f).RotatedByRandom(MathHelper.ToRadians(3));
                     Projectile proj = Projectile.NewProjectileDirect(player.Center + new Vector2(-12f * player.direction, 8f), vel, mod.ProjectileType("GunjetShot"), 50, 0f, player.whoAmI);
+                    // If this projectile hits, it adds 4 frames to the player's flight time - can be used to fly forever with consistent hits
                 }
                 else
                 {

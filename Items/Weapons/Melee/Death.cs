@@ -1,12 +1,15 @@
 using Microsoft.Xna.Framework;
+using Necromancy.Projectiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Necromancy.Items.Weapons.Melee
 {
-	public class Death : ModItem
+	public class Death : SwipeWeapon
 	{
+        // this is a child of SwipeWeapon.cs, so the important code is there
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Death");
@@ -14,35 +17,26 @@ namespace Necromancy.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.magic = true;
-            item.damage = 101;
-            item.crit = 4;
+            base.SetDefaults();
+            item.damage = 250;
             item.width = 68;
 			item.height = 64;
-            item.useAnimation = 8;
-            item.useTime = 8;
-            item.useStyle = 5;
-            item.noUseGraphic = true;
-            item.channel = true;
-            item.noMelee = true;
             item.knockBack = 4f;
-            item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 10;
-			item.autoReuse = true;
+            item.value = Item.sellPrice(0, 12, 75);
+			item.rare = 10; // color changed manually in ModifyTooltips
             item.shoot = mod.ProjectileType("DeathSwipe");
             item.shootSpeed = 32f;
-            item.prefix = 0;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).melee = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 8;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).thoriumRarity = true;
         }
-        
+
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            int p = Projectile.NewProjectile(position.X, position.Y, speedX, speedY, mod.ProjectileType("DeathSwipe"), damage, knockBack, player.whoAmI);
-            Main.projectile[p].scale = 1f;
-            Main.projectile[p].GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            // shoot scythe projectile
+            base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+            
+            Projectile proj = Projectile.NewProjectileDirect(player.Center, new Vector2(speedX, speedY) * 0.3f, mod.ProjectileType("DeathSap"), damage / 4, 0f, player.whoAmI);
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = item;
             return false;
         }
 

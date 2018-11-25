@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class LifeCrystalShard : ModProjectile
 	{
+        // basic knife-like projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Life Crystal Shard");

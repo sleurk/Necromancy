@@ -24,8 +24,9 @@ namespace Necromancy.Items
             item.useTime = refItem.useTime;
             item.useAnimation = refItem.useAnimation;
             item.UseSound = refItem.UseSound;
-			item.value = Item.sellPrice(0, 0, 2, 0);
-			item.rare = 4;
+			item.value = Item.sellPrice(0, 0, 2);
+            item.buffType = mod.BuffType<Buffs.Destabilized>();
+            item.rare = 4;
             item.consumable = true;
         }
 
@@ -42,7 +43,7 @@ namespace Necromancy.Items
 
         public override bool UseItem(Player player)
         {
-            Necromancy.DrainLife(player, 50);
+            Necromancy.BroadcastDrainLife(player, 50);
             player.AddBuff(mod.BuffType<Buffs.Destabilized>(), 21600); // 6 minutes
             return true;
         }

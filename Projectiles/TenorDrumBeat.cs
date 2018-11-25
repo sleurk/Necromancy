@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,6 +9,7 @@ namespace Necromancy.Projectiles
 {
 	public class TenorDrumBeat : ModProjectile
 	{
+        // basic projectile, shot in bursts in a + shape
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tenor Drum Beat");
@@ -30,7 +32,7 @@ namespace Necromancy.Projectiles
 			aiType = ProjectileID.Bullet;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentDefense>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.Defense;
         }
 
         public override void AI()

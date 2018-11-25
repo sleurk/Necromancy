@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Necromancy.Empowerments;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,7 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class WhistleRay : ModProjectile
 	{
-
+        // basic short laser, no piercing
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Whistle Ray");
@@ -19,14 +20,13 @@ namespace Necromancy.Projectiles
             projectile.width = 4;
 			projectile.height = 4;
             projectile.friendly = true;
-            projectile.penetrate = 1;
+            projectile.penetrate = -1;
 			projectile.timeLeft = 20;
             projectile.extraUpdates = 5;
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentMaxMana>();
-
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.ManaRegen;
         }
 
 		public override void AI()
@@ -50,6 +50,11 @@ namespace Necromancy.Projectiles
                     num3 = num452;
                 }
             }
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.immune[projectile.owner] = 2;
         }
     }
 }

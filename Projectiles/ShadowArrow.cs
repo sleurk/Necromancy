@@ -6,6 +6,7 @@ namespace Necromancy.Projectiles
 {
 	public class ShadowArrow : ModProjectile
 	{
+        // basic arrow projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Shadow Arrow");

@@ -20,14 +20,14 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 20;
 			item.height = 22;
-			item.value = 0;
+            item.value = 0;
 			item.rare = 10;
 			item.defense = 15;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += 0.4f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.4f;
             player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 8;
         }
 
@@ -42,11 +42,11 @@ namespace Necromancy.Items.Armor
             player.GetModPlayer<NecromancyPlayer>().wormholeSet = true;
             if (defenseMode)
             {
-                player.AddBuff(mod.BuffType<Buffs.WormholeDefense>(), 2);
+                player.AddBuff(mod.BuffType<Buffs.WormholeDefense>(), 2, false);
             }
             else
             {
-                player.AddBuff(mod.BuffType<Buffs.WormholeRecover>(), 2);
+                player.AddBuff(mod.BuffType<Buffs.WormholeRecover>(), 2, false);
             }
 
             string button = Main.ReversedUpDownArmorSetBonuses ? "UP" : "DOWN";
@@ -57,7 +57,7 @@ namespace Necromancy.Items.Armor
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(null, "FragmentWormhole", 10);
+			recipe.AddIngredient(mod, "FragmentWormhole", 10);
             recipe.AddIngredient(ItemID.LunarBar, 8);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);

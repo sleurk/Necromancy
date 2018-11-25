@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class AmberBullet : ModProjectile
 	{
+        // basic bullet projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Amber Bullet");

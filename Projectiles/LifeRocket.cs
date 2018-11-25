@@ -7,6 +7,8 @@ namespace Necromancy.Projectiles
 {
     public class LifeRocket : ModProjectile
     {
+        // rocket projectile, shot in bursts
+        // explodes on contact
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Life Rocket");
@@ -16,7 +18,8 @@ namespace Necromancy.Projectiles
         {
             projectile.magic = true;
             projectile.CloneDefaults(ProjectileID.RocketI);
-			projectile.width = 14;
+            projectile.ranged = false;
+            projectile.width = 14;
 			projectile.height = 22;
 			projectile.aiStyle = 34;
             projectile.friendly = true;
@@ -38,7 +41,7 @@ namespace Necromancy.Projectiles
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            // Vanilla explisions do less damage to Eater of Worlds in expert mode, so we will too.
+            // Vanilla explosions do less damage to Eater of Worlds in expert mode, so we will too.
             if (Main.expertMode)
             {
                 if (target.type >= NPCID.EaterofWorldsHead && target.type <= NPCID.EaterofWorldsTail)
@@ -81,22 +84,11 @@ namespace Necromancy.Projectiles
                 Main.PlaySound(SoundID.Item15, projectile.Center);
                 for (int i = 0; i < 20; i++)
                 {
-                    int dustIndex = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 57, 0f, 0f, 100, default(Color), 2f);
-                    Main.dust[dustIndex].velocity *= 1.4f;
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    int dustIndex = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 64, 0f, 0f, 100, default(Color), 3f);
-                    Main.dust[dustIndex].noGravity = true;
-                    Main.dust[dustIndex].velocity *= 5f;
-                    dustIndex = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 64, 0f, 0f, 100, default(Color), 2f);
-                    Main.dust[dustIndex].velocity *= 3f;
-
-                    dustIndex = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 61, 0f, 0f, 100, default(Color), 3f);
-                    Main.dust[dustIndex].noGravity = true;
-                    Main.dust[dustIndex].velocity *= 5f;
-                    dustIndex = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 61, 0f, 0f, 100, default(Color), 2f);
-                    Main.dust[dustIndex].velocity *= 3f;
+                    Dust d = Dust.NewDustDirect(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, 57, 0f, 0f, 100, default(Color), 2f);
+                    d.velocity *= 1.4f;
+                    d.noGravity = true;
+                    d = Dust.NewDustPerfect(projectile.Center, 6, Main.rand.NextVector2Circular(6f, 6f));
+                    d.noGravity = true;
                 }
                 for (int g = 0; g < 3; g++)
                 {

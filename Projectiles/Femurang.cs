@@ -7,7 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class Femurang : ModProjectile
 	{
-        private bool bounce;
+        // basic boomerang projectile, can bounce
 
         public override void SetStaticDefaults()
         {
@@ -24,17 +24,17 @@ namespace Necromancy.Projectiles
 			projectile.timeLeft = 120;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 1;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 2;
         }
 
 		public override void AI()
 		{
             if (projectile.penetrate < 4)
             {
-                bounce = true;
+                projectile.ai[0] = 1f;
             }
             projectile.rotation += projectile.direction;
-            if (bounce)
+            if (projectile.ai[0] == 1f)
             {
                 projectile.penetrate = -1;
                 Vector2 toPlayer = Main.player[projectile.owner].Center - projectile.Center;
@@ -49,7 +49,7 @@ namespace Necromancy.Projectiles
             {
                 if (projectile.timeLeft < 105)
                 {
-                    bounce = true;
+                    projectile.ai[0] = 1f;
                 }
             }
             Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 53, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f).noGravity = true;
@@ -58,7 +58,10 @@ namespace Necromancy.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            bounce = true;
+            if ((oldVelocity - projectile.velocity).Length() > 12f)
+            {
+                projectile.ai[0] = 1f;
+            }
             if (projectile.velocity.X != oldVelocity.X)
             {
                 projectile.velocity.X = -oldVelocity.X;

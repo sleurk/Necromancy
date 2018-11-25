@@ -8,6 +8,22 @@ namespace Necromancy.Projectiles
 {
 	public class WormholeScytheSwipe : ScytheSwipe
     {
+        // arkhalis-type projectile, see ScytheSwipe for actual behavior
+
+        protected override int DustType
+        {
+            get { return 27; }
+        }
+        protected override Color Color
+        {
+            get { return new Color(0.5F, 0.36F, 1F); }
+        }
+
+        protected override int FrameLength
+        {
+            get { return 2; }
+        }
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Wormhole Reaper Swipe");
@@ -17,13 +33,10 @@ namespace Necromancy.Projectiles
         public override void SetDefaults()
         {
             base.SetDefaults();
+            projectile.alpha = 50;
             projectile.width = 120;
             projectile.height = 138;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 5;
-            dustType = 60;
-            r = 0.8f;
-            g = 0.1f;
-            b = 0.2f;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 7;
         }
     }
 }

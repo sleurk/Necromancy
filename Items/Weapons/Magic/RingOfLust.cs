@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 15;
-            item.crit = 4;
             item.width = 32;
 			item.height = 32;
 			item.useTime = 10;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.noUseGraphic = true;
 			item.noMelee = true;
 			item.knockBack = 5;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+            item.value = Item.sellPrice(0, 0, 80);
             item.rare = 1;
             item.UseSound = SoundID.Item8;
 			item.autoReuse = true;
@@ -35,17 +35,16 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 6;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 6;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            // start position is somewhere in the aim direction 500px away from the player, with 30 degree spread
             position = player.Center + new Vector2(speedX, speedY).SafeNormalize(Vector2.UnitX * player.direction).RotatedByRandom(MathHelper.ToRadians(30)) * 500f;
-            Vector2 vel = player.Center - position;
-            vel.Normalize();
-            vel *= item.shootSpeed;
+            Vector2 vel = (player.Center - position).SafeNormalize(Vector2.Zero) * new Vector2(speedX, speedY).Length(); // match calculated speed of projectile
             Projectile proj = Projectile.NewProjectileDirect(position, vel, type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>().shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = item;
             return false;
         }
 

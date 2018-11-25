@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,7 +8,7 @@ namespace Necromancy.Projectiles.Minions
 {
 	public class SummonLightning : ModProjectile
 	{
-
+        // lightning bolt shot by small follower lightning cloud
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lightning");
@@ -23,49 +24,38 @@ namespace Necromancy.Projectiles.Minions
 			projectile.timeLeft = 300;
             projectile.hide = true;
             projectile.extraUpdates = 100;
+            ProjectileID.Sets.Homing[projectile.type] = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).summon = true;
 
         }
 
 		public override void AI()
-		{
-            // code from vanilla
-            projectile.localAI[0] += 1f;
-            if (projectile.localAI[0] > 9f)
+        {
+            for (int i = 0; i < 4; i++)
             {
-                int num3;
-                for (int num452 = 0; num452 < 4; num452 = num3 + 1)
-                {
-                    Vector2 vector36 = projectile.position;
-                    vector36 -= projectile.velocity * ((float)num452 * 0.25f);
-                    projectile.alpha = 255;
-                    int num453 = Dust.NewDust(vector36, 1, 1, 57);
-                    Main.dust[num453].position = vector36;
-                    Main.dust[num453].noGravity = true;
-                    Main.dust[num453].scale = (float)Main.rand.Next(70, 110) * 0.013f;
-                    Dust dust3 = Main.dust[num453];
-                    dust3.velocity *= 0.2f;
-                    num3 = num452;
-                }
+                Dust d = Dust.QuickDust(projectile.Center + projectile.velocity * i / 4f, new Color(1f, 1f, 0f));
+                d.noGravity = true;
+                d.scale = Main.rand.NextFloat();
+                d.velocity *= 0.2f;
             }
         }
 
         public override bool? CanHitNPC(NPC target)
         {
-            if (target.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit) return false;
+            if (target.GetGlobalNPC<NecromancyNPC>().lightningHit) return false;
             return base.CanHitNPC(target);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (target.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit)
+            if (target.GetGlobalNPC<NecromancyNPC>().lightningHit)
             {
                 projectile.penetrate++;
             }
             else
             {
-                target.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit = true;
+                target.GetGlobalNPC<NecromancyNPC>().lightningHit = true;
                 if (projectile.ai[1] != 0)
                 {
                     for (int i = 0; i < projectile.ai[0]; i++)
@@ -77,8 +67,15 @@ namespace Necromancy.Projectiles.Minions
                             toNewTarget.Normalize();
                             toNewTarget *= projectile.velocity.Length();
 
-                            Projectile bolt = Projectile.NewProjectileDirect(projectile.position, toNewTarget, projectile.type, damage, projectile.knockBack, projectile.owner, projectile.ai[0] - 1, projectile.ai[1] - 1);
-                            newTarget.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit = true;
+                            Projectile bolt = Projectile.NewProjectileDirect(projectile.Center, toNewTarget, projectile.type, damage, projectile.knockBack, projectile.owner, projectile.ai[0] - 1, projectile.ai[1] - 1);
+                            newTarget.GetGlobalNPC<NecromancyNPC>().lightningHit = true;
+                            for (int j = 0; j < 4; j++)
+                            {
+                                Dust d = Dust.QuickDust(projectile.Center + projectile.velocity * j / 4f, new Color(1f, 1f, 0f));
+                                d.noGravity = true;
+                                d.scale = Main.rand.NextFloat();
+                                d.velocity *= 0.2f;
+                            }
                         }
                     }
                     projectile.Kill();

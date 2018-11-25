@@ -7,8 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class SubBub : ModProjectile
 	{
-        private bool bounce = false;
-        private int bounceTimer = 0;
+        // projectile that stays and orbits the player at a long range until it hits something
 
         public override void SetStaticDefaults()
         {
@@ -21,6 +20,7 @@ namespace Necromancy.Projectiles
             projectile.width = 20;
 			projectile.height = 20;
 			projectile.friendly = true;
+            projectile.tileCollide = false;
 			projectile.penetrate = 2;
 			projectile.timeLeft = 1200;
             projectile.extraUpdates = 1;
@@ -31,12 +31,12 @@ namespace Necromancy.Projectiles
 
 		public override void AI()
 		{
-            if (bounce)
+            if (projectile.ai[0] == 1f)
             {
                 Vector2 toPlayer = Main.player[projectile.owner].Center - projectile.Center;
                 if (toPlayer.Length() < 32f)
                 {
-                    bounce = false;
+                    projectile.ai[0] = 0f;
                 }
                 projectile.velocity = projectile.velocity * 0.999f + toPlayer * 0.001f;
                 if (projectile.velocity.Length() > 16f)
@@ -47,11 +47,11 @@ namespace Necromancy.Projectiles
             }
             else
             {
-                bounceTimer++;
-                if (bounceTimer == 20)
+                projectile.ai[1]++;
+                if (projectile.ai[1] == 20)
                 {
-                    bounce = true;
-                    bounceTimer = 0;
+                    projectile.ai[0] = 1f;
+                    projectile.ai[1] = 0f;
                 }
             }
             if (Main.rand.NextBool()) Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 156, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f).scale = Main.rand.NextFloat(0.2f, 0.8f);

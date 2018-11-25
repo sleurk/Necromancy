@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class PrideRing : ModProjectile
 	{
+        // part of a small ring of spinning projectiles that also move
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Pride Ring");

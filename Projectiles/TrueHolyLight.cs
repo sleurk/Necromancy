@@ -8,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class TrueHolyLight : ModProjectile
 	{
+        // projectile that rains from above and below to mouse
+        // high damage against vampires
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("True Holy Light");

@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class IchorBlade : ModProjectile
 	{
+        // slow, spinning projectile that moves towards cursor
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Ichor Blade");
@@ -19,13 +20,13 @@ namespace Necromancy.Projectiles
             projectile.width = 40;
 			projectile.height = 40;
 			projectile.friendly = true;
-			projectile.penetrate = 1;
+			projectile.penetrate = 3;
 			projectile.timeLeft = 600;
             projectile.netImportant = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).ichor = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 4;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 3;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -48,7 +49,7 @@ namespace Necromancy.Projectiles
             {
                 Vector2 toMouse = Main.MouseWorld - projectile.Center;
                 toMouse.Normalize();
-                projectile.velocity = toMouse * 1.2f;
+                projectile.velocity = toMouse * 1.5f;
             }
             projectile.rotation += 0.3f * projectile.ai[1];
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 246, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);

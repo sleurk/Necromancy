@@ -19,7 +19,7 @@ namespace Necromancy.Items
 			item.width = 24;
 			item.height = 24;
 			item.maxStack = 999;
-			item.value = Item.sellPrice(0, 0, 20, 0);
+			item.value = Item.sellPrice(0, 0, 20);
 			item.rare = 9;
 			ItemID.Sets.ItemIconPulse[item.type] = true;
 			ItemID.Sets.ItemNoGravity[item.type] = true;
@@ -27,6 +27,7 @@ namespace Necromancy.Items
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
+            // manually draw item in world for correct lighting and such
             Texture2D texture = mod.GetTexture("Items/FragmentWormhole");
             Main.spriteBatch.Draw
             (

@@ -1,3 +1,4 @@
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -18,8 +19,7 @@ namespace Necromancy.Buffs
         {
             if (!npc.friendly)
             {
-                Dust.NewDustDirect(npc.position, npc.width, npc.height, 60).noGravity = true;
-                npc.GetGlobalNPC<NPCs.NecromancyNPC>().agitated = 2;
+                npc.GetGlobalNPC<NecromancyNPC>().agitated = 2;
             }
         }
     }

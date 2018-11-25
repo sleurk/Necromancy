@@ -1,3 +1,4 @@
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -14,14 +15,16 @@ namespace Necromancy.Buffs
             Main.debuff[Type] = true;
         }
 
+        // players get regen buff
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetModPlayer<NecromancyPlayer>().regenModifier += 4;
         }
 
+        // enemies get increased damage debuff
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<NPCs.NecromancyNPC>().extraDmg += 0.1f;
+            npc.GetGlobalNPC<NecromancyNPC>().extraDmg += 0.1f;
         }
     }
 }

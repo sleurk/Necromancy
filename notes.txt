@@ -1,0 +1,52 @@
+alchemy ingredients
+
+- 8 herbs/seeds
+- misc seeds
+- gems/bars
+- mushroom (normal/glowing/corrupted)
+- dye materials
+- pixie dust/unicorn horn
+- crystal shard
+- honey
+- water
+- holy water/unholy water
+- butterfly dust
+- black fairy dust
+- gel/pink gel
+- bone
+- fire/ice feather
+- bee wax
+- water candle
+- jungle spores
+- gold dust
+- sturdy fossil
+- fish
+- lens
+- cobweb
+- coral
+- feather
+- honey/crispy honey block
+- fallen star
+- marshmallow
+- ichor/cursed flame
+- philosopher's stone (not consumed)
+- vial of venom
+- explosive powder
+- chlorophyte ore
+- hellstone ore
+- frost core
+- lead
+- tin
+- iron
+- gold
+- copper
+- silver
+- platinum
+- lunar fragments
+- souls
+
+- salt
+- sulfur
+- quicksilver
+- bismuth
+- niter

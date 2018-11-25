@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Necromancy.Projectiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,14 +17,13 @@ namespace Necromancy.Items.Weapons.Melee
         {
             item.magic = true;
             item.damage = 25;
-            item.crit = 4;
             item.width = 38;
             item.height = 40;
-            item.useTime = 14;
-            item.useAnimation = 14;
+            item.useTime = 12;
+            item.useAnimation = 12;
             item.useStyle = 1;
             item.knockBack = 3;
-            item.value = 10000;
+            item.value = Item.sellPrice(0, 2);
             item.rare = 4;
             item.UseSound = SoundID.Item1;
             item.prefix = 0;
@@ -38,16 +38,19 @@ namespace Necromancy.Items.Weapons.Melee
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI, Main.rand.NextFloat(0f, 6.28f), player.direction);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
-            proj.Center = player.Center;
+            // swings sword and also shoots a slow projectile
+
+            Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI, Main.rand.NextFloat(0f, MathHelper.TwoPi), player.direction);
+            // ai0 = starting rotation
+            // ai1 = rotation direction
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "CursedBar", 8);
+            recipe.AddIngredient(mod, "CursedBar", 8);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

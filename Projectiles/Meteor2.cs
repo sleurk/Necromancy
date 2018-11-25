@@ -7,8 +7,9 @@ namespace Necromancy.Projectiles
 {
     public class Meteor2 : ModProjectile
     {
-        private bool exploded;
-        private int dustType;
+        // meteor from ritual level 2
+        // explodes on contact
+        private readonly int dustType = 27;
 
         public override void SetStaticDefaults()
         {
@@ -25,8 +26,6 @@ namespace Necromancy.Projectiles
             projectile.timeLeft = 300;
             projectile.aiStyle = 1;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
-            exploded = false;
-            dustType = 27;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -51,23 +50,23 @@ namespace Necromancy.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
             return false;
         }
 
         private void Explode()
         {
-            exploded = true;
+            projectile.ai[0] = 1f;
             Vector2 center = projectile.Center;
             projectile.width = 100;
             projectile.height = 100;

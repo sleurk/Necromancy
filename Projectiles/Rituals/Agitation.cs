@@ -14,12 +14,17 @@ namespace Necromancy.Projectiles.Rituals
             DisplayName.SetDefault("Agitation");
         }
 
+        protected override int TileType
+        {
+            get { return mod.TileType("AgitationAltar"); }
+        }
+
         public override void Tick()
         {
             foreach (Player player in Necromancy.NearbyAllies(projectile.Center, null, 600f))
             {
                 player.AddBuff(mod.BuffType<Buffs.Agitated>(), 2);
-                player.GetModPlayer<NecromancyPlayer>().agitation = power;
+                player.GetModPlayer<NecromancyPlayer>().agitation = (int)Power;
             }
             foreach (NPC npc in Necromancy.NearbyNPCs(projectile.Center, 600f))
             {

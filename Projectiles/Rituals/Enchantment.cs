@@ -1,14 +1,11 @@
+using Necromancy.Items;
 using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace Necromancy.Projectiles.Rituals
 {
 	public abstract class Enchantment : Ritual
-	{
+    {
         public Item targetItem;
         public Player targetPlayer;
 
@@ -17,13 +14,26 @@ namespace Necromancy.Projectiles.Rituals
             DisplayName.SetDefault("Enchantment");
         }
 
+        protected override int TileType
+        {
+            get { return mod.TileType("EnchantmentAltar"); }
+        }
+
         public override void Tick()
         {
-            targetPlayer = Main.player[targetItem.owner];
-            if (targetItem == null || targetPlayer == null) projectile.Kill();
-            targetPlayer.AddBuff(mod.BuffType<Buffs.Enchanted>(), 2);
-            targetPlayer.GetModPlayer<NecromancyPlayer>().buffedWeapon.Add(targetItem.type);
-            targetItem.GetGlobalItem<Items.NecromancyGlobalItem>().enchanted = Math.Max(targetItem.GetGlobalItem<Items.NecromancyGlobalItem>().enchanted, power);
+            if (targetItem == null)
+            {
+                targetItem = Main.item[(int)projectile.ai[0]];
+            }
+            if (targetPlayer == null && targetItem != null) targetPlayer = Main.player[targetItem.owner];
+            
+            if (targetItem == null) projectile.Kill();
+            else targetItem.GetGlobalItem<NecromancyGlobalItem>().enchanted = Math.Max(targetItem.GetGlobalItem<NecromancyGlobalItem>().enchanted, (int)Power);
+            if (targetPlayer != null)
+            {
+                targetPlayer.AddBuff(mod.BuffType<Buffs.Enchanted>(), 2);
+                targetPlayer.GetModPlayer<NecromancyPlayer>().buffedWeapon.Add(targetItem.type);
+            }
         }
     }
 }

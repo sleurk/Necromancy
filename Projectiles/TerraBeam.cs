@@ -10,6 +10,9 @@ namespace Necromancy.Projectiles
 {
     public class TerraBeam : ModProjectile
     {
+        // sustained laser, copied from examplemod
+        // increases in damage and life cost over time
+        // takes a while to charge
         private const int MAX_CHARGE = 120;
         private const float MOVE_DISTANCE = 48f;       //The distance charge particle from the player center
         private int shootTime = 0;
@@ -42,7 +45,6 @@ namespace Necromancy.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             float multiplier = 1 + ((Math.Min(shootTime, 600) - 120) / 600f);
-            Main.NewText(multiplier);
             damage = (int)(damage * multiplier);
         }
 
@@ -58,16 +60,12 @@ namespace Necromancy.Projectiles
             return false;
 
         }
-
-        /// <summary>
-        /// The core function of drawing a laser
-        /// </summary>
+        
         public void DrawLaser(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 unit, float step, int damage, float rotation = 0f, float scale = 1f, float maxDist = 2000f, Color color = default(Color), int transDist = 50)
         {
             Vector2 origin = start;
             float r = unit.ToRotation() + rotation;
-
-            #region Draw laser body
+            
             for (float i = transDist; i <= Distance; i += step)
             {
                 Color c = Color.White;
@@ -76,22 +74,14 @@ namespace Necromancy.Projectiles
                     new Rectangle(0, 26, 28, 26), i < transDist ? Color.Transparent : c, r,
                     new Vector2(28 / 2, 26 / 2), scale, 0, 0);
             }
-            #endregion
-
-            #region Draw laser tail
+            
             spriteBatch.Draw(texture, start + unit * (transDist - step) - Main.screenPosition,
                 new Rectangle(0, 0, 28, 26), Color.White, r, new Vector2(28 / 2, 26 / 2), scale, 0, 0);
-            #endregion
 
-            #region Draw laser head
             spriteBatch.Draw(texture, start + (Distance + step) * unit - Main.screenPosition,
                 new Rectangle(0, 52, 28, 26), Color.White, r, new Vector2(28 / 2, 26 / 2), scale, 0, 0);
-            #endregion
         }
 
-        /// <summary>
-        /// Change the way of collision check of the projectile
-        /// </summary>
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (Charge == MAX_CHARGE)
@@ -107,17 +97,11 @@ namespace Necromancy.Projectiles
             return false;
         }
 
-        /// <summary>
-        /// Change the behavior after hit a NPC
-        /// </summary>
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             target.immune[projectile.owner] = 5;
         }
 
-        /// <summary>
-        /// The AI of the projectile
-        /// </summary>
         public override void AI()
         {
             shootTime++;
@@ -126,7 +110,7 @@ namespace Necromancy.Projectiles
             {
                 if (drainTimer == 0)
                 {
-                    Necromancy.DrainLife(owner, 1);
+                    Necromancy.BroadcastDrainLife(owner, 1);
                     drainTimer = 20 - Math.Min(600, shootTime) / 30;
                 }
                 else
@@ -142,8 +126,7 @@ namespace Necromancy.Projectiles
             Vector2 mousePos = Main.MouseWorld;
             Player player = Main.player[projectile.owner];
 
-            #region Set projectile position
-            if (projectile.owner == Main.myPlayer) // Multiplayer support
+            if (projectile.owner == Main.myPlayer)
             {
                 Vector2 diff = mousePos - player.Center;
                 diff.Normalize();
@@ -160,10 +143,7 @@ namespace Necromancy.Projectiles
             player.itemAnimation = 2;
             player.itemRotation = (float)Math.Atan2(projectile.velocity.Y * dir,
                 projectile.velocity.X * dir);
-            #endregion
 
-            #region Charging process
-            // Kill the projectile if the player stops channeling
             if (!player.channel)
             {
                 projectile.Kill();
@@ -195,10 +175,7 @@ namespace Necromancy.Projectiles
                     dust.scale = Main.rand.Next(10, 20) * 0.05f;
                 }
             }
-            #endregion
-
-
-            #region Set laser tail position and dusts
+            
             if (Charge < MAX_CHARGE) return;
             Vector2 start = player.Center;
             Vector2 unit = projectile.velocity;
@@ -214,7 +191,6 @@ namespace Necromancy.Projectiles
             }
 
             Vector2 dustPos = player.Center + projectile.velocity * Distance;
-            //Imported dust code from source because I'm lazy
             for (int i = 0; i < 2; ++i)
             {
                 float num1 = projectile.velocity.ToRotation() + (Main.rand.Next(2) == 1 ? -1.0f : 1.0f) * 1.57f;
@@ -223,15 +199,12 @@ namespace Necromancy.Projectiles
                 Dust dust = Main.dust[Dust.NewDust(dustPos, 0, 0, 107, dustVel.X, dustVel.Y, 0, new Color(), 1f)];
                 dust.noGravity = true;
                 dust.scale = 2f;
-                // At this part, I was messing with the dusts going across the laser beam very fast, but only really works properly horizontally now
                 dust = Main.dust[Dust.NewDust(Main.player[projectile.owner].Center + unit * 5f, 0, 0, 107, unit.X, unit.Y, 0, new Color(), 1f)];
                 dust.fadeIn = 0f;
                 dust.noGravity = true;
                 dust.scale = 0.88f;
             }
-            #endregion
-
-            //Add lights
+            
             DelegateMethods.v3_1 = new Vector3(0f, 1f, 0f);
             Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * (Distance - MOVE_DISTANCE), 26, new Utils.PerLinePoint(DelegateMethods.CastLight));
         }

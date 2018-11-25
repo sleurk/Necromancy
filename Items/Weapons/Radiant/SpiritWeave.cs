@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Radiant
         {
             item.magic = true;
             item.damage = 43;
-            item.crit = 4;
             item.width = 40;
             item.height = 40;
             item.useTime = 20;
@@ -25,7 +25,7 @@ namespace Necromancy.Items.Weapons.Radiant
             Item.staff[item.type] = true;
             item.noMelee = true;
             item.knockBack = 5;
-            item.value = Item.sellPrice(0, 0, 80, 0);
+            item.value = Item.sellPrice(0, 1);
             item.rare = 3;
             item.UseSound = SoundID.Item20;
             item.autoReuse = true;
@@ -34,20 +34,20 @@ namespace Necromancy.Items.Weapons.Radiant
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 4;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 4;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 4;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 6;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
             recipe.AddIngredient(mod, "WebrootWand");
             recipe.AddIngredient(mod, "HeartbloomWand");
             recipe.AddIngredient(mod, "FrostthornWand");
@@ -60,7 +60,7 @@ namespace Necromancy.Items.Weapons.Radiant
             recipe.SetResult(this);
             recipe.AddRecipe();
 
-            recipe = new ModRecipe(mod);
+            recipe = new ThoriumRecipe(mod);
             recipe.AddIngredient(mod, "WebrootWand");
             recipe.AddIngredient(mod, "HeartbloomWand");
             recipe.AddIngredient(mod, "FrostthornWand");

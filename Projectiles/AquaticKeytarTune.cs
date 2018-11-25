@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,7 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class AquaticKeytarTune : ModProjectile
 	{
-        int dustType = 59;
+        // basic laser projectile, bounces
+        readonly int dustType = 59;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Aquatic Keytar Tune");
@@ -25,7 +27,7 @@ namespace Necromancy.Projectiles
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentMagicDamage>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.MagicDamage;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

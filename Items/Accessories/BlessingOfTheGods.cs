@@ -10,15 +10,15 @@ namespace Necromancy.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blessing of the Gods");
-            Tooltip.SetDefault("Radiant lifesteal increased by 10% of damage dealt");
+            Tooltip.SetDefault("Radiant lifesteal increased by 5% of damage dealt");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 36;
 			item.height = 40;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 6;
 			item.accessory = true;
 		}
 
@@ -29,7 +29,7 @@ namespace Necromancy.Items.Accessories
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
             recipe.AddIngredient(ItemID.SoulofMight);
             recipe.AddIngredient(ItemID.SoulofSight);
             recipe.AddIngredient(ItemID.SoulofFright);

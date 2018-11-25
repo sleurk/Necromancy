@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -5,8 +6,9 @@ using Terraria.ModLoader;
 
 namespace Necromancy.Items.Weapons.Melee
 {
-	public class WormholeReaper : ModItem
+	public class WormholeReaper : SwipeWeapon
 	{
+        // this is a child of SwipeWeapon.cs, so the important code is there
 
         public override void SetStaticDefaults()
         {
@@ -16,40 +18,38 @@ namespace Necromancy.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.magic = true;
+            base.SetDefaults();
             item.damage = 82;
-            item.crit = 4;
             item.width = 38;
 			item.height = 38;
-            item.useAnimation = 12;
-            item.useTime = 12;
-            item.useStyle = 5;
-            item.noUseGraphic = true;
-            item.channel = true;
-            item.noMelee = true;
             item.knockBack = 4f;
-            item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 10;
-			item.autoReuse = true;
+            item.value = Item.sellPrice(0, 10);
+            item.rare = 10;
             item.shoot = mod.ProjectileType("WormholeScytheSwipe");
             item.shootSpeed = 32f;
-            item.prefix = 0;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).melee = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 5;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 7;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            int p = Projectile.NewProjectile(position.X, position.Y, speedX, speedY, mod.ProjectileType("WormholeScytheSwipe"), damage, knockBack, player.whoAmI);
-            Main.projectile[p].scale = 1f;
+            // shoot scythe projectile
+            base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+
+            // shoot secondary projectile
+            foreach (Projectile p in Main.projectile)
+            {
+                // kill any existing secondary projectiles
+                if (p != null && p.active && p.owner == player.whoAmI && p.type == mod.ProjectileType("WormholeScytheShot")) p.Kill();
+            }
+            Projectile proj = Projectile.NewProjectileDirect(player.Center, new Vector2(speedX, speedY) * 0.3f, mod.ProjectileType("WormholeScytheShot"), damage / 4, 0f, player.whoAmI);
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "FragmentWormhole", 18);
+            recipe.AddIngredient(mod, "FragmentWormhole", 18);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -18,8 +18,8 @@ namespace Necromancy.Items.Accessories
 		{
 			item.width = 28;
 			item.height = 28;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 6;
 			item.accessory = true;
 		}
          

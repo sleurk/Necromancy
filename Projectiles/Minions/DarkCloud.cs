@@ -17,6 +17,7 @@ namespace Necromancy.Projectiles.Minions
             projectile.width = 16;
             projectile.height = 16;
             Main.projFrames[projectile.type] = 6;
+            ProjectileID.Sets.Homing[projectile.type] = true;
             projectile.penetrate = -1;
             projectile.timeLeft = 3600;
             projectile.hide = true;
@@ -60,13 +61,14 @@ namespace Necromancy.Projectiles.Minions
 
         public void Behavior()
         {
-            NPC npc = Necromancy.NearestNPC(projectile.Center, 200f);
+            NPC npc = Necromancy.NearestNPC(projectile.Center, 200f, false, false);
             Vector2 target = Main.player[projectile.owner].Center;
             if (npc != null && npc.active && !npc.friendly)
             {
                 target = npc.Center;
             }
 
+            // very basic homing
             Vector2 toTarget = target - projectile.Center;
             projectile.velocity = projectile.velocity * 0.95f + toTarget * 0.05f + Main.rand.NextVector2Circular(2f, 2f);
 

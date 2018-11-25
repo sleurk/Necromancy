@@ -31,14 +31,14 @@ namespace Necromancy.Items
             item.UseSound = refItem.UseSound;
             item.autoReuse = refItem.autoReuse;
             item.tileBoost = refItem.tileBoost;
-            item.value = Item.sellPrice(0, 5, 0, 0);
-            //item.glowMask = ??
+            item.value = Item.sellPrice(0, 5);
+            item.GetGlobalItem<NecromancyGlobalItem>().glowMask = ModLoader.GetTexture("Necromancy/Items/LunarHamaxeWormhole_Glow");
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "FragmentWormhole", 14);
+            recipe.AddIngredient(mod, "FragmentWormhole", 14);
             recipe.AddIngredient(ItemID.LunarBar, 12);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);

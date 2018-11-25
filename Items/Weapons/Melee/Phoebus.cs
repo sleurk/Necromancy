@@ -16,14 +16,13 @@ namespace Necromancy.Items.Weapons.Melee
         {
             item.magic = true;
             item.damage = 81;
-            item.crit = 4;
             item.width = 96;
             item.height = 96;
             item.useTime = 13;
             item.useAnimation = 13;
             item.useStyle = 1;
             item.knockBack = 10;
-            item.value = 10000;
+            item.value = Item.sellPrice(0, 6);
             item.rare = 8;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
@@ -40,6 +39,16 @@ namespace Necromancy.Items.Weapons.Melee
                 Main.dust[dust].scale = 1f + Main.rand.NextFloat();
                 Main.dust[dust].noGravity = true;
             }
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.LihzahrdPowerCell);
+            recipe.AddIngredient(ItemID.LihzahrdBrick, 40);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockback, bool crit)

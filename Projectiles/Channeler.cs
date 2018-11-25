@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class Channeler : ModProjectile
 	{
+        // spear projectile, shot with a boomerang projectile 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Channeler");
@@ -24,10 +25,11 @@ namespace Necromancy.Projectiles
             projectile.tileCollide = false;
             projectile.hide = true;
             projectile.ownerHitCheck = true; //so you can't hit enemies through walls
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 5;
         }
 		
-		public float movementFactor // Change this value to alter how fast the spear moves
+		public float MovementFactor // Change this value to alter how fast the spear moves
 		{
 			get { return projectile.ai[0]; }
 			set { projectile.ai[0] = value; }
@@ -51,22 +53,22 @@ namespace Necromancy.Projectiles
 			// As long as the player isn't frozen, the spear can move
 			if (!projOwner.frozen)
 			{
-				if (movementFactor == 0f) // When intially thrown out, the ai0 will be 0f
+				if (MovementFactor == 0f) // When intially thrown out, the ai0 will be 0f
 				{
-					movementFactor = 15f; // Make sure the spear moves forward when initially thrown out
+					MovementFactor = 15f; // Make sure the spear moves forward when initially thrown out
 					projectile.netUpdate = true; // Make sure to netUpdate this spear
 				}
 				if (projOwner.itemAnimation < projOwner.itemAnimationMax / 3) // Somewhere along the item animation, make sure the spear moves back
 				{
-					movementFactor -= 5.9f;
+					MovementFactor -= 5.9f;
 				}
 				else // Otherwise, increase the movement factor
 				{
-					movementFactor += 5.6f;
+					MovementFactor += 5.6f;
 				}
 			}
 			// Change the spear position based off of the velocity and the movementFactor
-			projectile.position += projectile.velocity * movementFactor;
+			projectile.position += projectile.velocity * MovementFactor;
 			// When we reach the end of the animation, we can kill the spear projectile
 			if (projOwner.itemAnimation == 0)
 			{

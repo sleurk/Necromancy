@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,15 +18,14 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 100;
-            item.crit = 4;
             item.width = 74;
 			item.height = 74;
-			item.useTime = 30;
-			item.useAnimation = 30;
+			item.useTime = 15;
+			item.useAnimation = 15;
             item.useStyle = 5;
             item.noUseGraphic = true;
-			item.value = Item.sellPrice(0, 2, 0, 0);
-			item.rare = 2;
+			item.value = Item.sellPrice(0, 8);
+			item.rare = 8;
             item.noMelee = true;
 			item.UseSound = SoundID.Item20;
 			item.autoReuse = true;
@@ -34,7 +34,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 2;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 9;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -43,14 +43,14 @@ namespace Necromancy.Items.Weapons.Magic
             {
                 Vector2 pos1 = Main.MouseWorld - player.Center;
                 Vector2 pos2 = 360f * pos1.SafeNormalize(Vector2.Zero);
-                position = pos1.Length() < pos2.Length() ? pos1 : pos2;
+                position = pos1.Length() < pos2.Length() ? pos1 : pos2; // Created at cursor, maximum distnace of 360px from player
                 position += player.Center;
                 Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI, Main.rand.NextBool() ? -1 : 1, Main.rand.NextFloat(5f, 8f));
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
-                proj.Center = position;
-                proj.netUpdate = true;
+                proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             }
             return false;
         }
+
+        // Drops from lunatic cultist boss
     }
 }

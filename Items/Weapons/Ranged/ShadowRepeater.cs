@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -18,7 +19,6 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             item.magic = true;
             item.damage = 56;
-            item.crit = 4;
             item.width = 56;
             item.height = 26;
             item.useTime = 4;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.useStyle = 5;
             item.noMelee = true;
             item.knockBack = 2;
-            item.value = Item.sellPrice(0, 22, 0, 0);
+            item.value = Item.sellPrice(0, 10);
             item.rare = 8;
             item.UseSound = SoundID.Item5;
             item.autoReuse = true;
@@ -35,26 +35,26 @@ namespace Necromancy.Items.Weapons.Ranged
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 4;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 4;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 4;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            // 1 degree spread, very slight variance in arrow speed
             Vector2 perturbedSpeed = new Vector2(speedX, speedY);
-            perturbedSpeed = perturbedSpeed.RotatedByRandom(MathHelper.ToRadians(3)) * Main.rand.NextFloat(0.95f, 1.05f);
+            perturbedSpeed = perturbedSpeed.RotatedByRandom(MathHelper.ToRadians(1)) * Main.rand.NextFloat(0.95f, 1.05f);
             Projectile proj = Projectile.NewProjectileDirect(position, perturbedSpeed, type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpookyWood, 50);
-            recipe.AddIngredient(ItemID.Ectoplasm, 10);
-            recipe.AddIngredient(ItemID.GraniteBlock, 15);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddIngredient(ItemID.Ectoplasm, 6);
+            recipe.AddIngredient(ItemID.SpookyWood, 30);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

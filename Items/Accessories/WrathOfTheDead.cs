@@ -11,15 +11,15 @@ namespace Necromancy.Items.Accessories
         {
             DisplayName.SetDefault("Wrath of the Dead");
             Tooltip.SetDefault("Necrotic summon max life costs do not increase with more minions" +
-                "\nBase max life cost increased by 5");
+                "\n3x base necrotic summon cost");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 36;
 			item.height = 40;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 6;
 			item.accessory = true;
 		}
 

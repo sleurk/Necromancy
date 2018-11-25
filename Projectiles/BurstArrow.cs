@@ -6,6 +6,7 @@ namespace Necromancy.Projectiles
 {
     public class BurstArrow : ModProjectile
     {
+        // basic arrow projectie, shot in a large group by weapon
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Burst Arrow");

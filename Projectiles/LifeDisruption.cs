@@ -7,7 +7,8 @@ namespace Necromancy.Projectiles
 {
 	public class LifeDisruption : ModProjectile
 	{
-        private int time = 0;
+        // moves in an arc, shoots many homing projectiles
+        // will dissipate if it hits something
 
         public override void SetStaticDefaults()
         {
@@ -30,19 +31,25 @@ namespace Necromancy.Projectiles
 		public override void AI()
 		{
             projectile.velocity.Y += 0.05f;
-            time++;
-            if (time >= 15)
+            projectile.ai[0]++;
+            if (projectile.ai[0] >= 15)
             {
-                time = 0;
-                Vector2 shoot = 8f * Vector2.UnitX.RotatedBy(projectile.ai[0]);
-                Projectile.NewProjectileDirect(projectile.Center, shoot + projectile.velocity, mod.ProjectileType("LifeShot"), projectile.damage, projectile.knockBack, projectile.owner);
-                Projectile.NewProjectileDirect(projectile.Center, -shoot + projectile.velocity, mod.ProjectileType("LifeShot"), projectile.damage, projectile.knockBack, projectile.owner);
-                projectile.ai[0] += 0.3f;
+                projectile.ai[0] = 0;
+                Vector2 shoot1 = projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2);
+                Vector2 shoot2 = projectile.velocity.SafeNormalize(Vector2.Zero).RotatedBy(-MathHelper.PiOver2);
+                for (int i = 1; i <= 3; i++)
+                {
+                    Projectile.NewProjectileDirect(projectile.Center, shoot1, mod.ProjectileType("LifeShot"), projectile.damage, projectile.knockBack, projectile.owner);
+                    Projectile.NewProjectileDirect(projectile.Center, shoot2, mod.ProjectileType("LifeShot"), projectile.damage, projectile.knockBack, projectile.owner);
+                    shoot1 *= 2f;
+                    shoot2 *= 2f;
+                }
             }
 
-            for (int k = 0; k < 5; k++)
+            for (int k = 0; k < 10; k++)
             {
-                Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
+                Dust d = Dust.QuickDust(projectile.Center + Main.rand.NextVector2CircularEdge(projectile.width / 2, projectile.height / 2), Color.Green);
+                d.velocity = 0.2f * (projectile.Center - d.position);
             }
         }
 

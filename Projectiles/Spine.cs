@@ -6,6 +6,7 @@ namespace Necromancy.Projectiles
 {
     public class Spine : ModProjectile
     {
+        // like vilethorn, but turns towards the mouse after being shot
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spine");

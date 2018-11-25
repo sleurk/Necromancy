@@ -18,8 +18,8 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 30;
 			item.height = 18;
-			item.value = Item.sellPrice(0, 0, 75, 0);
-			item.rare = 4;
+            item.value = Item.sellPrice(0, 2);
+            item.rare = 4;
 			item.defense = 7;
         }
 
@@ -32,7 +32,7 @@ namespace Necromancy.Items.Armor
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "IchorBar", 15);
+            recipe.AddIngredient(mod, "IchorBar", 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

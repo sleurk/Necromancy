@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             item.magic = true;
             item.damage = 91;
-            item.crit = 4;
             item.width = 44;
             item.height = 24;
             item.useTime = 20;
@@ -24,7 +24,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.useStyle = 5;
             item.noMelee = true;
             item.knockBack = 20;
-            item.value = Item.sellPrice(0, 0, 80, 0);
+            item.value = Item.sellPrice(0, 6);
             item.rare = 8;
             item.UseSound = SoundID.Item5;
             item.autoReuse = true;
@@ -33,13 +33,13 @@ namespace Necromancy.Items.Weapons.Ranged
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 10;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 10;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
@@ -48,7 +48,7 @@ namespace Necromancy.Items.Weapons.Ranged
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.LihzahrdPowerCell);
             recipe.AddIngredient(ItemID.LihzahrdBrick, 40);
-            recipe.AddTile(TileID.Anvils);
+            recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

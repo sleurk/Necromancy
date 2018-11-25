@@ -19,14 +19,14 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 20;
 			item.height = 22;
-			item.value = Item.sellPrice(0, 0, 75, 0);
-			item.rare = 4;
+            item.value = Item.sellPrice(0, 2);
+            item.rare = 4;
 			item.defense = 3;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += 0.15f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.15f;
             player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 2;
         }
 
@@ -45,7 +45,7 @@ namespace Necromancy.Items.Armor
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "IchorBar", 15);
+            recipe.AddIngredient(mod, "IchorBar", 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

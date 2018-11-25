@@ -28,8 +28,8 @@ namespace Necromancy.Items
             item.UseSound = refItem.UseSound;
             item.potion = true;
             item.maxStack = 1;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.rare = refItem.rare;
+            item.value = Item.sellPrice(0, 2);
+            item.rare = refItem.rare;
         }
 
         public override bool CanUseItem(Player player)

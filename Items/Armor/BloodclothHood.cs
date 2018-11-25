@@ -18,14 +18,14 @@ namespace Necromancy.Items.Armor
         {
             item.width = 22;
             item.height = 20;
-            item.value = Item.sellPrice(0, 0, 20, 0);
+            item.value = Item.sellPrice(0, 0, 20);
             item.rare = 1;
             item.defense = 2;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += .05f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += .05f;
         }
 
         public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -35,9 +35,9 @@ namespace Necromancy.Items.Armor
 
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "+50 Max Life" +
+            player.setBonus = "+20 Max Life" +
                 "\nNecrotic damage wounds enemies";
-            player.statLifeMax2 += 50;
+            player.statLifeMax2 += 20;
             player.GetModPlayer<NecromancyPlayer>().bloodcloth = true;
         }
 
@@ -45,7 +45,7 @@ namespace Necromancy.Items.Armor
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod, "BloodEssence", 5);
-            recipe.AddIngredient(ItemID.Silk, 10);
+            recipe.AddIngredient(ItemID.Silk, 4);
             recipe.AddTile(TileID.Loom);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -7,7 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class TendrilCluster : ModProjectile
 	{
-        private int timer = 0;
+        // creates tendrils to shoot at all nearby enemies
 
         public override void SetStaticDefaults()
         {
@@ -45,20 +45,18 @@ namespace Necromancy.Projectiles
                     projectile.timeLeft = 2;
                     projectile.Center = player.Center;
 
-                    if (timer == 0)
+                    if (projectile.ai[0] == 0f)
                     {
-                        timer = 5;
-                        foreach (NPC target in Necromancy.NearbyNPCs(player.Center + (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction) * 64f, 160f))
+                        projectile.ai[0] = 5f;
+                        foreach (NPC target in Necromancy.NearbyNPCs(player.Center + (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction) * 64f, 320f))
                         {
-                            Projectile proj = Projectile.NewProjectileDirect(projectile.Center, (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction), mod.ProjectileType<Tendril>(), projectile.damage, 0f, projectile.owner);
-                            proj.netUpdate = true;
-                            Tendril beam = (Tendril)proj.modProjectile;
-                            beam.target = target;
+                            Necromancy.DrainLife(player, 1);
+                            Projectile proj = Projectile.NewProjectileDirect(projectile.Center, (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction), mod.ProjectileType<Tendril>(), projectile.damage, 0f, projectile.owner, target.Center.X, target.Center.Y);
                         }
                     }
                     else
                     {
-                        timer--;
+                        projectile.ai[0]--;
                     }
                 }
                 else

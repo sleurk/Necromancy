@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
     public class DiscordOrb : ModProjectile
     {
+        // stays over a targeted enemy, makes them take more damage
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Orb of Discord");
@@ -32,28 +33,15 @@ namespace Necromancy.Projectiles
             {
                 if (projectile.timeLeft <= 1)
                 {
-                    owner.statLife--;
-                    if (owner.statLife <= 0)
-                    {
-                        Terraria.DataStructures.PlayerDeathReason damageSource;
-                        switch (Main.rand.Next(3))
-                        {
-                            case 0:
-                                damageSource = Terraria.DataStructures.PlayerDeathReason.ByCustomReason(owner.name + " ran out of blood.");
-                                break;
-                            case 1:
-                                damageSource = Terraria.DataStructures.PlayerDeathReason.ByCustomReason(owner.name + " couldn't handle the power.");
-                                break;
-                            default:
-                                damageSource = Terraria.DataStructures.PlayerDeathReason.ByCustomReason(owner.name + " didn't watch their health bar.");
-                                break;
-                        }
-                        owner.KillMe(damageSource, 5, -owner.direction);
-                    }
+                    Necromancy.DrainLife(owner, 1);
                     projectile.timeLeft = 4;
                 }
                 projectile.Center = new Vector2(target.Center.X, target.position.Y - 24f);
                 target.AddBuff(mod.BuffType<Buffs.DiscordOrb>(), 2);
+
+                Vector2 dustPos = projectile.Center + Main.rand.NextVector2Circular(projectile.width / 2, projectile.height / 2);
+                Dust d = Dust.QuickDust(dustPos, new Color(0.5f, 0f, 0.5f));
+                d.velocity = 0.08f * (target.Center - d.position) + target.velocity;
             }
             else
             {

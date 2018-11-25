@@ -1,3 +1,4 @@
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -16,7 +17,7 @@ namespace Necromancy.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<NPCs.NecromancyNPC>().extraDmg += 0.25f;
+            npc.GetGlobalNPC<NecromancyNPC>().extraDmg += 0.25f;
         }
     }
 }

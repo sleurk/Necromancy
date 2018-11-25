@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class CursedBullet : ModProjectile
 	{
+        // basic bullet projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cursed Bullet");

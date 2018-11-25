@@ -18,7 +18,7 @@ namespace Necromancy.Items
 			item.width = 28;
 			item.height = 30;
 			item.maxStack = 99;
-			item.value = Item.sellPrice(0, 2, 0, 0);
+			item.value = Item.sellPrice(0, 2);
 			item.rare = 8;
 		}
     }

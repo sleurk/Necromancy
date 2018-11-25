@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
     public class SpineTip : ModProjectile
     {
+        // last projectile from Spine, for visuals
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spine");

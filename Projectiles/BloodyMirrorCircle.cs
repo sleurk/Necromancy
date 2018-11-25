@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class BloodyMirrorCircle : ModProjectile
 	{
+        // large projectile that stays on player
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bloody Mirror Circle");

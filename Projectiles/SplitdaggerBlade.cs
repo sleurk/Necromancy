@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
     public class SplitdaggerBlade : ModProjectile
     {
+        // basic short-range projectile created when Splitdagger splits
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Splitdagger");

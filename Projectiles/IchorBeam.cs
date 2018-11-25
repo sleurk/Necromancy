@@ -10,7 +10,9 @@ namespace Necromancy.Projectiles
 {
     public class IchorBeam : ModProjectile
     {
-        private const int MAX_CHARGE = 100;
+        // sustained laser, copied from examplemod
+        // hits 20 times before dissipating
+        private const int MAX_CHARGE = 60;
         private const float MOVE_DISTANCE = 75f;       //The distance charge particle from the player center
 
         public float Distance
@@ -31,10 +33,11 @@ namespace Necromancy.Projectiles
             projectile.width = 10;
             projectile.height = 10;
             projectile.friendly = true;
-            projectile.penetrate = 40;
+            projectile.penetrate = 20;
             projectile.tileCollide = false;
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>().necrotic = true;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>().ichor = true;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)

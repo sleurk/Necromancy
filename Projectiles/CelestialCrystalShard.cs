@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class CelestialCrystalShard : ModProjectile
 	{
+        // basic thrown projectile, like throwing knives
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Celestial Crystal Shard");

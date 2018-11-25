@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
     public class GhoulPortal : ModProjectile
     {
+        // slow-moving projectile that homes on enemies and lasts
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Ghoul Portal");
@@ -20,6 +21,7 @@ namespace Necromancy.Projectiles
             projectile.friendly = true;
             projectile.netImportant = true;
             projectile.tileCollide = false;
+            ProjectileID.Sets.Homing[projectile.type] = true;
             projectile.hide = true;
             projectile.penetrate = -1;
             projectile.timeLeft = 600;
@@ -31,7 +33,7 @@ namespace Necromancy.Projectiles
         public override void AI()
         {
             projectile.velocity *= 0.99f;
-            NPC target = Necromancy.NearestNPC(projectile.Center, 300f);
+            NPC target = Necromancy.NearestNPC(projectile.Center, 300f, false, false);
             if (target != null)
             {
                 projectile.velocity += (target.Center - projectile.Center) * 0.01f;
@@ -44,15 +46,10 @@ namespace Necromancy.Projectiles
             for (int i = 0; i < 3; i++)
             {
                 Vector2 pos = projectile.Center + Main.rand.NextVector2Circular(32f, 32f);
-                Dust d = Dust.QuickDust(pos, Main.rand.NextBool() ? Color.Purple : Color.Pink);
+                Dust d = Dust.QuickDust(pos, Main.rand.NextBool() ? new Color(1f, 0.3f, 1f) : new Color(0.5f, 0f, 1f));
                 d.velocity = (projectile.Center - d.position).RotatedBy(MathHelper.ToRadians(90));
                 d.velocity /= 10f;
             }
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.immune[projectile.owner] = 5;
         }
 
         public override void Kill(int timeLeft)
@@ -60,7 +57,7 @@ namespace Necromancy.Projectiles
             for (int k = 0; k < 5; k++)
             {
                 Vector2 pos = projectile.Center + Main.rand.NextVector2Circular(32f, 32f);
-                Dust d = Dust.QuickDust(pos, Main.rand.NextBool() ? Color.Purple : Color.Pink);
+                Dust d = Dust.QuickDust(pos, Main.rand.NextBool() ? new Color(1f, 0.3f, 1f) : new Color(0.5f, 0f, 1f));
                 d.velocity = (projectile.Center - d.position).RotatedBy(MathHelper.ToRadians(90));
                 d.velocity /= 10f;
             }

@@ -19,7 +19,7 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 30;
 			item.height = 18;
-			item.value = 0;
+            item.value = 0;
 			item.rare = 10;
 			item.defense = 20;
         }
@@ -33,7 +33,7 @@ namespace Necromancy.Items.Armor
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(null, "FragmentWormhole", 15);
+			recipe.AddIngredient(mod, "FragmentWormhole", 15);
             recipe.AddIngredient(ItemID.LunarBar, 12);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);

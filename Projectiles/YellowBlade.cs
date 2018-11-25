@@ -7,7 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class YellowBlade : ModProjectile
 	{
-        private bool bounce;
+        // spinny boomerang projectile
 
         public override void SetStaticDefaults()
         {
@@ -30,7 +30,7 @@ namespace Necromancy.Projectiles
 		public override void AI()
 		{
             projectile.rotation += MathHelper.ToRadians(30);
-            if (bounce)
+            if (projectile.ai[0] == 1f)
             {
                 Vector2 toPlayer = Main.player[projectile.owner].Center - projectile.Center;
                 if (toPlayer.Length() < 32f)
@@ -44,7 +44,7 @@ namespace Necromancy.Projectiles
             {
                 if (projectile.timeLeft < 105)
                 {
-                    bounce = true;
+                    projectile.ai[0] = 1f;
                 }
             }
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 246, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
@@ -53,7 +53,7 @@ namespace Necromancy.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            bounce = true;
+            projectile.ai[0] = 1f;
             if (projectile.velocity.X != oldVelocity.X)
             {
                 projectile.velocity.X = -oldVelocity.X;

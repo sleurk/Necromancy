@@ -2,67 +2,44 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Necromancy.Items
 {
-	public class GreaterHealthCatalyst : ModItem
+    // this is a child of SwipeWeapon.cs, so the important code is there
+    // this will drain the player's life as long as they hold click until they drain 800 life, at which point it spawns an item
+    public class GreaterHealthCatalyst : HealthCatalyst
 	{
-        private int healthSpent = 0;
-        private int use = 0; // to keep track of if the button is held down or not
+        protected override float Cap
+        {
+            // maximum health to drain
+            get { return 800f; }
+        }
+
+        protected override Color ProgressColor
+        {
+            // color for progress text to be as it approaches 100%
+            get { return new Color(1f, 0.5f, 0f); }
+        }
+
+        protected override int HealthPerTick
+        {
+            // how much health is drained per tick
+            get { return 2; }
+        }
 
         public override void SetStaticDefaults()
         {
-            if (healthSpent > 0)
-            {
-                DisplayName.SetDefault("Greater Health Catalyst: " + healthSpent + " / 500");
-            }
-            else
-            {
-                DisplayName.SetDefault("Greater Health Catalyst");
-            }
+            DisplayName.SetDefault("Greater Health Catalyst");
             Tooltip.SetDefault("Hold to drain life" +
-                    "\nDrain 500 life to create a Living Heart");
+                    "\nDrain " + (int)Cap + " life to create a Living Heart");
         }
 
         public override void SetDefaults()
 		{
-			item.width = 20;
-			item.height = 20;
-			item.maxStack = 1;
+            base.SetDefaults();
+            item.value = Item.sellPrice(0, 3);
             item.rare = 7;
-			item.useAnimation = 3;
-			item.useTime = 3;
-			item.useStyle = 4;
-            item.value = Item.sellPrice(0, 1, 0, 0);
-            item.UseSound = SoundID.Item3;
-            item.autoReuse = true;
-        }
-
-		public override bool UseItem(Player player)
-        {
-            item.autoReuse = true;
-            use = 3;
-            healthSpent += 1;
-            Necromancy.DrainLife(player, 1);
-            if (healthSpent >= 500)
-            {
-                Item.NewItem((int)player.position.X, (int)player.position.Y, player.width, player.height, mod.ItemType("LivingHeart"), 1);
-                healthSpent = 0;
-                item.autoReuse = false;
-            }
-            return true;
-		}
-        
-        public override void HoldItem(Player player)
-        {
-            if (use > 0)
-            {
-                use -= 1;
-            }
-            else
-            {
-                healthSpent = 0;
-            }
         }
 
         public override void AddRecipes()
@@ -73,6 +50,12 @@ namespace Necromancy.Items
             recipe.AddTile(TileID.MythrilAnvil);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
+        }
+
+        protected override void OnFull(Player player)
+        {
+            // when the player has drained 800 life
+            Item.NewItem(player.Center, mod.ItemType("LivingHeart"), 1, true, 0, true);
         }
 	}
 }

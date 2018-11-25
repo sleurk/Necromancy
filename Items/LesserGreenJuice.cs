@@ -28,7 +28,7 @@ namespace Necromancy.Items
             item.UseSound = refItem.UseSound;
             item.potion = true;
             item.maxStack = 1;
-			item.value = Item.sellPrice(0, 0, 25, 0);
+			item.value = Item.sellPrice(0, 1);
             item.rare = refItem.rare;
         }
 

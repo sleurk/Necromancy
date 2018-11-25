@@ -24,7 +24,7 @@ namespace Necromancy.Items.Placeable
 			item.useTime = 10;
 			item.useStyle = 1;
 			item.consumable = true;
-			item.value = Item.sellPrice(0, 2, 0, 0);
+            item.value = 0;
             item.rare = 3;
             item.createTile = mod.TileType("MeteorShowerAltar");
 		}

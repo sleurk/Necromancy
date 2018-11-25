@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,11 +18,10 @@ namespace Necromancy.Items.Weapons.Throwing
         {
             item.magic = true;
             item.damage = 61;
-            item.crit = 4;
             item.width = 28;
 			item.height = 30;
-			item.useTime = 2;
-			item.useAnimation = 2;
+			item.useTime = 3;
+			item.useAnimation = 3;
             item.useStyle = 1;
             item.noUseGraphic = true;
             item.knockBack = 2;
@@ -35,14 +35,13 @@ namespace Necromancy.Items.Weapons.Throwing
             item.maxStack = 999;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).throwing = true;
-
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost = 15;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost = 20;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
@@ -51,7 +50,7 @@ namespace Necromancy.Items.Weapons.Throwing
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.BeetleHusk, 10);
             recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this, 100);
+            recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }

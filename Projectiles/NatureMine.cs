@@ -7,7 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class NatureMine : ModProjectile
     {
-        private bool active;
+        // projectile, slows to a stop and waits, explodes on contact
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Nature Mine");
@@ -32,9 +32,9 @@ namespace Necromancy.Projectiles
             projectile.velocity *= 0.95f;
             if (projectile.timeLeft < 1140)
             {
-                if (!active)
+                if (projectile.ai[0] == 0f)
                 {
-                    active = true;
+                    projectile.ai[0] = 1f;
                     Main.PlaySound(SoundID.Item11, projectile.Center);
                     projectile.friendly = true;
                     for (int i = 0; i < 8; i++)

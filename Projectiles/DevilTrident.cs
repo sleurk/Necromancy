@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class DevilTrident : ModProjectile
 	{
+        // spear projectile, goes with three TridentBlast projectiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Devil's Trident");
@@ -25,6 +26,7 @@ namespace Necromancy.Projectiles
             projectile.hide = true;
             projectile.ownerHitCheck = true; //so you can't hit enemies through walls
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).burn = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 1;
         }
 
@@ -50,24 +52,24 @@ namespace Necromancy.Projectiles
 			projectile.position.Y = ownerMountedCenter.Y - (projectile.height / 2);
 			// As long as the player isn't frozen, the spear can move
 			if (!projOwner.frozen)
-			{
-				if (movementFactor == 0f) // When intially thrown out, the ai0 will be 0f
-				{
-					movementFactor = 3f; // Make sure the spear moves forward when initially thrown out
-					projectile.netUpdate = true; // Make sure to netUpdate this spear
-				}
-				if (projOwner.itemAnimation < projOwner.itemAnimationMax / 3) // Somewhere along the item animation, make sure the spear moves back
-				{
-					movementFactor -= 2.4f;
-				}
-				else // Otherwise, increase the movement factor
-				{
-					movementFactor += 2.1f;
-				}
-			}
+            {
+                if (movementFactor == 0f) // When initially thrown out, the ai0 will be 0f
+                {
+                    movementFactor = 3f; // Make sure the spear moves forward when initially thrown out
+                    projectile.netUpdate = true; // Make sure to netUpdate this spear
+                }
+                if (projOwner.itemAnimation < projOwner.itemAnimationMax / 3) // Somewhere along the item animation, make sure the spear moves back
+                {
+                    movementFactor -= 2.4f;
+                }
+                else // Otherwise, increase the movement factor
+                {
+                    movementFactor += 2.1f;
+                }
+            }
 			// Change the spear position based off of the velocity and the movementFactor
 			projectile.position += projectile.velocity * movementFactor;
-			// When we reach the end of the animation, we can kill the spear projectile
+            // When we reach the end of the animation, we can kill the spear projectile
 			if (projOwner.itemAnimation == 0)
 			{
 				projectile.Kill();

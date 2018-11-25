@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -8,7 +9,6 @@ namespace Necromancy.Items.Weapons.Summon
 {
 	public class CumulusStaff : ModItem
 	{
-
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cumulus Staff");
@@ -20,7 +20,6 @@ namespace Necromancy.Items.Weapons.Summon
         {
             item.magic = true;
             item.damage = 31;
-            item.crit = 4;
             item.width = 48;
 			item.height = 48;
             item.useStyle = 1;
@@ -29,8 +28,8 @@ namespace Necromancy.Items.Weapons.Summon
 			item.noMelee = true;
 			item.knockBack = 0;
             item.autoReuse = true;
-			item.value = Item.sellPrice(0, 12, 75, 0);
-			item.rare = 5; 
+            item.value = Item.sellPrice(0, 4);
+            item.rare = 5; 
 			item.UseSound = SoundID.Item44;
 			item.shoot = mod.ProjectileType("RainCloudSummon");
             item.shootSpeed = 8f;
@@ -42,6 +41,7 @@ namespace Necromancy.Items.Weapons.Summon
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            // picks a random projectile type of these 3
             switch (Main.rand.Next(3))
             {
                 case 0:
@@ -55,7 +55,7 @@ namespace Necromancy.Items.Weapons.Summon
                     break;
             }
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
@@ -67,7 +67,9 @@ namespace Necromancy.Items.Weapons.Summon
             recipe.AddIngredient(ItemID.RainCloud, 20);
             recipe.AddIngredient(ItemID.SnowBlock, 20);
             recipe.AddIngredient(ItemID.SunplateBlock, 20);
-            recipe.AddIngredient(ItemID.SoulofSight, 20);
+            recipe.AddIngredient(ItemID.SoulofSight, 5);
+            recipe.AddIngredient(ItemID.SoulofMight, 5);
+            recipe.AddIngredient(ItemID.SoulofFright, 5);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

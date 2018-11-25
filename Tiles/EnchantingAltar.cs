@@ -14,7 +14,6 @@ namespace Necromancy.Tiles
         public override void SetDefaults()
         {
             base.SetDefaults();
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TEEnchantingAltar>().Hook_AfterPlacement, -1, 0, false);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Enchanting Altar");
@@ -28,12 +27,22 @@ namespace Necromancy.Tiles
             Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType<Items.Placeable.EnchantingAltar>());
             int cornerX = i - (frameX / 18) + 1;
             int cornerY = j - (frameY / 18) + 1;
-            mod.GetTileEntity<TEEnchantingAltar>().Kill(cornerX, cornerY);
         }
 
-        public override TEAltar GetNewTE()
+        public override bool CreateRitual(int chalk, int i, int j)
         {
-            return new TEEnchantingAltar();
+            Vector2 pos = GetProjectilePosition(i, j);
+            Main.PlaySound(SoundID.Item46, pos);
+            /*
+            Item weapon = Necromancy.NearestWeapon(pos, 128f);
+            if (weapon != null)
+            {
+                Projectile projectile = Projectile.NewProjectileDirect(pos, Vector2.Zero, mod.ProjectileType("Enchantment" + chalkName[chalk]), 0, 0f, Main.myPlayer, weapon.whoAmI);
+                Main.PlaySound(SoundID.Item46, pos);
+                return true;
+            }
+			*/
+            return false;
         }
     }
 }

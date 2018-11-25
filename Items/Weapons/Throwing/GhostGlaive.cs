@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Necromancy.Projectiles;
 
 namespace Necromancy.Items.Weapons.Throwing
 {
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Throwing
         {
             item.magic = true;
             item.damage = 61;
-            item.crit = 4;
             item.width = 52;
 			item.height = 52;
 			item.useTime = 12;
@@ -34,13 +34,13 @@ namespace Necromancy.Items.Weapons.Throwing
             item.maxStack = 999;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).throwing = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost = 45;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost = 50;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
     }

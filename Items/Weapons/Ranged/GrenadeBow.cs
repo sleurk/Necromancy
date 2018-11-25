@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             item.magic = true;
             item.damage = 53;
-            item.crit = 4;
             item.width = 60;
             item.height = 26;
             item.useTime = 25;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.autoReuse = true;
             item.noMelee = true;
             item.knockBack = 4;
-            item.value = Item.sellPrice(0, 2, 0, 0);
+            item.value = Item.sellPrice(0, 2);
             item.rare = 4;
             item.UseSound = SoundID.Item5;
             item.shoot = mod.ProjectileType("Grenade");
@@ -34,14 +34,14 @@ namespace Necromancy.Items.Weapons.Ranged
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 30;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 30;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 30;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 

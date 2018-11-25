@@ -1,5 +1,8 @@
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,7 +12,6 @@ namespace Necromancy.Items.Accessories
 	public class WormholeWings : ModItem
 	{
         private int healthTick;
-        private bool glow;
 
         public override void SetStaticDefaults()
         {
@@ -21,11 +23,10 @@ namespace Necromancy.Items.Accessories
 		{
             item.width = 24;
 			item.height = 26;
-			item.value = Item.sellPrice(0, 8, 0, 0);
-			item.rare = 10;
+            item.value = Item.sellPrice(0, 10);
+            item.rare = 10;
 			item.accessory = true;
             healthTick = 0;
-            glow = false;
 		}
 
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -35,7 +36,6 @@ namespace Necromancy.Items.Accessories
             {
                 if (player.wingTime < 5)
                 {
-                    glow = true;
                     player.wingTime++;
                     if (healthTick <= 0)
                     {
@@ -44,14 +44,9 @@ namespace Necromancy.Items.Accessories
                     }
                     else
                     {
-                        glow = false;
                         healthTick--;
                     }
                 }
-            }
-            else
-            {
-                glow = false;
             }
         }
 
@@ -73,14 +68,26 @@ namespace Necromancy.Items.Accessories
 
         public override bool WingUpdate(Player player, bool inUse)
         {
+            // Will use life if there is less than 6 frames of flying time remaining
+            if (inUse && player.wingTime < 6)
+            {
+                Main.PlaySound(SoundID.Item3, player.Center);
+                Vector2 dustPos = new Vector2(Main.rand.NextFloat(player.width * 2) - player.width * player.direction, Main.rand.NextFloat(player.height)) + player.position;
+                Dust dust = Dust.QuickDust(dustPos, new Color(0.5f, 0.36f, 1f));
+                dust.noGravity = true;
 
+                // this doesn't work yet
+                // player.cWings is supposed to be the dye on the player's wings, but it doesn't work for modded wings (or at least, not these ones)
+                GameShaders.Armor.GetSecondaryShader(player.cWings, player);
+                dust.velocity = player.velocity;
+            }
             return false;
         }
 
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(null, "FragmentWormhole", 14);
+			recipe.AddIngredient(mod, "FragmentWormhole", 14);
             recipe.AddIngredient(ItemID.LunarBar, 10);
             recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);

@@ -7,9 +7,8 @@ namespace Necromancy.Projectiles
 {
     public class Splitdagger : ModProjectile
     {
-        private bool hit = false;
-
-        private NPC bounceFrom = null;
+        // moves a set distance, then splits into 7 SplitdaggerBlade projectiles
+        // if it hits an enemy it splits but shoots them away, doing less damage
 
         public override void SetStaticDefaults()
         {
@@ -48,15 +47,15 @@ namespace Necromancy.Projectiles
             {
                 projectile.velocity.Y = -oldVelocity.Y;
             }
-            hit = true;
             return true;
         }
 
         public override void Kill(int timeLeft)
         {
-            if (bounceFrom != null)
+            Vector2 bounceFrom = new Vector2(projectile.ai[0], projectile.ai[1]);
+            if (bounceFrom != Vector2.Zero)
             {
-                projectile.velocity = projectile.Center - bounceFrom.Center;
+                projectile.velocity = projectile.Center - bounceFrom;
                 projectile.velocity.Normalize();
                 projectile.velocity *= projectile.oldVelocity.Length();
             }
@@ -64,14 +63,13 @@ namespace Necromancy.Projectiles
             for (int i = -3; i < 4; i++)
             {
                 Vector2 perturbedSpeed = projectile.velocity.RotatedBy(rotation * i);
-                Projectile.NewProjectile(hit ? projectile.position + perturbedSpeed : projectile.position, perturbedSpeed, mod.ProjectileType<SplitdaggerBlade>(), projectile.damage, projectile.knockBack / 7f, projectile.owner);
+                Projectile.NewProjectile(projectile.position + perturbedSpeed, perturbedSpeed, mod.ProjectileType<SplitdaggerBlade>(), projectile.damage, projectile.knockBack / 7f, projectile.owner);
             }
             Main.PlaySound(SoundID.Item40, projectile.position);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            hit = true;
             projectile.velocity *= -1f;
         }
     }

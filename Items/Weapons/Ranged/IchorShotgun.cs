@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -18,7 +19,6 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             item.magic = true;
             item.damage = 36;
-            item.crit = 4;
             item.width = 46;
             item.height = 16;
             item.useTime = 45;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.useStyle = 5;
             item.noMelee = true;
             item.knockBack = 8;
-            item.value = Item.sellPrice(0, 2, 0, 0);
+            item.value = Item.sellPrice(0, 2);
             item.rare = 4;
             item.UseSound = SoundID.Item36;
             item.shoot = mod.ProjectileType("IchorBullet");
@@ -34,14 +34,14 @@ namespace Necromancy.Items.Weapons.Ranged
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 30;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 30;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 6;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "IchorBar", 8);
+            recipe.AddIngredient(mod, "IchorBar", 8);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
@@ -54,6 +54,7 @@ namespace Necromancy.Items.Weapons.Ranged
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            // 5 projectiles in a 17 degree spread with some variance to bullet speed
             int numberProjectiles = 5;
             for (int i = 0; i < numberProjectiles; i++)
             {
@@ -61,7 +62,7 @@ namespace Necromancy.Items.Weapons.Ranged
                 float scale = 1f - (Main.rand.NextFloat() * .3f);
                 perturbedSpeed = perturbedSpeed * scale; 
                 Projectile proj = Projectile.NewProjectileDirect(position, perturbedSpeed, type, damage, knockBack, player.whoAmI);
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+                proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             }
             return false;
         }

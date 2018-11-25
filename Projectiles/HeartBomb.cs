@@ -5,12 +5,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Achievements;
+using Terraria.Graphics.Shaders;
 
 namespace Necromancy.Projectiles
 {
 	public class HeartBomb : ModProjectile
 	{
-        private bool exploded;
+        // sticky projectile, small explosion that destroys tiles
 
         public override void SetStaticDefaults()
         {
@@ -27,7 +28,6 @@ namespace Necromancy.Projectiles
 			projectile.timeLeft = 120;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).throwing = true;
-            exploded = false;
         }
 
 		public override void AI()
@@ -36,38 +36,36 @@ namespace Necromancy.Projectiles
             projectile.velocity.Y += 0.3f;
 			if (Main.rand.Next(2) == 0)
 			{
-				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 12, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                Dust d = Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 12, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+                d.noGravity = true;
 			}
+
+            if (Collision.SolidCollision(projectile.position - new Vector2(1f, 1f), projectile.width + 2, projectile.height + 2))
+            {
+                projectile.velocity = Vector2.Zero;
+            }
 		}
 
         public override void Kill(int timeLeft)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (projectile.velocity.X != oldVelocity.X)
-            {
-                projectile.velocity.X = -oldVelocity.X / 1.2f;
-            }
-            if (projectile.velocity.Y != oldVelocity.Y)
-            {
-                projectile.velocity.Y = -oldVelocity.Y / 3f;
-            }
-            projectile.velocity.X *= 0.99f;
+            projectile.velocity = Vector2.Zero;
             return false;
         }
 
         private void Explode()
         {
             ExplodeTiles();
-            exploded = true;
+            projectile.ai[0] = 1f;
             Vector2 center = projectile.Center;
             projectile.width = 300;
             projectile.height = 300;

@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
     public class RotRain : ModProjectile
     {
+        // rain from rot nimbus rod clone
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Rot Rain");

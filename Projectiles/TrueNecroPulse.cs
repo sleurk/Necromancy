@@ -5,6 +5,7 @@ namespace Necromancy.Projectiles
 {
 	public class TrueNecroPulse : ModProjectile
 	{
+        // NecroPulse but better, waits a short time then activates
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("True Necrotic Pulse");

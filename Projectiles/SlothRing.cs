@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class SlothRing : ModProjectile
 	{
+        // ring around the player, knocks enemies away
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sloth Ring");
@@ -29,7 +30,7 @@ namespace Necromancy.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.velocity += (target.Center - Main.player[projectile.owner].Center) / 3f * target.knockBackResist;
+            Necromancy.DoCustomKnockback(target, (target.Center - Main.player[projectile.owner].Center) / 3f);
         }
 
         public override void AI()

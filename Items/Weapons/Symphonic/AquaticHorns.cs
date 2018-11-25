@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Symphonic
         {
             item.magic = true;
             item.damage = 45;
-            item.crit = 4;
             item.width = 48;
 			item.height = 48;
 			item.useTime = 16;
@@ -26,8 +26,8 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.noMelee = true;
             item.noUseGraphic = true;
             item.knockBack = 5;
-			item.value = Item.sellPrice(0, 0, 80, 0);
-			item.rare = 4;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 4;
 			item.UseSound = SoundID.Item43;
 			item.autoReuse = true;
 			item.shoot = mod.ProjectileType("AquaticHornDoot");
@@ -35,14 +35,27 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 5;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 8;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
+        }
+
+        public override void AddRecipes()
+        {
+            Mod thorium = ModLoader.GetMod("ThoriumMod");
+            if (thorium != null)
+            {
+                ModRecipe recipe = new ModRecipe(mod);
+                recipe.AddIngredient(thorium, "AbyssalChitin", 10);
+                recipe.AddTile(TileID.Anvils);
+                recipe.SetResult(this);
+                recipe.AddRecipe();
+            }
         }
     }
 }

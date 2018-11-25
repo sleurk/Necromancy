@@ -5,50 +5,51 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.UI;
+using Necromancy.Projectiles;
+using Terraria.Utilities;
 
 namespace Necromancy.Items
 {
     public class NecromancyGlobalItem : GlobalItem
     {
-        public int baseCrit;
+        public bool necrotic; // necrotic damage
+        public bool melee; // necrotic melee damage
+        public bool ranged; // necrotic ranged damage
+        public bool magic; // // necrotic magic damage
+        public bool summon; // necrotic summon damage
+        public bool throwing; // necrotic throwing damage
+        public bool radiant; // necrotic radiant damage
+        public bool symphonic; // necrotic symphonic damage
 
-        public bool necrotic;
-        public bool melee;
-        public bool ranged;
-        public bool magic;
-        public bool summon;
-        public bool throwing;
-        public bool radiant;
-        public bool symphonic;
+        public bool ichor; // item applies ichor on hit (melee swings)
+        public bool cursedfire;  // item applies cursed flame on hit (melee swings)
+        public bool fire; // item applies flame on hit (melee swings)
 
-        public bool ichor;
-        public bool cursedfire;
-        public bool fire;
+        public bool thoriumRarity; // item has "Blood Orange" colored rarity, to replicate the rarity from thorium
 
-        public bool thoriumRarity;
+        public int lifeCost; // cost of using the item, for necrotic ranged/magic/radiant/symphonic weapons
 
-        public int numProjectiles;
-        public int numShoot;
-
-        public int baseLifeCost;
-        public int lifeCost;
-
-        public int reloadCost;
+        public int reloadCost; // cost to add 10 to the stack on right click, for necrotic throwing weapons
         
-        public int lifeSteal;
+        public int lifeSteal; // life stolen on hit with item (melee swings/tooltip)
 
-        public int healPower;
+        public int healPower; // healing done to an ally on hit (melee swings/tooltip)
 
-        public int summonCost;
+        public int summonCost; // base maximum life cost per minion, for necrotic summon weapons
 
-        public int rClickDelay;
+        public int rClickDelay; // internal timer for separating right clicks for 
 
-        public int enchanted;
+        public int enchanted; // enchantment level of the item - not yet implemented, may be removed
 
+        public Texture2D glowMask; // texture of glowmask to use for items on the ground and regularly swung items
+
+        public bool rClickCostOnly; // if the item only applies the life cost on right click rather than left click - literally only for one item but there may be more in the future
+
+        // setting default values for each field that resets every tick
         public NecromancyGlobalItem()
         {
-            baseCrit = 0;
-
             necrotic = false;
             melee = false;
             ranged = false;
@@ -64,11 +65,7 @@ namespace Necromancy.Items
 
             thoriumRarity = false;
 
-            numProjectiles = 1;
-            numShoot = 1;
-
-            baseLifeCost = 0;
-            lifeCost = baseLifeCost;
+            lifeCost = 0;
 
             reloadCost = 0;
 
@@ -81,20 +78,22 @@ namespace Necromancy.Items
             rClickDelay = 0;
 
             enchanted = 0;
+
+            glowMask = null;
+
+            rClickCostOnly = false;
         }
 
+        // so items can hold individual data
         public override bool InstancePerEntity
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
+        // required for every important field on items that isn't reset every frame - I probably forgot some here
         public override GlobalItem Clone(Item item, Item itemClone)
         {
             NecromancyGlobalItem myClone = (NecromancyGlobalItem)base.Clone(item, itemClone);
-            myClone.baseCrit = baseCrit;
 
             myClone.necrotic = necrotic;
             myClone.melee = melee;
@@ -110,10 +109,7 @@ namespace Necromancy.Items
             myClone.fire = fire;
 
             myClone.thoriumRarity = thoriumRarity;
-
-            myClone.numProjectiles = numProjectiles;
-
-            myClone.baseLifeCost = baseLifeCost;
+            
             myClone.lifeCost = lifeCost;
 
             myClone.reloadCost = reloadCost;
@@ -131,6 +127,7 @@ namespace Necromancy.Items
             return myClone;
         }
 
+        // damage modifications based on the item's data - enchantment (NYI) would apply here
         public override void GetWeaponDamage(Item item, Player player, ref int damage)
         {
             if (item.GetGlobalItem<NecromancyGlobalItem>(mod).enchanted > 0)
@@ -141,110 +138,131 @@ namespace Necromancy.Items
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            // encahntment incantation
             if (item.GetGlobalItem<NecromancyGlobalItem>(mod).thoriumRarity) // Blood Orange Rarity (Ragnarok tier items)
             {
                 tooltips[0].overrideColor = new Color(255, 127, 0);
             }
-            if (tooltips.Count > 1)
+            if (tooltips.Count > 1) // precaution to avoid errors
             {
-                int damageLine = tooltips[1].text.Equals("Marked as favorite") ? 3 : 1;
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic)
+                int damageLine = -1;
+                
+                for (int i = 0; i < tooltips.Count; i++)
                 {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" magic damage", " necrotic damage");
-                }
-
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).enchanted > 0)
-                {
-                    tooltips[damageLine].text = "Enchanted\n" + tooltips[damageLine].text;
-                }
-
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).melee)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " melee damage");
-                }
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " ranged damage");
-                }
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).magic)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " magic damage");
-                }
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).summon)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " summon damage");
-                }
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).throwing)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " throwing damage");
-                }
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " radiant damage");
-                }
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " symphonic damage");
-                }
-
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal > 0)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " damage\nSteals " + Main.player[item.owner].GetModPlayer<NecromancyPlayer>(mod).LifeSteal(item) * Shoots(item) + " life");
-                }
-
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower > 0)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " damage\nHeals allies for " + Necromancy.GetHealPower(Main.player[item.owner], item) * Shoots(item) + " life");
-                }
-
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost > 0)
-                {
-                    string text = "\nUses " + Necromancy.GetCost(Main.player[item.owner], item, true) + " life";
-                    if (Main.player[item.owner].GetModPlayer<NecromancyPlayer>().manaAcc && !item.GetGlobalItem<NecromancyGlobalItem>().ranged)
+                    if (tooltips[i].Name.Contains("Damage"))
                     {
-                        text += " (" + Necromancy.GetCost(Main.player[item.owner], item, true) * 10 + " mana)";
+                        damageLine = i; // search for line that says "(number) (damage type) damage"
+                        i = tooltips.Count;
                     }
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " damage" + text);
+                }
+                
+                if (damageLine == -1) return; // if there is no "Damage" line
+
+                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic) // necrotic weapons are labelled as "magic" so the game does things like prefixes
+                {
+                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" magic damage", " necrotic damage"); // replace 'magic' with 'necrotic'
                 }
 
+                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).enchanted > 0) // NYI, adds "Enchanted" to the tooltips
+                {
+                    tooltips.Insert(damageLine, new TooltipLine(mod, "Necromancy Item Info: Enchant", "Enchanted"));
+                    damageLine++;
+                    tooltips[damageLine - 1].overrideColor = new Color(1f, 0.2f, 1f);
+                }
+
+                if (Config.ExplicitlyShowNecroticSubtypes)
+                {
+                    // specifies subtype in tooltip, so the player knows how the weapon works
+                    // disabled by default so as not to confuse players, but the option is there to see these
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).melee)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic melee damage");
+                    }
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic ranged damage");
+                    }
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).magic)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic magic damage");
+                    }
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).summon)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic summon damage");
+                    }
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).throwing)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic throwing damage");
+                    }
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic radiant damage");
+                    }
+                    if (item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic)
+                    {
+                        tooltips[damageLine].text = tooltips[damageLine].text.Replace("necrotic damage", "necrotic symphonic damage");
+                    }
+                }
+
+                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal > 0) // add the lifesteal to the tooltip
+                {
+                    tooltips.Insert(damageLine + 1, new TooltipLine(mod, "Necromancy Item Info: Lifesteal", "Steals " + Main.player[item.owner].GetModPlayer<NecromancyPlayer>(mod).LifeSteal(item) + " life"));
+                }
+
+                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower > 0) // add necrotic radiant healing power to the tooltip
+                {
+                    tooltips.Insert(damageLine + 1, new TooltipLine(mod, "Necromancy Item Info: Radiant Heal", "Heals allies for " + Necromancy.GetHealPower(Main.player[item.owner], item) + " life"));
+                }
+
+                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost > 0) // add the life cost to the tooltip
+                {
+                    string text = "Uses " + Necromancy.GetCost(Main.player[item.owner], item) + " life";
+                    if (Main.player[item.owner].GetModPlayer<NecromancyPlayer>().manaAcc && !item.GetGlobalItem<NecromancyGlobalItem>().ranged) // ranged life costs cannot use mana even with the accessory
+                    {
+                        text += " (" + Necromancy.GetCost(Main.player[item.owner], item) * 15 + " mana)";
+                    }
+                    tooltips.Insert(damageLine + 1, new TooltipLine(mod, "Necromancy life cost", text));
+                }
+
+                // summon max life costs - calculates based on number of summons as well as the sum of their costs
                 if (item.GetGlobalItem<NecromancyGlobalItem>(mod).summonCost > 0)
                 {
                     Player player = Main.player[item.owner];
                     int summons = Necromancy.CountSummons(player);
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " damage\nCosts " + item.GetGlobalItem<NecromancyGlobalItem>(mod).summonCost + "x" + summons + " maximum life per minion" +
-                        "\nCurrent total summon cost: " + item.GetGlobalItem<NecromancyGlobalItem>(mod).summonCost * summons * summons);
-                }
 
-                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost > 0)
-                {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " damage\nReload 10 for " + item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost + " life");
+                    tooltips.Insert(damageLine + 1, new TooltipLine(mod, "Necromancy Item Info: Summon Cost", "Costs " + item.GetGlobalItem<NecromancyGlobalItem>(mod).summonCost + "x" + summons + " maximum life per minion"));
+                    tooltips.Insert(damageLine + 1, new TooltipLine(mod, "Necromancy Item Info: Total Summon Cost", "Current total summon cost: " + player.GetModPlayer<NecromancyPlayer>().totalSummonCost));
                 }
                 
-                int shoot = item.GetGlobalItem<NecromancyGlobalItem>(mod).numShoot * item.GetGlobalItem<NecromancyGlobalItem>(mod).numProjectiles;
-                if (shoot > 1)
+                if (item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost > 0) // add the necrotic throwing refill cost to the tooltip
                 {
-                    tooltips[damageLine].text = tooltips[damageLine].text.Replace(" damage", " damage\nFires " + shoot + " projectiles");
+                    tooltips.Insert(damageLine + 1, new TooltipLine(mod, "Necromancy Item Info: Throwing Cost", "Reload 10 for " + GetReloadCost(item) + " life"));
                 }
             }
         }
 
-        public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool UseItem(Item item, Player player) // using items that don't shoot
+        {
+            if (item.healLife > 0) Necromancy.HealPlayer(player, player.GetModPlayer<NecromancyPlayer>().bonusPotionHeal, false);
+            return base.UseItem(item, player);
+        }
+
+        public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack) // using items that do shoot
         {
             if (player.itemAnimation > player.itemAnimationMax - item.useTime)
             {
-                Necromancy.DoLifeCost(player, item);
+                Necromancy.DoLifeCost(player, item); // only do life cost once per click, so items that shoot several times per click don't do the cost multiple times
             }
             return base.Shoot(item, player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
         }
 
         public override bool CanUseItem(Item item, Player player)
         {
-            if (player.GetModPlayer<NecromancyPlayer>().wraithTime > 0) return false;
+            if (item.GetGlobalItem<NecromancyGlobalItem>().throwing && item.stack == 1) return false; // cannot use throwing weapons with only one left, so they don't run out
+            if (player.GetModPlayer<NecromancyPlayer>().wraithTime > 0) return false; // can't use item while the player is using the Wraith Cloak
             return base.CanUseItem(item, player);
         }
 
-        public override void HoldItem(Item item, Player player)
+        public override void HoldItem(Item item, Player player) // ticks timer for the right click delay for necrotic throwing refills
         {
             if (item.GetGlobalItem<NecromancyGlobalItem>(mod).rClickDelay > 0)
             {
@@ -252,23 +270,31 @@ namespace Necromancy.Items
             }
         }
 
-        public override bool AltFunctionUse(Item item, Player player)
+        public static int GetReloadCost(Item item)
         {
+            Mod mod = ModLoader.GetMod("Necromancy");
+            // reload cost is affected by items that reduce or increase life cost
+            return Math.Max(1, item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost + Main.player[item.owner].GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier);
+        }
+
+        public override bool AltFunctionUse(Item item, Player player) // on right click
+        {
+            // reload on necrotic throwing weapons
             if (item.GetGlobalItem<NecromancyGlobalItem>(mod).rClickDelay == 0 && item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost > 0 && item.stack < item.maxStack)
             {
                 item.stack = Math.Min(item.stack + 10, item.maxStack);
-                Necromancy.DrainLife(player, item.GetGlobalItem<NecromancyGlobalItem>(mod).reloadCost);
+                Necromancy.BroadcastDrainLife(player, GetReloadCost(item));
             }
 
-            if (item.GetGlobalItem<NecromancyGlobalItem>(mod).rClickDelay == 0 && item.GetGlobalItem<NecromancyGlobalItem>(mod).summonCost > 0)
+            if (item.GetGlobalItem<NecromancyGlobalItem>(mod).rClickDelay == 0 && item.GetGlobalItem<NecromancyGlobalItem>(mod).summonCost > 0) // right click also desummons necrotic summons
             {
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < Main.projectile.Length; i++)
                 {
                     Projectile p = Main.projectile[i];
-                    if (SummonedFromItem(p, item) && p.owner == player.whoAmI)
+                    if (p != null && p.active && p.GetGlobalProjectile<NecromancyGlobalProjectile>().summonCost > 0 && p.owner == player.whoAmI && SummonedFromItem(p, item))
                     {
                         p.Kill();
-                        i = 1000;
+                        i = Main.projectile.Length;
                     }
                 }
             }
@@ -276,8 +302,12 @@ namespace Necromancy.Items
             return base.AltFunctionUse(item, player);
         }
 
-        public override bool ConsumeItem(Item item, Player player)
+        public override bool ConsumeItem(Item item, Player player) // whether or not to consume a consumable
         {
+            // reduced chance from empowerment
+            if (Main.rand.NextFloat() > player.GetModPlayer<NecromancyPlayer>().ammoConsumeChance) return false;
+
+            // reduced chance from necrotic throwing accessory
             if (player.GetModPlayer<NecromancyPlayer>().throwAcc && item.GetGlobalItem<NecromancyGlobalItem>(mod).throwing)
             {
                 return Main.rand.NextFloat() < (float)player.statLife / player.statLifeMax2;
@@ -285,65 +315,95 @@ namespace Necromancy.Items
             return base.ConsumeItem(item, player);
         }
 
-        public override bool PreOpenVanillaBag(string context, Player player, int arg)
+        public override bool PreOpenVanillaBag(string context, Player player, int arg) // opening expert boss bags
         {
             if (arg == ItemID.PlanteraBossBag)
             {
-                Item.NewItem(player.position, player.width, player.height, mod.ItemType("AcidSpray"));
+                player.QuickSpawnItem(mod.ItemType("AcidSpray"));
+            }
+            if (arg == ItemID.MoonLordBossBag)
+            {
+                player.QuickSpawnItem(mod.ItemType("AncientHeptagram"));
             }
             if (arg == ItemID.WallOfFleshBossBag)
             {
-                if (Main.rand.NextFloat() < 0.25)
+                if (Main.rand.NextFloat() < 0.25f)
                 {
-                    Item.NewItem(player.position, player.width, player.height, mod.ItemType("NecromancerEmblem"));
+                    player.QuickSpawnItem(mod.ItemType("NecromancerEmblem"));
                 }
                 if (Main.rand.NextFloat() < 1/3f)
                 {
-                    Item.NewItem(player.position, player.width, player.height, mod.ItemType("GrenadeBow"));
+                    player.QuickSpawnItem(mod.ItemType("GrenadeBow"));
                 }
+            }
+            if (arg == ItemID.FishronBossBag)
+            {
+                player.QuickSpawnItem(mod.ItemType("SubmarineGun"));
             }
 
             Mod thorium = ModLoader.GetMod("ThoriumMod");
             if (thorium != null && arg == thorium.ItemType("LichBag"))
             {
-                player.QuickSpawnItem(mod.ItemType<Weapons.Magic.LichSoul>());
+                player.QuickSpawnItem(mod.ItemType("LichSoul"));
             }
             else if (thorium != null && arg == thorium.ItemType("BoreanBag"))
             {
-                player.QuickSpawnItem(mod.ItemType<Weapons.Symphonic.TenorDrum>());
+                player.QuickSpawnItem(mod.ItemType("TenorDrum"));
             }
             else if (thorium != null && arg == thorium.ItemType("BeholderBag"))
             {
-                player.QuickSpawnItem(mod.ItemType<Weapons.Radiant.HyperthermalSlicer>());
+                player.QuickSpawnItem(mod.ItemType("HyperthermalSlicer"));
+            }
+            else if (thorium != null && arg == thorium.ItemType("AbyssionBag"))
+            {
+                player.QuickSpawnItem(mod.ItemType("Octobass"));
             }
             return true;
         }
 
-        public bool SummonedFromItem(Projectile p, Item item)
+        public bool SummonedFromItem(Projectile p, Item item) // determining if a projectile was created by the given item
         {
-            return p.active && p.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>().shotFrom != null && p.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>().shotFrom.type == item.type;
+            return p.active && p.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom != null && p.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom.type == item.type;
         }
 
-        public override bool WingUpdate(int wings, Player player, bool inUse)
+        public override bool WingUpdate(int wings, Player player, bool inUse) // using wings
         {
             if (inUse)
             {
+                // for use elsewhere
                 player.GetModPlayer<NecromancyPlayer>().wingUse = 2;
             }
             return base.WingUpdate(wings, player, inUse);
         }
 
-        // Number of projectiles an item shoots
-        // only reliable for necrotic weapons, since numProjectiles is only changed in the mod and not globally
-        public int Shoots(Item item)
-        {
-            return ShootTimes(item) * item.GetGlobalItem<NecromancyGlobalItem>().numProjectiles;
-        }
-
-        // Number of times Shoot is called per click
-        public int ShootTimes(Item item)
+        public int ShootTimes(Item item) // number of times Shoot is called per click
         {
             return item.useAnimation / item.useTime;
+        }
+
+        public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            // drawing glowmasks on items thrown on the ground
+            if (item.GetGlobalItem<NecromancyGlobalItem>().glowMask != null)
+            {
+                Texture2D texture = item.GetGlobalItem<NecromancyGlobalItem>().glowMask;
+                spriteBatch.Draw
+                (
+                    texture,
+                    new Vector2
+                    (
+                        item.position.X - Main.screenPosition.X + item.width * 0.5f,
+                        item.position.Y - Main.screenPosition.Y + item.height - texture.Height * 0.5f + 2f
+                    ),
+                    new Rectangle(0, 0, texture.Width, texture.Height),
+                    Color.White,
+                    rotation,
+                    texture.Size() * 0.5f,
+                    scale,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Necromancy.Items
 {
     public class NPCDrops : GlobalNPC
     {
+        /* Separate from NecromancyGlobalNPC for organization purposes */
+
         public override void NPCLoot(NPC npc)
         {
             if (npc.type == NPCID.CultistBoss)
@@ -30,41 +32,61 @@ namespace Necromancy.Items
                 }
             }
 
+            if (!Main.expertMode && npc.type == NPCID.WallofFlesh)
+            {
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AncientHeptagram"));
+            }
+
+            if (!Main.expertMode && npc.type == NPCID.Plantera)
+            {
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("AcidSpray"));
+            }
+            if (!Main.expertMode && npc.type == NPCID.WallofFlesh)
+            {
+                if (Main.rand.NextFloat() < 1 / 8f)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("NecromancerEmblem"));
+                }
+                if (Main.rand.NextFloat() < 1 / 6f)
+                {
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GrenadeBow"));
+                }
+            }
             if (!Main.expertMode && ModLoader.GetMod("ThoriumMod") != null && npc.type == ModLoader.GetMod("ThoriumMod").NPCType("BoreanStrider"))
             {
-                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("TenorDrum"), 1);
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("TenorDrum"));
             }
             if (!Main.expertMode && ModLoader.GetMod("ThoriumMod") != null && npc.type == ModLoader.GetMod("ThoriumMod").NPCType("Beholder"))
             {
-                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("HyperthermalSlicer"), 1);
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("HyperthermalSlicer"));
             }
             if (!Main.expertMode && ModLoader.GetMod("ThoriumMod") != null && npc.type == ModLoader.GetMod("ThoriumMod").NPCType("Lich"))
             {
-                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("LichSoul"), 1);
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("LichSoul"));
             }
             if (!Main.expertMode && ModLoader.GetMod("ThoriumMod") != null && npc.type == ModLoader.GetMod("ThoriumMod").NPCType("Abyssion"))
             {
-                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("Octobass"), 1);
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("Octobass"));
             }
 
             if (npc.type == NPCID.Reaper)
             {
                 float rand = Main.rand.NextFloat();
-                if (rand < 0.05f || (Main.expertMode && rand < 0.1f))
+                if (rand < 1 / 10f || (Main.expertMode && rand < 1 / 5f))
                 {
-                    switch (Main.rand.Next(4))
+                    switch (Main.rand.Next(ModLoader.GetMod("ThoriumMod") != null ? 4 : 3))
                     {
                         case 0:
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DarkSlidewhistle"), 1);
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GhoulPortal"));
                             break;
                         case 1:
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GhostGlaive"), Main.rand.Next(45, 60));
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GhostGlaive"));
                             break;
                         case 2:
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("WraithCloak"), 1);
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("WraithCloak"));
                             break;
                         default:
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GhoulPortal"), 1);
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DarkSlidewhistle"));
                             break;
                     }
                 }
@@ -73,33 +95,33 @@ namespace Necromancy.Items
             if (npc.type == NPCID.Vampire || npc.type == NPCID.VampireBat)
             {
                 float rand = Main.rand.NextFloat();
-                if (rand < 0.01f || (Main.expertMode && rand < 0.02f))
+                if (rand < 1 / 100f || (Main.expertMode && rand < 1 / 50f))
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("VampireLocket"), 1);
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("VampireLocket"));
                 }
             }
 
             if (npc.type >= 402 && npc.type <= 429) // Lunar Event Enemies
             {
                 float rand = Main.rand.NextFloat();
-                if (rand < 0.1f || (Main.expertMode && rand < 0.15f))
+                if (rand < 1 / 50f || (Main.expertMode && rand < 1 / 25f))
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("FragmentWormhole"), 1);
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("FragmentWormhole"));
                 }
             }
 
             if (npc.type == NPCID.GiantCursedSkull)
             {
                 float rand = Main.rand.NextFloat();
-                if (rand < 0.05f || (Main.expertMode && rand < 0.1f))
+                if (rand < 1 / 20f || (Main.expertMode && rand < 1 / 10f))
                 {
                     switch (Main.rand.Next(2))
                     {
                         case 0:
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("HarmonyOrb"), 1);
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("HarmonyOrb"));
                             break;
                         default:
-                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DiscordOrb"), 1);
+                            Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("DiscordOrb"));
                             break;
                     }
                 }
@@ -107,23 +129,20 @@ namespace Necromancy.Items
 
             if (npc.type == NPCID.Mothron)
             {
-                if (Main.rand.NextFloat() < 0.5f)
+                if (Main.rand.NextFloat() < 1 / 2f)
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BrokenHeroTome"), 1);
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BrokenHeroTome"));
                 }
             }
 
-            if (npc.type == NPCID.BloodZombie || npc.type == NPCID.Drippler)
+            if (Main.bloodMoon && Main.rand.NextFloat() < 1 / 2f)
             {
-                if (Main.rand.NextFloat() < 0.5f)
-                {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodEssence"), 1);
-                }
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodEssence"));
+            }
 
-                if (Main.hardMode && Main.rand.NextFloat() < .05f)
-                {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodyMirror"), 1);
-                }
+            if (Main.bloodMoon && Main.hardMode && Main.rand.NextFloat() < 1 / 40f)
+            {
+                Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("BloodyMirror"));
             }
 
             if (npc.type == NPCID.GoblinSummoner)
@@ -131,7 +150,7 @@ namespace Necromancy.Items
                 Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("ShadowBlood"), Main.rand.Next(11, 21));
             }
 
-            if (npc.type > 25 && npc.type < 30 && Main.expertMode) // goblin enemies
+            if (npc.type > 25 && npc.type < 30 && Main.hardMode) // goblin enemies
             {
                 Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("ShadowBlood"), Main.rand.Next(1, 2));
             }
@@ -141,23 +160,23 @@ namespace Necromancy.Items
              || npc.type == NPCID.Demon
              || npc.type == NPCID.FireImp)
             {
-                if (Main.rand.NextFloat () < 2/3f)
+                if (Main.rand.NextFloat() < 2 / 3f)
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("Brimstone"), 1);
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("Brimstone"));
                 }
             }
 
             if (npc.type == NPCID.WallofFlesh && !Main.expertMode)
             {
                 float rand = Main.rand.NextFloat();
-                if (rand < 0.125f || (Main.expertMode && rand < 0.25f))
+                if (rand < 1 / 8f || (Main.expertMode && rand < 1 / 4f))
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("NecromancerEmblem"), 1);
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("NecromancerEmblem"));
                 }
-                rand = Main.rand.Next(8);
-                if (rand < 1 || (Main.expertMode && rand < 2))
+                rand = Main.rand.NextFloat();
+                if (rand < 1 / 8f || (Main.expertMode && rand < 1 / 4f))
                 {
-                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GrenadeBow"), 1);
+                    Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("GrenadeBow"));
                 }
             }
         }

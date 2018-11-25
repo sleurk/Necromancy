@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Radiant
         {
             item.magic = true;
             item.damage = 52;
-            item.crit = 4;
             item.width = 48;
 			item.height = 48;
 			item.useTime = 6;
@@ -25,8 +25,8 @@ namespace Necromancy.Items.Weapons.Radiant
             item.noMelee = true;
             item.noUseGraphic = true;
             item.knockBack = 3;
-			item.value = Item.sellPrice(0, 0, 80, 0);
-			item.rare = 4;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 4;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 			item.shoot = mod.ProjectileType("HyperthermalSlicer");
@@ -34,18 +34,19 @@ namespace Necromancy.Items.Weapons.Radiant
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 3;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 6;
         }
 
         public override bool CanUseItem(Player player)
         {
+            // can only use if there are no existing projectiles from this item
             return player.ownedProjectileCounts[item.shoot] < 1;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(player.Center, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI, 2f, -1f);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
     }

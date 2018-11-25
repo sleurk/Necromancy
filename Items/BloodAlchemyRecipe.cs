@@ -7,9 +7,9 @@ namespace Necromancy.Items
 {
     public class BloodAlchemyRecipe : ModRecipe
     {
-        public BloodAlchemyRecipe(Mod mod) : base(mod)
-        {
-        }
+        public BloodAlchemyRecipe(Mod mod) : base(mod) { }
+
+        // Custom recipe type: 50% chance to consume potion ingredients, costs 50 health to craft
 
         public override int ConsumeItem(int type, int numRequired)
         {
@@ -30,8 +30,8 @@ namespace Necromancy.Items
 
         public override void OnCraft(Item item)
         {
-            Player player = Main.player[item.owner];
-            Necromancy.DrainLife(player, 50);
+            Player player = Main.LocalPlayer;
+            Necromancy.BroadcastDrainLife(player, 50);
         }
     }
 }

@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class CelestialNote : ModProjectile
 	{
+        // similar to vanilla harp projectile, bounces & moves at a set rate
+        // weapon shoots them so they align in groups of 4 if sitting still
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Celestial Note");
@@ -18,12 +21,12 @@ namespace Necromancy.Projectiles
             projectile.width = 22;
 			projectile.height = 30;
 			projectile.friendly = true;
-			projectile.penetrate = 1;
+			projectile.penetrate = 5;
 			projectile.timeLeft = 600;
             projectile.netImportant = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType("EmpowermentFlight");
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.Flight;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -59,7 +62,7 @@ namespace Necromancy.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.immune[projectile.owner] = 1;
+            target.immune[projectile.owner] = 5;
         }
     }
 }

@@ -6,6 +6,8 @@ using Terraria.ModLoader;
 
 namespace Necromancy.Projectiles.Minions
 {
+    // this is a raincloud that moves above enemies to rain on them
+    // rain pierces and moves straight down
     public class RainCloudSummon : ModProjectile
     {
         private float idleAccel = 0.05f;

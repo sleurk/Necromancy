@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,8 +9,8 @@ namespace Necromancy.Projectiles
 {
 	public class AquaticDrumBeat : ModProjectile
 	{
-        int dustType = 60;
-        bool exploded = false;
+        // basic projectile, explodes 
+        readonly int dustType = 60;
 
         public override void SetStaticDefaults()
         {
@@ -27,7 +28,7 @@ namespace Necromancy.Projectiles
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentMeleeDamage>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.MeleeDamage;
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -53,23 +54,23 @@ namespace Necromancy.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
             return false;
         }
 
         private void Explode()
         {
-            exploded = true;
+            projectile.ai[0] = 1f;
             Vector2 center = projectile.Center;
             projectile.width = 120;
             projectile.height = 120;

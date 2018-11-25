@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles.Minions
 {
     public class LightningCloudSummon : ModProjectile
     {
+        // this is a cloud that flies near the player and zaps nearby enemies with chain lightning
         private float idleAccel = 0.05f;
         private float spacingMult = 1f;
         private float viewDist = 400f;
@@ -34,6 +35,7 @@ namespace Necromancy.Projectiles.Minions
             shootSpeed = 5f;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).summon = true;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shock = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).summonCost = 15;
         }
 

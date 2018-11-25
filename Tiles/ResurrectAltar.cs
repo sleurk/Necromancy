@@ -14,7 +14,6 @@ namespace Necromancy.Tiles
         public override void SetDefaults()
         {
             base.SetDefaults();
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TEResurrectAltar>().Hook_AfterPlacement, -1, 0, false);
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Resurrect Altar");
@@ -28,12 +27,14 @@ namespace Necromancy.Tiles
             Item.NewItem(i * 16, j * 16, 32, 48, mod.ItemType<Items.Placeable.ResurrectAltar>());
             int cornerX = i - (frameX / 18) + 1;
             int cornerY = j - (frameY / 18) + 1;
-            mod.GetTileEntity<TEResurrectAltar>().Kill(cornerX, cornerY);
         }
 
-        public override TEAltar GetNewTE()
+        public override bool CreateRitual(int chalk, int i, int j)
         {
-            return new TEResurrectAltar();
+            Vector2 pos = GetProjectilePosition(i, j);
+            Projectile projectile = Projectile.NewProjectileDirect(pos, Vector2.Zero, mod.ProjectileType("Resurrect" + chalkName[chalk]), 0, 0f, Main.myPlayer);
+            Main.PlaySound(SoundID.Item46, pos);
+            return true;
         }
     }
 }

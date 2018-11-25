@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class BloodBall : ModProjectile
 	{
+        // basic projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blood Ball");
@@ -28,7 +29,7 @@ namespace Necromancy.Projectiles
 		{
 			if (Main.rand.Next(2) == 0)
 			{
-				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 12, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+				Dust.NewDust(projectile.position, projectile.width, projectile.height, 12, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
 			}
 		}
 
@@ -36,7 +37,7 @@ namespace Necromancy.Projectiles
 		{
 			for (int k = 0; k < 5; k++)
 			{
-				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 12, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
+				Dust.NewDust(projectile.position, projectile.width, projectile.height, 12, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
 			}
 			Main.PlaySound(SoundID.Item25, projectile.position);
 		}

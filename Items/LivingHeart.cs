@@ -21,7 +21,7 @@ namespace Necromancy.Items
             item.height = 28;
             item.maxStack = 999;
             item.rare = 7;
-            item.value = Item.sellPrice(0, 0, 12, 0);
+            item.value = Item.sellPrice(0, 4);
         }
 
         public override void AddRecipes()

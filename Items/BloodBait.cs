@@ -3,11 +3,14 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace Necromancy.Items
 {
 	public class BloodBait : ModItem
 	{
+        // fishing bait
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Blood Bait");
@@ -19,7 +22,7 @@ namespace Necromancy.Items
 			item.width = 16;
 			item.height = 16;
 			item.maxStack = 999;
-			item.value = Item.sellPrice(0, 0, 2, 0);
+			item.value = Item.sellPrice(0, 0, 2);
 			item.rare = 2;
             item.bait = 10;
 		}

@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 7;
-            item.crit = 4;
             item.width = 32;
 			item.height = 32;
 			item.useTime = 60;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.noUseGraphic = true;
 			item.noMelee = true;
 			item.knockBack = 5;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+            item.value = Item.sellPrice(0, 0, 80);
             item.rare = 1;
             item.UseSound = SoundID.Item8;
 			item.autoReuse = true;
@@ -35,19 +35,20 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 6;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 6;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            float r = 12f;
-            for (int i = 0; i < 8; i++)
+            // creates 8 projectiles in a small ring (radius of 12px) and shoots the ring
+            // motion of the projectiles are calculated in the projectiles' code (PrideRing.cs)
+            float radius = 12f;
+            for (int i = 0; i < 8; i++) 
             {
-                Vector2 pos = player.Center + Vector2.UnitX.RotatedBy(MathHelper.ToRadians(45) * i) * r;
+                Vector2 pos = player.Center + Vector2.UnitX.RotatedBy(MathHelper.ToRadians(45) * i) * radius;
                 HalfVector2 vel = new HalfVector2(speedX, speedY);
                 Projectile proj = Projectile.NewProjectileDirect(position, Vector2.Zero, type, damage, knockBack, player.whoAmI, MathHelper.ToRadians(45) * i, vel.PackedValue);
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>().shotFrom = item;
-                proj.Center = pos;
+                proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = item;
             }
             return false;
         }

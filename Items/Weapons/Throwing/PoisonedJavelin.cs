@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Necromancy.Projectiles;
 
 namespace Necromancy.Items.Weapons.Throwing
 {
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Throwing
         {
             item.magic = true;
             item.damage = 20;
-            item.crit = 4;
             item.width = 28;
 			item.height = 30;
 			item.useTime = 25;
@@ -40,8 +40,7 @@ namespace Necromancy.Items.Weapons.Throwing
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.position = player.Center + proj.velocity;
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
@@ -51,7 +50,7 @@ namespace Necromancy.Items.Weapons.Throwing
             recipe.AddIngredient(ItemID.JungleSpores, 8);
             recipe.AddIngredient(ItemID.Stinger, 5);
             recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this, 100);
+            recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }

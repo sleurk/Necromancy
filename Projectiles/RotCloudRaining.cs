@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,8 +8,9 @@ namespace Necromancy.Projectiles
 {
     public class RotCloudRaining : ModProjectile
     {
-        private bool set;
-        private bool disappear;
+        // nimbus rod clone, cloud while in position and raining
+        private const int NUM_CLOUDS = 1;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Rot Cloud");
@@ -29,22 +31,26 @@ namespace Necromancy.Projectiles
             Main.projFrames[projectile.type] = 6;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).magic = true;
-            set = true;
-            disappear = false;
         }
 
         public override void AI()
         {
-            if (set)
+            if (projectile.ai[0] == 0f)
             {
-                set = false;
-                Main.player[projectile.owner].GetModPlayer<NecromancyPlayer>(mod).rotCloud = projectile;
-            }
-
-            if (!disappear && Main.player[projectile.owner].GetModPlayer<NecromancyPlayer>(mod).rotCloud != projectile)
-            {
-                projectile.timeLeft = 10;
-                disappear = true;
+                projectile.ai[0] = 1f;
+                List<Projectile> clouds = new List<Projectile>();
+                foreach (Projectile proj in Main.projectile)
+                {
+                    if (proj != null && proj.active && proj.type == projectile.type && proj.owner == projectile.owner)
+                    {
+                        clouds.Add(proj);
+                    }
+                }
+                clouds.Sort(new ProjectileAgeComparer());
+                for (int i = clouds.Count - 1; i >= NUM_CLOUDS; i--)
+                {
+                    clouds[i].Kill();
+                }
             }
 
             if (projectile.timeLeft < 10)
@@ -63,6 +69,7 @@ namespace Necromancy.Projectiles
             {
                 Vector2 pos = new Vector2(Main.rand.NextFloat(projectile.position.X + projectile.width * 1/4f, projectile.position.X + projectile.width * 3/4f), projectile.Center.Y);
                 Projectile proj = Projectile.NewProjectileDirect(pos, new Vector2(0, 10f), mod.ProjectileType("RotRain"), projectile.damage, projectile.knockBack, projectile.owner);
+                proj.position = pos;
                 proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom;
             }
         }

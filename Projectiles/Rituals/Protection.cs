@@ -14,12 +14,17 @@ namespace Necromancy.Projectiles.Rituals
             DisplayName.SetDefault("Protection");
         }
 
+        protected override int TileType
+        {
+            get { return mod.TileType("ProtectionAltar"); }
+        }
+
         public override void Tick()
         {
             foreach (Player player in Necromancy.NearbyAllies(projectile.Center, null, 600f))
             {
                 player.AddBuff(mod.BuffType<Buffs.Protected>(), 2);
-                player.statDefense += power * 8;
+                player.statDefense += (int)Power * 3;
             }
         }
     }

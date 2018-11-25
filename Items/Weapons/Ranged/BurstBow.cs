@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -18,7 +19,6 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             item.magic = true;
             item.damage = 45;
-            item.crit = 4;
             item.width = 28;
             item.height = 50;
             item.useTime = 45;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.useStyle = 5;
             item.noMelee = true;
             item.knockBack = 2;
-            item.value = Item.sellPrice(0, 22, 0, 0);
+            item.value = Item.sellPrice(0, 3);
             item.rare = 5;
             item.UseSound = SoundID.Item5;
             item.autoReuse = true;
@@ -35,7 +35,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 45;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 45;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 3;
         }
 
@@ -44,11 +44,12 @@ namespace Necromancy.Items.Weapons.Ranged
             int numberProjectiles = 15;
             for (int i = 0; i < numberProjectiles; i++)
             {
+                // 15 arrows, 15 degree spread, some randomized speed
                 Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(15));
                 float scale = 1f - (Main.rand.NextFloat() * .3f);
                 perturbedSpeed = perturbedSpeed * scale;
                 Projectile proj = Projectile.NewProjectileDirect(position, perturbedSpeed, type, damage, knockBack, player.whoAmI);
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+                proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             }
             return false;
         }
@@ -62,7 +63,7 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.HallowedBar, 15);
-            recipe.AddIngredient(ItemID.SoulofSight, 10);
+            recipe.AddIngredient(ItemID.SoulofSight, 20);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

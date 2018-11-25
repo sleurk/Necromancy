@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class Flame : ModProjectile
 	{
+        // basic projectile, slows to a stop, shot in an arc
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Flame");

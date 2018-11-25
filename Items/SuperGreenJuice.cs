@@ -29,7 +29,7 @@ namespace Necromancy.Items
             item.potion = true;
             item.mana = refItem.healLife;
             item.maxStack = 1;
-			item.value = Item.sellPrice(0, 1, 0, 0);
+			item.value = Item.sellPrice(0, 4);
             item.rare = refItem.rare;
         }
 

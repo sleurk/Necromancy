@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,6 +8,9 @@ namespace Necromancy.Projectiles
 {
 	public class ElectricWhip : ModProjectile
 	{
+        // whip projectile
+        // fast-moving, straight line, short range
+        private const int LIFESPAN = 90;
 
         public override void SetStaticDefaults()
         {
@@ -16,70 +20,68 @@ namespace Necromancy.Projectiles
         public override void SetDefaults()
         {
             projectile.magic = true;
-            projectile.width = 8;
-			projectile.height = 8;
+            projectile.width = 4;
+			projectile.height = 4;
             projectile.friendly = true;
             projectile.penetrate = 1;
-			projectile.timeLeft = 50;
+			projectile.timeLeft = LIFESPAN;
             projectile.hide = true;
-            projectile.extraUpdates = 10;
+            projectile.extraUpdates = 20;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 4;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 10;
 
         }
 
 		public override void AI()
 		{
-            // code from vanilla
-            projectile.localAI[0] += 1f;
-            if (projectile.localAI[0] > 9f)
-            {
-                int num3;
-                for (int num452 = 0; num452 < 4; num452 = num3 + 1)
-                {
-                    Vector2 vector36 = projectile.position;
-                    vector36 -= projectile.velocity * ((float)num452 * 0.25f);
-                    projectile.alpha = 255;
-                    int num453 = Dust.NewDust(vector36, 1, 1, 230);
-                    Main.dust[num453].noGravity = true;
-                    Main.dust[num453].scale = (float)Main.rand.NextFloat();
-                    Main.dust[num453].position = vector36;
-                    Dust dust3 = Main.dust[num453];
-                    dust3.velocity *= 0.2f;
-                    num3 = num452;
-                }
+            for (int i = 0; i < 4; i++)
+            { 
+                Dust d = Dust.QuickDust(projectile.Center + projectile.velocity * i / 4f, new Color(0.3f, 1f, 0.1f));
+                d.noGravity = true;
+                d.scale = Main.rand.NextFloat();
+                d.velocity *= 0.2f;
             }
         }
 
         public override bool? CanHitNPC(NPC target)
         {
-            if (target.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit) return false;
+            if (target.GetGlobalNPC<NecromancyNPC>().lightningHit) return false;
             return base.CanHitNPC(target);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (target.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit)
+            if (target.GetGlobalNPC<NecromancyNPC>().lightningHit)
             {
                 projectile.penetrate++;
             }
             else
             {
-                target.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit = true;
+                target.GetGlobalNPC<NecromancyNPC>().lightningHit = true;
                 if (projectile.ai[1] != 0)
                 {
                     for (int i = 0; i < projectile.ai[0]; i++)
                     {
-                        NPC newTarget = Necromancy.NearestNPC(projectile.position, 500f, true);
+                        float radius = projectile.velocity.Length() * LIFESPAN;
+
+                        NPC newTarget = Necromancy.NearestNPC(projectile.position + projectile.velocity * 32f, radius / 2, true);
                         if (newTarget != null)
                         {
                             Vector2 toNewTarget = newTarget.Center - projectile.Center;
                             toNewTarget.Normalize();
                             toNewTarget *= projectile.velocity.Length();
 
-                            Projectile bolt = Projectile.NewProjectileDirect(projectile.position, toNewTarget, projectile.type, damage, projectile.knockBack, projectile.owner, projectile.ai[0] - 1, projectile.ai[1] - 1);
-                            newTarget.GetGlobalNPC<NPCs.NecromancyNPC>().lightningHit = true;
+                            Projectile bolt = Projectile.NewProjectileDirect(projectile.Center, toNewTarget, projectile.type, damage, projectile.knockBack, projectile.owner, projectile.ai[0], projectile.ai[1] - 1);
+                            newTarget.GetGlobalNPC<NecromancyNPC>().lightningHit = true;
+
+                            for (int j = 0; j < 4; j++)
+                            {
+                                Dust d = Dust.QuickDust(bolt.Center + bolt.velocity * j / 4f, new Color(0.3f, 1f, 0.1f));
+                                d.noGravity = true;
+                                d.scale = Main.rand.NextFloat();
+                                d.velocity *= 0.2f;
+                            }
                         }
                     }
                     projectile.Kill();

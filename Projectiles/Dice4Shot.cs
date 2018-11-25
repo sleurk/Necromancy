@@ -7,6 +7,8 @@ namespace Necromancy.Projectiles
 {
     public class Dice4Shot : ModProjectile
     {
+        // projectile created by throwing dice on a '4'
+        // bounces on walls
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dice 4 Shot");

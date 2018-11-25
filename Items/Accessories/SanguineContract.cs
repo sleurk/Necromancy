@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Necromancy.Items.Accessories
@@ -10,25 +8,32 @@ namespace Necromancy.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sanguine Contract");
-            Tooltip.SetDefault("Halves your life regen" +
-                    "\n20% increased life steal");
+            Tooltip.SetDefault("+50% increased life steal");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 36;
 			item.height = 36;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.rare = 2;
+            item.value = Item.sellPrice(0, 1);
+            item.rare = 2;
 			item.accessory = true;
 		}
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).regenMult *= 0.5f;
-            player.GetModPlayer<NecromancyPlayer>(mod).lifeStealMult += 0.2f;
+            player.GetModPlayer<NecromancyPlayer>(mod).lifeStealMult += 0.5f;
         }
 
-        // recipe in BloodAlchemyStation.cs
+        public override void AddRecipes()
+        {
+            BloodAlchemyRecipe recipe = new BloodAlchemyRecipe(mod);
+            recipe.AddIngredient(mod, "Brimstone", 5);
+            recipe.AddIngredient(mod, "BloodEssence", 20);
+            recipe.AddIngredient(mod, "Parchment");
+            recipe.AddTile(mod, "BloodAlchemyStation");
+            recipe.SetResult(mod, "SanguineContract");
+            recipe.AddRecipe();
+        }
     }
 }

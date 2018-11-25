@@ -22,12 +22,12 @@ namespace Necromancy.Items.Armor
 			item.value = 0;
 			item.rare = 5;
 			item.defense = 5;
-            item.value = Item.sellPrice(0, 5, 0, 0);
+            item.value = Item.sellPrice(0, 1);
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>().necroticMult += 0.2f;
+            player.GetModPlayer<NecromancyPlayer>().necroticDamage += 0.2f;
             player.GetModPlayer<NecromancyPlayer>().lifeCostModifier -= 3;
         }
 

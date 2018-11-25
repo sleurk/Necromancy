@@ -20,14 +20,14 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 20;
 			item.height = 22;
-			item.value = Item.sellPrice(0, 6, 0, 0);
-			item.rare = 7;
+            item.value = Item.sellPrice(0, 2);
+            item.rare = 7;
 			item.defense = 12;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += 0.3f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.3f;
             player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 5;
         }
 
@@ -43,6 +43,7 @@ namespace Necromancy.Items.Armor
                 "\nPlayers inside the aura regenerate quickly" +
                 "\nEnemies inside the aura take more damage";
             player.statLifeMax2 += 150;
+            // uses a projectile to buff/debuff allies/enemies respectively
             Projectile.NewProjectileDirect(player.Center, Vector2.Zero, mod.ProjectileType<Projectiles.ApocalypseAura>(), 0, 0f, player.whoAmI).Center = player.Center;
         }
 

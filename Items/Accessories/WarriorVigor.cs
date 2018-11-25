@@ -11,15 +11,15 @@ namespace Necromancy.Items.Accessories
         {
             DisplayName.SetDefault("Warrior's Vigor");
             Tooltip.SetDefault("-2 necrotic melee life steal" +
-                    "\nNecrotic melee life steal increases when not getting hit");
+                    "\nNecrotic melee life steal increases after being hit");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 36;
 			item.height = 40;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 6;
 			item.accessory = true;
 		}
 

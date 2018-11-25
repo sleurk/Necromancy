@@ -16,6 +16,7 @@ namespace Necromancy.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
+            // defense buff from ritual
             player.noKnockback = true;
         }
     }

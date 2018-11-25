@@ -1,13 +1,16 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Necromancy.Items.Weapons.Melee
 {
-	public class SoulScythe : ModItem
-	{
+    // this is a child of SwipeWeapon.cs, so the important code is there
 
+    public class SoulScythe : SwipeWeapon
+	{
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soul Scythe");
@@ -15,42 +18,32 @@ namespace Necromancy.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            item.magic = true;
+            base.SetDefaults();
             item.damage = 67;
-            item.crit = 4;
             item.width = 74;
 			item.height = 68;
-            item.useAnimation = 12;
-            item.useTime = 12;
-            item.useStyle = 5;
-            item.noUseGraphic = true;
-            item.channel = true;
-            item.noMelee = true;
             item.knockBack = 4f;
-            item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 8;
-			item.autoReuse = true;
+            item.value = Item.sellPrice(0, 10);
+            item.rare = 8;
             item.shoot = mod.ProjectileType("SoulScytheSwipe");
             item.shootSpeed = 32f;
-            item.prefix = 0;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).melee = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 3;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = SoulScytheSwipe.EXTENSIONS + 1;
         }
-        
+
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            int p = Projectile.NewProjectile(position.X, position.Y, speedX, speedY, type, damage, knockBack, player.whoAmI);
-            Main.projectile[p].scale = 1f;
+            Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), item.shoot, damage, knockBack, player.whoAmI, 0f, -1f);
+            // ai1 = projectile's "age" (see SoulScytheSwipe.cs)
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Ectoplasm, 10);
-            recipe.AddIngredient(ItemID.SpookyWood, 100);
-            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddIngredient(ItemID.Ectoplasm, 6);
+            recipe.AddIngredient(ItemID.SpookyWood, 30);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

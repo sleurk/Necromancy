@@ -8,6 +8,22 @@ namespace Necromancy.Projectiles
 {
 	public class DeathSwipe : ScytheSwipe
     {
+        // arkhalis-type projecitle, look in ScytheSwipe for actual behavior
+
+        protected override int DustType
+        {
+            get { return 54; }
+        }
+        protected override Color Color
+        {
+            get { return new Color(0.3F, 0F, 0F); }
+        }
+
+        protected override int FrameLength
+        {
+            get { return 1; }
+        }
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Death Swipe");
@@ -20,10 +36,6 @@ namespace Necromancy.Projectiles
             projectile.width = 180;
             projectile.height = 206;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 8;
-            dustType = 54;
-            r = 0.3f;
-            g = 0f;
-            b = 0f;
         }
     }
 }

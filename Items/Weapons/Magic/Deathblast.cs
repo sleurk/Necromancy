@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,10 +17,9 @@ namespace Necromancy.Items.Weapons.Magic
         public override void SetDefaults()
         {
             item.magic = true;
-            item.damage = 20;
-            item.crit = 4;
+            item.damage = 41;
             item.width = 40;
-			item.height = 40;
+			item.height = 44;
             item.useTime = 25;
             item.channel = true;
 			item.useAnimation = 7;
@@ -27,7 +27,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.noUseGraphic = true;
             item.noMelee = true;
             item.knockBack = 5;
-			item.value = Item.sellPrice(0, 10, 0, 0);
+			item.value = Item.sellPrice(0, 10);
 			item.rare = 8;
 			item.UseSound = SoundID.Item13;
             item.shoot = mod.ProjectileType("Deathblast");
@@ -40,7 +40,7 @@ namespace Necromancy.Items.Weapons.Magic
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 

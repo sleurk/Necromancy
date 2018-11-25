@@ -3,12 +3,17 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System;
+using Necromancy.NPCs;
 
 namespace Necromancy.Projectiles
 {
 	public class GreedRing : ModProjectile
 	{
-
+        // creates a slowly shrinking ring around the player
+        // moves very fast in a shrinking circle
+        // is supposed to knock enemies that are inside the circle towards the player
+        // and knock enemies that are outside away
+        // but it doesn't work too well
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Greed Ring");
@@ -31,13 +36,13 @@ namespace Necromancy.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if ((target.GetGlobalNPC<NPCs.NecromancyNPC>().oldCenter - Main.player[projectile.owner].Center).Length() < projectile.ai[0])
+            if ((target.GetGlobalNPC<NecromancyNPC>().oldCenter - Main.player[projectile.owner].Center).Length() < projectile.ai[0])
             {
-                target.velocity -= (target.Center - Main.player[projectile.owner].Center) / 12f * target.knockBackResist;
+                Necromancy.DoCustomKnockback(target, (target.Center - Main.player[projectile.owner].Center) / 12f);
             }
             else
             {
-                target.velocity += (target.Center - Main.player[projectile.owner].Center) / 24f * target.knockBackResist;
+                Necromancy.DoCustomKnockback(target, -(target.Center - Main.player[projectile.owner].Center) / 12f);
             }
             target.immune[projectile.owner] = 5;
         }

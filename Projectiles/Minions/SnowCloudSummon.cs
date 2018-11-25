@@ -6,6 +6,9 @@ using Terraria.ModLoader;
 
 namespace Necromancy.Projectiles.Minions
 {
+    // this is a snow cloud that tries to be above enemies to snow on them
+    // snow is like rain but doesn't pierce and is affected by horizontal movement
+    // more projectiles are shot though
     public class SnowCloudSummon : ModProjectile
     {
         private float idleAccel = 0.05f;

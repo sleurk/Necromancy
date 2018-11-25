@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,7 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class AquaticStringNote : ModProjectile
 	{
-        int dustType = 58;
+        // basic short-range projectile
+        readonly int dustType = 58;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Aquatic String Note");
@@ -24,7 +26,7 @@ namespace Necromancy.Projectiles
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentSummonDamage>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.SummonDamage;
         }
 
 		public override void AI()

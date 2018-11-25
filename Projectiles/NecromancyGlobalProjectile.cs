@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Necromancy.Empowerments;
+using Necromancy.NPCs;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -11,16 +13,19 @@ namespace Necromancy.Projectiles
     {
         public override bool InstancePerEntity
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public bool necrotic = false;
         public bool ichor = false;
         public bool cursedfire = false;
         public bool fire = false;
+        public bool blood = false;
+        public bool glow = false;
+        public bool burn = false;
+        public bool ice = false;
+        public bool goo = false;
+        public bool shock = false;
         public bool healAll = false;
         public bool melee = false;
         public bool ranged = false;
@@ -29,7 +34,8 @@ namespace Necromancy.Projectiles
         public bool throwing = false;
         public bool radiant = false;
         public bool symphonic = false;
-        public int buffType;
+        public bool lightningShootFlag = false;
+        public EmpType empowermentType;
         public bool rangedHit = false;
         public bool magnetActivated = false;
         public int lifeSteal = 0;
@@ -37,33 +43,22 @@ namespace Necromancy.Projectiles
         public int summonCost = 0;
         public Item shotFrom = null;
 
-        public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
-        {
-            Player player = Main.player[projectile.owner];
-            NecromancyPlayer mPlayer = player.GetModPlayer<NecromancyPlayer>();
-
-            NecromancyGlobalProjectile gProjectile = projectile.GetGlobalProjectile<NecromancyGlobalProjectile>();
-
-            if (true /*target.type != NPCID.TargetDummy && !target.SpawnedFromStatue */)
-            {
-                if (projectile.type == mod.ProjectileType("PestilenceBall"))
-                {
-                    target.GetGlobalNPC<NPCs.NecromancyNPC>(mod).pestilence = true; // no need for buff, since it lasts forever
-                    target.GetGlobalNPC<NPCs.NecromancyNPC>(mod).pestilencePlayer = player; // who to heal
-                }
-            }
-        }
-
         public override void Kill(Projectile projectile, int timeLeft)
         {
-            if (projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).ranged && !projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).rangedHit)
+            if (projectile.type != mod.ProjectileType("ABowBolt") && projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).ranged && !projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).rangedHit)
             {
-                Main.player[projectile.owner].GetModPlayer<NecromancyPlayer>(mod).rangedHitsNum = 0f;
+                // reducing buff from Sharpshooter's Blessing after missing a projectile
+                if (Main.player[projectile.owner] != null && projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom != null)
+                {
+                    float reduction = Main.player[projectile.owner].GetModPlayer<NecromancyPlayer>(mod).rangedHitsNum - projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom.useTime / 60f;
+                    Main.player[projectile.owner].GetModPlayer<NecromancyPlayer>(mod).rangedHitsNum = Math.Max(0, reduction);
+                }
             }
         }
 
         public override void PostAI(Projectile projectile)
         {
+            // doing necrotic summon costs
             if (summonCost > 0)
             {
                 Player player = Main.player[projectile.owner];
@@ -77,11 +72,12 @@ namespace Necromancy.Projectiles
 
                 if (!player.dead)
                 {
+                    player.GetModPlayer<NecromancyPlayer>().totalSummonCost += activeSummonCost;
                     player.statLifeMax2 -= activeSummonCost;
                     projectile.timeLeft = 2;
                 }
 
-                if (player.statLife > player.statLifeMax2) Necromancy.DrainLife(player, player.statLife - player.statLifeMax2);
+                if (player.statLife > player.statLifeMax2) Necromancy.DrainLife(player, player.statLife - player.statLifeMax2, -2f);
                 if (player.statLifeMax2 <= 0) player.statLifeMax2 = player.statLifeMax;
             }
         }

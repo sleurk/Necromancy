@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -13,21 +14,20 @@ namespace Necromancy.Items.Weapons.Symphonic
         {
             DisplayName.SetDefault("Space Drum");
             Tooltip.SetDefault("Creates a pulse of space bass" +
-                "\nEmpowers players with stacking movement speed");            
+                "\nEmpowers players with dodge chance");            
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 15;
-            item.crit = 4;
             item.width = 38;
 			item.height = 38;
-			item.useTime = 35;
-			item.useAnimation = 35;
+			item.useTime = 30;
+			item.useAnimation = 30;
 			item.useStyle = 5;
             item.knockBack = 5;
-			item.value = Item.sellPrice(0, 2, 0, 0);
+			item.value = Item.sellPrice(0, 0, 80);
 			item.rare = 2;
 			item.UseSound = SoundID.Item10;
 			item.autoReuse = true;
@@ -36,25 +36,26 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 3;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 2;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             float numberProjectiles = 32;
-            float rotation = MathHelper.ToRadians(11.25f);
+            float rotation = MathHelper.ToRadians(360f / numberProjectiles);
+            // shoots 32 projectiles equally spaced in a ring
             for (int i = 0; i < numberProjectiles; i++)
             {
                 Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(rotation * i) * 0.4f;
                 Projectile projectile = Main.projectile[Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI)];
-                projectile.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+                projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             }
             return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
             recipe.AddIngredient(ItemID.MeteoriteBar, 10);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);

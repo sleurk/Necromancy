@@ -22,7 +22,7 @@ namespace Necromancy.Items
             item.height = 20;
             item.maxStack = 30;
             item.rare = 4;
-            item.value = Item.sellPrice(0, 0, 0, 50);
+            item.value = Item.sellPrice(0, 0, 1);
             item.consumable = true;
         }
 

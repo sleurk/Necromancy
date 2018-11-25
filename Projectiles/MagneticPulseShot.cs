@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class MagneticPulseShot : ModProjectile
 	{
+        // basic homing projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Magnetic Pulse Shot");
@@ -18,7 +19,8 @@ namespace Necromancy.Projectiles
             projectile.width = 16;
 			projectile.height = 16;
 			projectile.friendly = true;
-			projectile.penetrate = 1;
+            ProjectileID.Sets.Homing[projectile.type] = true;
+            projectile.penetrate = 1;
 			projectile.timeLeft = 150;
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;

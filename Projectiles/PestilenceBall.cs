@@ -6,6 +6,7 @@ namespace Necromancy.Projectiles
 {
 	public class PestilenceBall : ModProjectile
 	{
+        // basic projectile, applies a status effect
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Pestilence Ball");
@@ -17,7 +18,8 @@ namespace Necromancy.Projectiles
             projectile.width = 16;
 			projectile.height = 16;
 			projectile.friendly = true;
-			projectile.penetrate = 1;
+            projectile.tileCollide = false;
+			projectile.penetrate = -1;
 			projectile.timeLeft = 600;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).magic = true;
@@ -25,6 +27,7 @@ namespace Necromancy.Projectiles
 
 		public override void AI()
 		{
+            projectile.velocity = projectile.velocity * 0.995f + (Main.player[projectile.owner].Center - projectile.Center) * 0.005f;
             projectile.rotation += projectile.direction;
 			if (Main.rand.Next(2) == 0)
 			{
@@ -47,5 +50,10 @@ namespace Necromancy.Projectiles
             }
 			Main.PlaySound(SoundID.Item25, projectile.position);
 		}
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.immune[projectile.owner] = 2;
+        }
     }
 }

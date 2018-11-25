@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -8,7 +9,6 @@ namespace Necromancy.Items.Weapons.Summon
 {
 	public class Famine : ModItem
 	{
-
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Famine");
@@ -18,8 +18,7 @@ namespace Necromancy.Items.Weapons.Summon
         public override void SetDefaults()
         {
             item.magic = true;
-            item.damage = 73;
-            item.crit = 4;
+            item.damage = 175;
             item.width = 48;
 			item.height = 48;
             item.useStyle = 1;
@@ -28,7 +27,7 @@ namespace Necromancy.Items.Weapons.Summon
 			item.noMelee = true;
 			item.knockBack = 5;
             item.autoReuse = true;
-			item.value = Item.sellPrice(0, 12, 75, 0);
+			item.value = Item.sellPrice(0, 12, 75);
 			item.rare = 10; 
 			item.UseSound = SoundID.Item44;
 			item.shoot = mod.ProjectileType("DarkCloud");
@@ -43,7 +42,7 @@ namespace Necromancy.Items.Weapons.Summon
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 

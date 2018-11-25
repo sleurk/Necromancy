@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 2;
-            item.crit = 4;
             item.width = 32;
 			item.height = 32;
 			item.useTime = 80;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.noUseGraphic = true;
 			item.noMelee = true;
 			item.knockBack = 5;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+			item.value = Item.sellPrice(0, 0, 80);
 			item.rare = 1;
 			item.UseSound = SoundID.Item8;
 			item.autoReuse = true;
@@ -35,7 +35,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 6;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 6;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -44,16 +44,14 @@ namespace Necromancy.Items.Weapons.Magic
             {
                 if (p != null && p.active && p.type == type && p.owner == player.whoAmI)
                 {
-                    p.Kill();
+                    p.Kill(); // using the weapon destroys other instances of the projectile
                 }
             }
             if (Main.myPlayer == player.whoAmI)
             {
-                position = Main.MouseWorld;
+                position = Main.MouseWorld; // created at cursor
                 Projectile proj = Projectile.NewProjectileDirect(position, Vector2.Zero, type, damage, 0f, player.whoAmI);
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>().shotFrom = item;
-                proj.Center = position;
-                proj.netUpdate = true;
+                proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = item;
             }
             return false;
         }

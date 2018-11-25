@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class LifeShot : ModProjectile
 	{
+        // basic projectile, homes
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Life Shot");
@@ -18,7 +19,8 @@ namespace Necromancy.Projectiles
             projectile.width = 16;
 			projectile.height = 16;
 			projectile.friendly = true;
-			projectile.penetrate = 1;
+            ProjectileID.Sets.Homing[projectile.type] = true;
+            projectile.penetrate = 1;
 			projectile.timeLeft = 60;
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
@@ -40,19 +42,15 @@ namespace Necromancy.Projectiles
                 projectile.velocity *= projectile.oldVelocity.Length();
             }
 
-            Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
-            if (Main.rand.Next(2) == 0)
-			{
-				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
-			}
-		}
+            Dust d = Dust.QuickDust(projectile.Center, Color.Green);
+        }
 
 		public override void Kill(int timeLeft)
 		{
 			for (int k = 0; k < 5; k++)
-			{
-				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 61, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
-			}
+            {
+                Dust d = Dust.QuickDust(projectile.Center + Main.rand.NextVector2CircularEdge(projectile.width / 2, projectile.height / 2), Color.Green);
+            }
 		}
     }
 }

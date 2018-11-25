@@ -7,7 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class Grenade : ModProjectile
 	{
-        private bool exploded;
+        // basic high-gravity projectile, explodes on any contact
 
         public override void SetStaticDefaults()
         {
@@ -25,7 +25,6 @@ namespace Necromancy.Projectiles
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).ranged = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 30;
-            exploded = false;
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -52,23 +51,23 @@ namespace Necromancy.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
             return false;
         }
 
         private void Explode()
         {
-            exploded = true;
+            projectile.ai[0] = 1f;
             Vector2 center = projectile.Center;
             projectile.width = 300 - projectile.timeLeft;
             projectile.height = 300 - projectile.timeLeft;

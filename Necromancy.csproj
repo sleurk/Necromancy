@@ -29,8 +29,31 @@
   <PropertyGroup>
     <RootNamespace>Necromancy</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>4</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="ReLogic, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dllReferences\ReLogic.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -56,10 +79,16 @@
     <Content Include="description.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffs\MushroomSpores.cs" />
+    <Compile Include="Buffs\GreenSwarm.cs" />
+    <Compile Include="Buffs\Chilled.cs" />
+    <Compile Include="Buffs\ArcticWind.cs" />
+    <Compile Include="Buffs\Glow.cs" />
+    <Compile Include="Buffs\MortalBoost.cs" />
+    <Compile Include="Buffs\Taunting.cs" />
+    <Compile Include="Buffs\Shocked.cs" />
+    <Compile Include="Buffs\Recovering.cs" />
     <Compile Include="Buffs\VampiricExhaustion.cs" />
-    <Compile Include="Buffs\EmpowermentDefense.cs" />
-    <Compile Include="Buffs\EmpowermentLifeSteal.cs" />
-    <Compile Include="Buffs\EmpowermentMaxLife.cs" />
     <Compile Include="Buffs\Resurrect.cs" />
     <Compile Include="Buffs\Energized3.cs" />
     <Compile Include="Buffs\Energized2.cs" />
@@ -67,39 +96,92 @@
     <Compile Include="Buffs\SoulHarvest.cs" />
     <Compile Include="Buffs\Apocalypse.cs" />
     <Compile Include="Buffs\Stunned.cs" />
+    <Compile Include="Buffs\Goo.cs" />
+    <Compile Include="Buffs\Burning.cs" />
     <Compile Include="Buffs\Wounded.cs" />
-    <Compile Include="Buffs\EmpowermentImmortality.cs" />
     <Compile Include="Buffs\WormholeRecover.cs" />
     <Compile Include="Buffs\WormholeDefense.cs" />
     <Compile Include="Buffs\Enchanted.cs" />
     <Compile Include="Buffs\Protected.cs" />
     <Compile Include="Buffs\Agitated.cs" />
     <Compile Include="Buffs\DiscordOrb.cs" />
-    <Compile Include="Buffs\EmpowermentCritChance.cs" />
-    <Compile Include="Buffs\EmpowermentNecroticDamage.cs" />
-    <Compile Include="Buffs\EmpowermentSummonDamage.cs" />
-    <Compile Include="Buffs\EmpowermentMagicDamage.cs" />
-    <Compile Include="Buffs\EmpowermentRangedDamage.cs" />
-    <Compile Include="Buffs\EmpowermentMeleeDamage.cs" />
-    <Compile Include="Buffs\EmpowermentDamage.cs" />
-    <Compile Include="Buffs\EmpowermentMaxMana.cs" />
     <Compile Include="Buffs\HarmonyOrb.cs" />
     <Compile Include="Buffs\CursedRage.cs" />
-    <Compile Include="Buffs\Empowerment.cs" />
-    <Compile Include="Buffs\EmpowermentFlight.cs" />
-    <Compile Include="Buffs\EmpowermentMoveSpeed.cs" />
-    <Compile Include="Buffs\EmpowermentEndurance.cs" />
-    <Compile Include="Buffs\EmpowermentRegen.cs" />
     <Compile Include="Buffs\DarkPower.cs" />
     <Compile Include="Buffs\CelestialProtection.cs" />
     <Compile Include="Buffs\Favored.cs" />
-    <Compile Include="Buffs\HealingBoost.cs" />
     <Compile Include="Buffs\IchorEndurance.cs" />
-    <Compile Include="Buffs\RitualCircle3.cs" />
-    <Compile Include="Buffs\RitualCircle2.cs" />
-    <Compile Include="Buffs\RitualCircle1.cs" />
     <Compile Include="Buffs\Destabilized.cs" />
     <Compile Include="Buffs\Toughblood.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Empowerments\EmpowermentAttackSpeed.cs" />
+    <Compile Include="Empowerments\EmpowermentAmmoConsumption.cs" />
+    <Compile Include="Empowerments\EmpowermentManaEfficiency.cs" />
+    <Compile Include="Empowerments\EmpowermentArmorPierce.cs" />
+    <Compile Include="Empowerments\EmpowermentRestoration.cs" />
+    <Compile Include="Empowerments\EmpowermentDodge.cs" />
+    <Compile Include="Empowerments\EmpowermentMaxLife.cs" />
+    <Compile Include="Empowerments\EmpowermentMaxMana.cs" />
+    <Compile Include="Empowerments\EmpowermentManaRegen.cs" />
+    <Compile Include="Items\Placeable\TauntingAltar.cs" />
+    <Compile Include="Items\Weapons\Melee\Dreambreaker.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Magic\PylonHarmonizer.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Magic\SlimeCrystal.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Melee\Magmatica.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Ranged\Chloroflamethrower.cs" />
+    <Compile Include="Items\Weapons\Summon\AncientHeptagram.cs" />
+    <Compile Include="Items\Placeable\RecoveryAltar.cs" />
+    <Compile Include="Items\ThoriumRecipe.cs" />
+    <Compile Include="Items\Weapons\Magic\RingOfPerdition.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Magic\VolcanicEruption.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Magic\GlacialTome.cs" />
+    <Compile Include="Items\Weapons\Magic\LightningShock.cs" />
+    <Compile Include="Items\Weapons\Radiant\GooRod.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Magic\Cruor.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Melee\AcidDisc.cs" />
+    <Compile Include="Items\Weapons\Melee\SwipeWeapon.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Melee\StaticFlail.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Melee\LivingBlade.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Radiant\MeteorEye.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Radiant\SnowShock.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Radiant\Ooze.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Radiant\Thunderbolt.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Radiant\Bioluminescence.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Radiant\Plasm.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Melee\SanguineLongsword.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Melee\IceWhip.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Magic\FungalGrasp.cs" />
+    <Compile Include="Items\Weapons\Radiant\Regenerator.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Ranged\ArcBow.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Ranged\Blooderbuss.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Ranged\FrozenRailgun.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Ranged\InfernalBlaster.cs" />
+    <Compile Include="Items\Weapons\Ranged\GaiaGatlingGun.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Ranged\ToxicCannon.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Summon\ArcticTablet.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Summon\Firewall.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Summon\StormCaller.cs" />
+    <Compile Include="Items\Weapons\Summon\CrimsonFamiliar.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Summon\GreenSwarm.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Summon\SporeStaff.cs" />
+    <Compile Include="Items\Weapons\Summon\SpiritualAttractor.cs" />
+    <Compile Include="Items\Weapons\Symphonic\WorldWalkerMelody.cs" />
+    <Compile Include="Items\Weapons\Symphonic\MagmastarPiccolo.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Symphonic\ChillingHarmonica.cs" />
+    <Compile Include="Items\Weapons\Symphonic\BonevinePiccolo.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Symphonic\Goong.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Symphonic\ElectricGuitar.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Symphonic\BurningBugle.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Symphonic\VerdantViola.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Symphonic\Hemoharp.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Throwing\JungleThorn.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Throwing\BoltAxe.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Throwing\SearedDagger.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Throwing\RedStar.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Throwing\GunkCapsule.cs" />
+    <Compile Include="Items\Weapons\Symphonic\DeathMetal.cs" />
+    <Compile Include="Items\Weapons\Throwing\CryonicJavelin.cs" />
+    <Compile Include="Necromancy.cs" />
     <Compile Include="Items\Accessories\BlessingOfTheGods.cs" />
     <Compile Include="Items\Accessories\AstralContract.cs" />
     <Compile Include="Items\Accessories\VampireLocket.cs" />
@@ -149,17 +231,12 @@
     <Compile Include="Items\Placeable\AgitationAltar.cs" />
     <Compile Include="Items\Placeable\EnchantingAltar.cs" />
     <Compile Include="Items\ShadowBlood.cs" />
-    <Compile Include="Items\DiscordOrb.cs" />
-    <Compile Include="Items\HarmonyOrb.cs" />
+    <Compile Include="Items\HDOrb.cs" />
     <Compile Include="Items\Accessories\WraithCloak.cs" />
     <Compile Include="Items\SoulChalk.cs" />
     <Compile Include="Items\ShadowChalk.cs" />
     <Compile Include="Items\Accessories\RogueAgility.cs" />
     <Compile Include="Items\Accessories\MuseMind.cs" />
-    <Compile Include="Items\SuperGreenJuice.cs" />
-    <Compile Include="Items\GreaterGreenJuice.cs" />
-    <Compile Include="Items\GreenJuice.cs" />
-    <Compile Include="Items\LesserGreenJuice.cs" />
     <Compile Include="Items\BloodEssence.cs" />
     <Compile Include="Items\Accessories\SanguineContract.cs" />
     <Compile Include="Items\Brimstone.cs" />
@@ -185,7 +262,7 @@
     <Compile Include="Items\Placeable\BloodAlchemyStation.cs" />
     <Compile Include="Items\Placeable\BloodTable.cs" />
     <Compile Include="Items\BoneChalk.cs" />
-    <Compile Include="Items\SacrificialKnife.cs" />
+    <Compile Include="Items\BloodlettingKnife.cs" />
     <Compile Include="Items\ToughbloodPotion.cs" />
     <Compile Include="Items\Weapons\Magic\AcidSpray.cs" />
     <Compile Include="Items\Weapons\Magic\GhoulPortal.cs" />
@@ -259,7 +336,7 @@
     <Compile Include="Items\Weapons\Ranged\ShadowRepeater.cs" />
     <Compile Include="Items\Weapons\Ranged\SubmarineGun.cs" />
     <Compile Include="Items\Weapons\Ranged\UndeadBow.cs" />
-    <Compile Include="Items\Weapons\Summon\AncientHeptagram.cs" />
+    <Compile Include="Items\Weapons\Summon\LeechStaff.cs" />
     <Compile Include="Items\Weapons\Summon\CelestialStaff.cs" />
     <Compile Include="Items\Weapons\Summon\CumulusStaff.cs" />
     <Compile Include="Items\Weapons\Summon\Famine.cs" />
@@ -281,6 +358,7 @@
     <Compile Include="Items\Weapons\Throwing\BeetleFang.cs" />
     <Compile Include="Items\Weapons\Throwing\CelestialCrystalShard.cs" />
     <Compile Include="Items\Weapons\Throwing\GhostGlaive.cs" />
+    <Compile Include="Items\Weapons\NonNecrotic\Throwing\Frostbite.cs" />
     <Compile Include="Items\Weapons\Throwing\ThrowingDice.cs" />
     <Compile Include="Items\Weapons\Throwing\HeartBomb.cs" />
     <Compile Include="Items\Weapons\Throwing\PoisonedJavelin.cs" />
@@ -289,18 +367,132 @@
     <Compile Include="Items\WormholePickaxe.cs" />
     <Compile Include="Items\Accessories\Gunjet.cs" />
     <Compile Include="Items\Accessories\WormholeWings.cs" />
-    <Compile Include="Necromancy.cs" />
     <Compile Include="NecromancyPlayer.cs" />
     <Compile Include="NPCs\Shopkeeper.cs" />
     <Compile Include="NPCs\NecromancyNPC.cs" />
+    <Compile Include="Projectiles\Chloroflame.cs" />
+    <Compile Include="Projectiles\PHarmBolt.cs" />
+    <Compile Include="Projectiles\Acid.cs" />
+    <Compile Include="Empowerments\EmpowermentDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentNecroticDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentSymphonicDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentRadiantDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentThrowingDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentSummonDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentMagicDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentRangedDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentMeleeDamage.cs" />
+    <Compile Include="Empowerments\EmpowermentEndurance.cs" />
+    <Compile Include="Empowerments\EmpowermentLifeSteal.cs" />
+    <Compile Include="Empowerments\EmpowermentMoveSpeed.cs" />
+    <Compile Include="Empowerments\EmpowermentLifeRegen.cs" />
+    <Compile Include="Empowerments\EmpowermentFlight.cs" />
+    <Compile Include="Empowerments\EmpowermentCritChance.cs" />
+    <Compile Include="Empowerments\EmpowermentDefense.cs" />
+    <Compile Include="Empowerments\EmpowermentImmortality.cs" />
+    <Compile Include="Empowerments\Empowerment.cs" />
+    <Compile Include="Projectiles\Pylon.cs" />
+    <Compile Include="Projectiles\PylonCreator.cs" />
+    <Compile Include="Projectiles\SlimeCenter.cs" />
+    <Compile Include="Projectiles\CursedFireball.cs" />
+    <Compile Include="Projectiles\DeathMetalShot.cs" />
+    <Compile Include="Projectiles\AquaticBassWave.cs" />
+    <Compile Include="Projectiles\AquaticBassPulse.cs" />
+    <Compile Include="Projectiles\AquaticBassSlash.cs" />
+    <Compile Include="Projectiles\ChannelerShot.cs" />
+    <Compile Include="Projectiles\DeathMetalSwipe.cs" />
+    <Compile Include="Projectiles\MagmastarPulse.cs" />
+    <Compile Include="Projectiles\PiccoloPulse.cs" />
+    <Compile Include="Projectiles\BonevinePulse.cs" />
+    <Compile Include="Projectiles\MagneticPulseActive.cs" />
+    <Compile Include="Projectiles\CryonicJavelin.cs" />
+    <Compile Include="Projectiles\Rituals\TauntingBone.cs" />
+    <Compile Include="Projectiles\Rituals\TauntingShadow.cs" />
+    <Compile Include="Projectiles\Rituals\TauntingSoul.cs" />
+    <Compile Include="Projectiles\Rituals\Taunting.cs" />
+    <Compile Include="Projectiles\Magmatica.cs" />
+    <Compile Include="Projectiles\SlimeOrbiter.cs" />
+    <Compile Include="Projectiles\Dreambreaker.cs" />
+    <Compile Include="Projectiles\WandEnergy.cs" />
+    <Compile Include="Projectiles\PerditionRing.cs" />
+    <Compile Include="Projectiles\VolcanicFlame.cs" />
+    <Compile Include="Projectiles\Minions\FirewallPrime.cs" />
+    <Compile Include="Projectiles\Minions\Firewall.cs" />
+    <Compile Include="Projectiles\ChillingBreath.cs" />
+    <Compile Include="Projectiles\FrozenShot.cs" />
+    <Compile Include="Projectiles\GoongWave.cs" />
+    <Compile Include="Projectiles\GlacialSpike.cs" />
+    <Compile Include="Projectiles\Gunk.cs" />
+    <Compile Include="Projectiles\Minions\FirewallFlame.cs" />
+    <Compile Include="Projectiles\SnowShock.cs" />
+    <Compile Include="Projectiles\MeteorEye.cs" />
+    <Compile Include="Projectiles\Minions\ArcticWindFollower.cs" />
+    <Compile Include="Projectiles\Minions\ArcticWindLeader.cs" />
+    <Compile Include="Projectiles\Minions\StormCloud.cs" />
+    <Compile Include="Projectiles\Minions\StormBolt.cs" />
+    <Compile Include="Projectiles\Ooze.cs" />
+    <Compile Include="Projectiles\BurningDoot.cs" />
+    <Compile Include="Projectiles\ElectricBall.cs" />
+    <Compile Include="Projectiles\ElectricBolt.cs" />
+    <Compile Include="Projectiles\BAxeBolt.cs" />
+    <Compile Include="Projectiles\InfernalRocket.cs" />
+    <Compile Include="Projectiles\Minions\GreenSwarmFollower.cs" />
+    <Compile Include="Projectiles\Minions\GreenSwarmLeader.cs" />
+    <Compile Include="Projectiles\AcidDisc.cs" />
+    <Compile Include="Projectiles\SFlailBolt.cs" />
+    <Compile Include="Projectiles\Bioluminescence.cs" />
+    <Compile Include="Projectiles\JungleThorn.cs" />
+    <Compile Include="Projectiles\StaticFlailBall.cs" />
+    <Compile Include="Projectiles\BlooderbussShot.cs" />
+    <Compile Include="Projectiles\Cruor.cs" />
+    <Compile Include="Projectiles\BoltAxe.cs" />
+    <Compile Include="Projectiles\GunkCapsule.cs" />
+    <Compile Include="Projectiles\Thunderbolt.cs" />
+    <Compile Include="Projectiles\ThunderCharge.cs" />
+    <Compile Include="Projectiles\ViolaBurst.cs" />
+    <Compile Include="Projectiles\SearedDagger.cs" />
+    <Compile Include="Projectiles\PlasmBlast.cs" />
+    <Compile Include="Projectiles\PlasmBlast4.cs" />
+    <Compile Include="Projectiles\PlasmBlast3.cs" />
+    <Compile Include="Projectiles\PlasmBlast2.cs" />
+    <Compile Include="Projectiles\PlasmBlast1.cs" />
+    <Compile Include="Projectiles\PlasmStart.cs" />
+    <Compile Include="Projectiles\HemoharpNote.cs" />
+    <Compile Include="Projectiles\GaiaBullet.cs" />
+    <Compile Include="Projectiles\LivingBladeShot.cs" />
+    <Compile Include="Projectiles\Minions\CrimsonFamiliar.cs" />
+    <Compile Include="Projectiles\RedStar.cs" />
+    <Compile Include="Projectiles\Toxin.cs" />
     <Compile Include="Projectiles\AmberBullet.cs" />
     <Compile Include="Projectiles\AcidSpray.cs" />
     <Compile Include="Projectiles\ApocalypseAura.cs" />
     <Compile Include="Projectiles\AquaticBassBlast.cs" />
+    <Compile Include="Projectiles\LightningShock.cs" />
     <Compile Include="Projectiles\AquaticStringNote.cs" />
     <Compile Include="Projectiles\AquaticKeytarTune.cs" />
     <Compile Include="Projectiles\AquaticHornDoot.cs" />
     <Compile Include="Projectiles\AquaticDrumBeat.cs" />
+    <Compile Include="Projectiles\ArcArrowCurrent.cs" />
+    <Compile Include="Projectiles\SanguineLongswordSwipe.cs" />
+    <Compile Include="Projectiles\Minions\MushroomSpore.cs" />
+    <Compile Include="Projectiles\ProjectileAgeComparer.cs" />
+    <Compile Include="Projectiles\FungalGrasp.cs" />
+    <Compile Include="Projectiles\Rituals\Recovery.cs" />
+    <Compile Include="Projectiles\Rituals\RecoveryBone.cs" />
+    <Compile Include="Projectiles\Rituals\RecoveryShadow.cs" />
+    <Compile Include="Projectiles\Rituals\RecoverySoul.cs" />
+    <Compile Include="Projectiles\GooCloudMoving.cs" />
+    <Compile Include="Projectiles\GooCloudRaining.cs" />
+    <Compile Include="Projectiles\GooRain.cs" />
+    <Compile Include="Projectiles\CryonicTrail.cs" />
+    <Compile Include="Projectiles\DeathSap.cs" />
+    <Compile Include="Projectiles\WormholeScytheShot.cs" />
+    <Compile Include="Projectiles\IceWhip.cs" />
+    <Compile Include="Projectiles\Minions\SpiritFlame.cs" />
+    <Compile Include="Projectiles\Minions\Spirit.cs" />
+    <Compile Include="Projectiles\RegeneratorBeam.cs" />
+    <Compile Include="Projectiles\Frostbite.cs" />
+    <Compile Include="Projectiles\Minions\Leech.cs" />
     <Compile Include="Projectiles\SigilStar.cs" />
     <Compile Include="Projectiles\GhoulPortal.cs" />
     <Compile Include="Projectiles\TridentBlast.cs" />
@@ -329,18 +521,18 @@
     <Compile Include="Projectiles\Meteor2.cs" />
     <Compile Include="Projectiles\Meteor1.cs" />
     <Compile Include="Projectiles\Minions\DarkCloud.cs" />
-    <Compile Include="Projectiles\Rituals\MeteorShower1.cs" />
-    <Compile Include="Projectiles\Rituals\MeteorShower2.cs" />
-    <Compile Include="Projectiles\Rituals\MeteorShower3.cs" />
+    <Compile Include="Projectiles\Rituals\MeteorShowerBone.cs" />
+    <Compile Include="Projectiles\Rituals\MeteorShowerShadow.cs" />
+    <Compile Include="Projectiles\Rituals\MeteorShowerSoul.cs" />
     <Compile Include="Projectiles\Rituals\MeteorShower.cs" />
     <Compile Include="Projectiles\Rituals\Resurrect.cs" />
     <Compile Include="Projectiles\Rituals\SoulHarvest.cs" />
-    <Compile Include="Projectiles\Rituals\Resurrect1.cs" />
-    <Compile Include="Projectiles\Rituals\SoulHarvest1.cs" />
-    <Compile Include="Projectiles\Rituals\Resurrect2.cs" />
-    <Compile Include="Projectiles\Rituals\SoulHarvest2.cs" />
-    <Compile Include="Projectiles\Rituals\Resurrect3.cs" />
-    <Compile Include="Projectiles\Rituals\SoulHarvest3.cs" />
+    <Compile Include="Projectiles\Rituals\ResurrectBone.cs" />
+    <Compile Include="Projectiles\Rituals\SoulHarvestBone.cs" />
+    <Compile Include="Projectiles\Rituals\ResurrectShadow.cs" />
+    <Compile Include="Projectiles\Rituals\SoulHarvestShadow.cs" />
+    <Compile Include="Projectiles\Rituals\ResurrectSoul.cs" />
+    <Compile Include="Projectiles\Rituals\SoulHarvestSoul.cs" />
     <Compile Include="Projectiles\TenorDrumBeat.cs" />
     <Compile Include="Projectiles\LuteBlast.cs" />
     <Compile Include="Projectiles\Channeler.cs" />
@@ -349,18 +541,18 @@
     <Compile Include="Projectiles\HeartBomb.cs" />
     <Compile Include="Projectiles\SubBub.cs" />
     <Compile Include="Projectiles\Rituals\Agitation.cs" />
-    <Compile Include="Projectiles\Rituals\Agitation1.cs" />
-    <Compile Include="Projectiles\Rituals\Agitation2.cs" />
-    <Compile Include="Projectiles\Rituals\Agitation3.cs" />
-    <Compile Include="Projectiles\Rituals\Protection1.cs" />
-    <Compile Include="Projectiles\Rituals\Protection2.cs" />
-    <Compile Include="Projectiles\Rituals\Protection3.cs" />
+    <Compile Include="Projectiles\Rituals\AgitationBone.cs" />
+    <Compile Include="Projectiles\Rituals\AgitationShadow.cs" />
+    <Compile Include="Projectiles\Rituals\AgitationSoul.cs" />
+    <Compile Include="Projectiles\Rituals\ProtectionBone.cs" />
+    <Compile Include="Projectiles\Rituals\ProtectionShadow.cs" />
+    <Compile Include="Projectiles\Rituals\ProtectionSoul.cs" />
     <Compile Include="Projectiles\Rituals\Protection.cs" />
     <Compile Include="Projectiles\Rituals\Ritual.cs" />
     <Compile Include="Projectiles\Rituals\Enchantment.cs" />
-    <Compile Include="Projectiles\Rituals\Enchantment3.cs" />
-    <Compile Include="Projectiles\Rituals\Enchantment2.cs" />
-    <Compile Include="Projectiles\Rituals\Enchantment1.cs" />
+    <Compile Include="Projectiles\Rituals\EnchantmentSoul.cs" />
+    <Compile Include="Projectiles\Rituals\EnchantmentShadow.cs" />
+    <Compile Include="Projectiles\Rituals\EnchantmentBone.cs" />
     <Compile Include="Projectiles\SeepingTune.cs" />
     <Compile Include="Projectiles\LichSoul.cs" />
     <Compile Include="Projectiles\EnergyYellow.cs" />
@@ -399,6 +591,7 @@
     <Compile Include="Projectiles\Deathblast.cs" />
     <Compile Include="Projectiles\TrueHolyLightPink.cs" />
     <Compile Include="Projectiles\Brick.cs" />
+    <Compile Include="Projectiles\ArcArrow.cs" />
     <Compile Include="Projectiles\UndeadArrow.cs" />
     <Compile Include="Projectiles\Grenade.cs" />
     <Compile Include="Projectiles\GaussBullet.cs" />
@@ -439,16 +632,11 @@
     <Compile Include="Projectiles\WormholeScytheSwipe.cs" />
     <Compile Include="Projectiles\RedBlade.cs" />
     <Compile Include="Projectiles\HungerOrb.cs" />
+    <Compile Include="Tiles\TauntingAltar.cs" />
+    <Compile Include="Tiles\RecoveryAltar.cs" />
     <Compile Include="Tiles\ResurrectAltar.cs" />
     <Compile Include="Tiles\MeteorShowerAltar.cs" />
     <Compile Include="Tiles\SoulHarvestAltar.cs" />
-    <Compile Include="Tiles\TEEnchantingAltar.cs" />
-    <Compile Include="Tiles\TEAgitationAltar.cs" />
-    <Compile Include="Tiles\TEMeteorShowerAltar.cs" />
-    <Compile Include="Tiles\TEResurrectAltar.cs" />
-    <Compile Include="Tiles\TESoulHarvestAltar.cs" />
-    <Compile Include="Tiles\TEProtectionAltar.cs" />
-    <Compile Include="Tiles\TEAltar.cs" />
     <Compile Include="Tiles\ProtectionAltar.cs" />
     <Compile Include="Tiles\Altar.cs" />
     <Compile Include="Tiles\BloodAlchemyStation.cs" />
@@ -457,7 +645,6 @@
     <Compile Include="Tiles\BloodTable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dusts\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />

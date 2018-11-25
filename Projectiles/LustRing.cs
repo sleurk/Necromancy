@@ -7,6 +7,8 @@ namespace Necromancy.Projectiles
 {
 	public class LustRing : ModProjectile
 	{
+        // basic projectile
+        // created to be moving towards player to pull enemies forward
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lust Ring");
@@ -20,7 +22,7 @@ namespace Necromancy.Projectiles
 			projectile.friendly = true;
             projectile.tileCollide = false;
 			projectile.penetrate = 1;
-			projectile.timeLeft = 180;
+			projectile.timeLeft = 90;
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).magic = true;

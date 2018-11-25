@@ -12,15 +12,15 @@ namespace Necromancy.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Wraith Cloak");
-            Tooltip.SetDefault("Double tap up and hold to fly towards your cursor for some life");
+            Tooltip.SetDefault("Double tap UP and hold to fly towards your cursor for some life");
         }
 
         public override void SetDefaults()
 		{
-			item.width = 28;
+			item.width = 30;
 			item.height = 30;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 5);
+            item.rare = 6;
 			item.accessory = true;
 		}
 

@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Ranged
         {
             item.magic = true;
             item.damage = 82;
-            item.crit = 4;
             item.width = 40;
             item.height = 26;
             item.useTime = 10;
@@ -25,7 +25,7 @@ namespace Necromancy.Items.Weapons.Ranged
             item.useStyle = 5;
             item.noMelee = true;
             item.knockBack = 2;
-            item.value = Item.sellPrice(0, 22, 0, 0);
+            item.value = Item.sellPrice(0, 15);
             item.rare = 8;
             item.UseSound = SoundID.Item40;
             item.autoReuse = true;
@@ -34,22 +34,18 @@ namespace Necromancy.Items.Weapons.Ranged
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).ranged = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 4;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 4;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 4;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            // 10 degree spread
             Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
             speedX = perturbedSpeed.X;
             speedY = perturbedSpeed.Y;
-            Vector2 muzzleOffset = new Vector2(0, -8);
-            if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
-            {
-                position += muzzleOffset;
-            }
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 

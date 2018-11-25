@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class AcidSpray : ModProjectile
 	{
+        // spray projectile like aqua scepter
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Acid Spray");
@@ -28,7 +29,7 @@ namespace Necromancy.Projectiles
 
 		public override void AI()
 		{
-            // mostly vanilla code
+            // mostly vanilla code from aqua scepter
             projectile.scale -= 0.02f;
             if (projectile.scale <= 0f)
             {

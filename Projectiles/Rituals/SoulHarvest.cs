@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,6 +15,11 @@ namespace Necromancy.Projectiles.Rituals
             DisplayName.SetDefault("SoulHarvest");
         }
 
+        protected override int TileType
+        {
+            get { return mod.TileType("SoulHarvestAltar"); }
+        }
+
         public override void Tick()
         {
             foreach (Player player in Necromancy.NearbyAllies(projectile.Center, null, 600f))
@@ -22,8 +28,7 @@ namespace Necromancy.Projectiles.Rituals
             }
             foreach (NPC npc in Necromancy.NearbyNPCs(projectile.Center, 600f))
             {
-                Dust.NewDust(npc.position, npc.width, npc.height, dustType);
-                npc.GetGlobalNPC<NPCs.NecromancyNPC>().soulHarvest = power;
+                npc.GetGlobalNPC<NecromancyNPC>().soulHarvest = (int)Power;
             }
         }
     }

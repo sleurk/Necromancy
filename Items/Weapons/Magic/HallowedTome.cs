@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Necromancy.Projectiles;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -17,14 +18,13 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 34;
-            item.crit = 4;
             item.width = 28;
             item.height = 30;
             item.useTime = 6;
             item.useAnimation = 6;
             item.useStyle = 5;
             item.knockBack = 2;
-            item.value = Item.sellPrice(0, 2, 0, 0);
+            item.value = Item.sellPrice(0, 2);
             item.rare = 5;
             item.noMelee = true;
             item.UseSound = SoundID.Item20;
@@ -34,22 +34,20 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 10;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 7;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Vector2 mouse = Main.MouseWorld;
-            int numProj = Main.rand.Next(1, 3);
+            int numProj = Main.rand.Next(1, 3); // 1-2 projectiles at a time
             for (int i = 0; i < numProj; i++)
             {
-                Vector2 start = new Vector2(position.X + Main.rand.NextFloat() * 8 * 16f, position.Y - 30 * 16f);
-                Vector2 vel = (mouse - start).RotatedByRandom(MathHelper.ToRadians(2));
-                vel.Normalize();
-                vel *= item.shootSpeed + Main.rand.NextFloat(3f);
-                Projectile proj = Main.projectile[Projectile.NewProjectile(start.X, start.Y, vel.X, vel.Y, type, damage, knockBack, player.whoAmI)];
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
-                proj.netUpdate = true;
+                Vector2 start = new Vector2(position.X + Main.rand.NextFloat() * 128f, position.Y - 800f); // initial position is 800px above player, with some spread to X position
+                Vector2 vel = (mouse - start).RotatedByRandom(MathHelper.ToRadians(2)); // 2 degree spread on velocity towards mouse
+                vel = vel.SafeNormalize(Vector2.Zero) * (item.shootSpeed + Main.rand.NextFloat(3f)); // up to 3x base speed
+                Projectile proj = Projectile.NewProjectileDirect(start, vel, type, damage, knockBack, player.whoAmI);
+                proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             }
             return false;
         }

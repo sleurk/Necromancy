@@ -18,25 +18,19 @@ namespace Necromancy.Items
 			item.width = 36;
 			item.height = 36;
             item.maxStack = 999;
-			item.value = Item.sellPrice(0, 0, 0, 20);
+			item.value = Item.sellPrice(0, 0, 20);
 			item.rare = 2;
 		}
-
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            player.GetModPlayer<NecromancyPlayer>(mod).regenMult *= 0.5f;
-            player.GetModPlayer<NecromancyPlayer>(mod).lifeStealMult *= 1.2f;
-        }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Leather, 2);
+            recipe.AddIngredient(ItemID.Leather, 1);
             recipe.AddTile(TileID.WorkBenches);
             recipe.SetResult(mod, "Parchment");
             recipe.AddRecipe();
 
-            // for leather in crimson
+            // leather is unobtainable in crimson worlds in vanilla, need to manually add the recipe
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Vertebrae, 5);
             recipe.AddTile(TileID.WorkBenches);

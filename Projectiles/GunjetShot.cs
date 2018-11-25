@@ -8,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class GunjetShot : ModProjectile
 	{
+        // shot from Gunjet wings
+        // on hitting an enemy, increases player's flight time
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Gunjet Shot");

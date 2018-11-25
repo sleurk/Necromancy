@@ -7,8 +7,7 @@ namespace Necromancy.Projectiles
 {
     public class RotCloudMoving : ModProjectile
     {
-        private Vector2 destination;
-        private bool set;
+        // nimbus rod clone, cloud while moving to target
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Rot Cloud");
@@ -29,7 +28,6 @@ namespace Necromancy.Projectiles
             Main.projFrames[projectile.type] = 4;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).magic = true;
-            set = true;
         }
 
         public override void AI()

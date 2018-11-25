@@ -12,14 +12,15 @@ namespace Necromancy.Items.Armor
         {
             DisplayName.SetDefault("Midnight Helm");
             Tooltip.SetDefault("40% increased necrotic damage" +
-                "\n-6 life cost");
+                "\n-5 life cost" +
+                "\nEnemies are more likely to target you");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 20;
 			item.height = 24;
-            item.value = Item.sellPrice(0, 1, 0, 0);
+            item.value = Item.sellPrice(0, 2, 50);
             item.rare = 8;
 			item.defense = 20;
 		}
@@ -31,8 +32,9 @@ namespace Necromancy.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += 0.4f;
-            player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 6;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.4f;
+            player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 5;
+            player.aggro += 800;
         }
 
         public override void UpdateArmorSet(Player player)
@@ -45,9 +47,8 @@ namespace Necromancy.Items.Armor
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpookyWood, 100);
-            recipe.AddIngredient(ItemID.Ectoplasm, 15);
-            recipe.AddIngredient(ItemID.GraniteBlock, 20);
+            recipe.AddIngredient(ItemID.SpookyWood, 40);
+            recipe.AddIngredient(ItemID.Ectoplasm, 8);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

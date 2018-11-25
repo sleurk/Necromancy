@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Radiant
         {
             item.magic = true;
             item.damage = 31;
-            item.crit = 4;
             item.width = 64;
 			item.height = 64;
 			item.useTime = 10;
@@ -27,20 +27,21 @@ namespace Necromancy.Items.Weapons.Radiant
             item.noUseGraphic = true;
 			item.useTurn = false;﻿
             item.noMelee = true;
-			item.rare = 5;
+            item.value = Item.sellPrice(0, 3);
+            item.rare = 5;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 			item.shoot = mod.ProjectileType("LifeExtractor");
 			item.shootSpeed = 5f;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 4;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 30;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>().shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = item;
             return false;
         }
 
@@ -49,7 +50,7 @@ namespace Necromancy.Items.Weapons.Radiant
             Mod thorium = ModLoader.GetMod("ThoriumMod");
             if (thorium != null)
             {
-                ModRecipe recipe = new ModRecipe(mod);
+                ThoriumRecipe recipe = new ThoriumRecipe(mod);
                 recipe.AddIngredient(thorium, "StrangePlating", 6);
                 recipe.AddIngredient(thorium, "LifeCell");
                 recipe.AddTile(TileID.MythrilAnvil);
@@ -59,7 +60,8 @@ namespace Necromancy.Items.Weapons.Radiant
 		}
 
 		public override bool CanUseItem(Player player)
-		{
+        {
+            // can only use if there are no existing projectiles from this item
             return player.ownedProjectileCounts[item.shoot] < 1;
 		}
     }

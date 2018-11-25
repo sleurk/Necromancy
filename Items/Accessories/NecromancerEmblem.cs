@@ -17,14 +17,14 @@ namespace Necromancy.Items.Accessories
 		{
 			item.width = 28;
 			item.height = 28;
-			item.value = Item.sellPrice(0, 2, 0, 0);
-			item.rare = 4;
+            item.value = Item.sellPrice(0, 1);
+            item.rare = 4;
 			item.accessory = true;
 		}
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult *= 1.15f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.15f;
         }
 
         public override void AddRecipes()

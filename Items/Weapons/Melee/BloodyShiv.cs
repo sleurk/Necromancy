@@ -9,22 +9,20 @@ namespace Necromancy.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bloody Shiv");  //The (English) text shown below your weapon's name
+            DisplayName.SetDefault("Bloody Shiv");
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 10;
-            item.crit = 4;
             item.width = 40;
             item.height = 40;
             item.useTime = 10;
             item.useAnimation = 10;
-            item.useStyle = 3;
+            item.useStyle = 3; // shortsword, the most unloved weapon type
             item.knockBack = 4;
-            item.value = 10000;
-            item.rare = 1;
+            item.value = Item.sellPrice(0, 0, 80);
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.prefix = 0;
@@ -36,7 +34,7 @@ namespace Necromancy.Items.Weapons.Melee
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "BloodEssence", 10);
+            recipe.AddIngredient(mod, "BloodEssence", 10);
             recipe.AddIngredient(ItemID.LifeCrystal);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);

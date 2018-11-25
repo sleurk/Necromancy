@@ -8,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class EnvyRing : ModProjectile
 	{
+        // moves in a circle to collide with paired projectile
+        // explodes on contact with other projectile
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Ring Bolt");
@@ -31,12 +33,11 @@ namespace Necromancy.Projectiles
 		{
             projectile.velocity = projectile.velocity.RotatedBy(MathHelper.ToRadians(5 * projectile.ai[0]));
             Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 11, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f).noGravity = true;
-            Projectile pair = Main.projectile[(int)projectile.ai[1]];
             if (projectile.timeLeft == 15)
             {
                 Main.PlaySound(SoundID.Item20, projectile.Center);
             }
-            if (projectile.timeLeft == 3 && pair != null && pair.active && pair.type == projectile.type && pair.timeLeft < 5)
+            if (projectile.timeLeft == 3)
             {
                 projectile.hide = true;
                 Vector2 oldC = projectile.Center;

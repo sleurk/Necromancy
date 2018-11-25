@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class FiddleBurst : ModProjectile
 	{
+        // basic projectile, shot in bursts
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fiddle Burst");
@@ -24,7 +26,7 @@ namespace Necromancy.Projectiles
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentCritChance>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.CritChance;
         }
 
 		public override void AI()

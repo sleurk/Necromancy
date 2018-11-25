@@ -19,14 +19,14 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 34;
 			item.height = 22;
-			item.value = 0;
-			item.rare = 6;
+            item.value = Item.sellPrice(0, 2);
+            item.rare = 6;
 			item.defense = 20;
         }
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>().necroticCritBonus += 17;
+            player.GetModPlayer<NecromancyPlayer>().necroticCrit += 17;
         }
 
         public override void AddRecipes()

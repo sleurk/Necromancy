@@ -20,7 +20,7 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 34;
 			item.height = 20;
-            item.value = Item.sellPrice(0, 1, 0, 0);
+            item.value = Item.sellPrice(0, 3);
             item.rare = 10;
 			item.defense = 25;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).thoriumRarity = true;
@@ -28,7 +28,7 @@ namespace Necromancy.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>().necroticCritBonus += 35;
+            player.GetModPlayer<NecromancyPlayer>().necroticCrit += 35;
         }
 
         public override void AddRecipes()

@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class GhostGlaive : ModProjectile
 	{
+        // thrown projectile, goes through walls
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Ghost Glaive");

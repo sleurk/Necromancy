@@ -9,11 +9,16 @@ namespace Necromancy.Projectiles
 {
 	public class LichSoul : ModProjectile
 	{
-        private Vector2 lastMove = Vector2.Zero;
-        private int baseDmg = -1;
-        private float timer = 0;
-        private bool channeling = true;
-        private float speed = 4f;
+        // flamelash clone
+        // grows in strength while moving
+        // loses strength while not moving
+        // high strength does high damage and may not destroy the projectile
+
+        private float Speed
+        {
+            get { return projectile.ai[0] * 4f; }
+            set { projectile.ai[0] = value / 4f; }
+        }
 
         public override void SetStaticDefaults()
         {
@@ -60,42 +65,33 @@ namespace Necromancy.Projectiles
         public override void AI()
 		{
             projectile.ai[0] = Math.Min(projectile.timeLeft / 1200f, 3f);
-            speed = projectile.ai[0] * 4f;
-            timer += projectile.ai[0];
-            if (baseDmg < 0)
-            {
-                baseDmg = projectile.damage;
-            }
             projectile.scale = projectile.ai[0];
-            projectile.damage = (int)(baseDmg * projectile.ai[0]);
             Player owner = Main.player[projectile.owner];
-            projectile.netUpdate = true;
-            if (owner.whoAmI == Main.myPlayer && channeling && owner.channel && !owner.dead)
+            if (owner.whoAmI == Main.myPlayer && owner.channel && !owner.dead)
             {
+                projectile.netUpdate = true;
                 projectile.timeLeft += 2;
                 Vector2 toMouse = Main.MouseWorld - projectile.Center;
-                if (toMouse.Length() > speed)
+                if (toMouse.Length() > Speed)
                 {
                     toMouse.Normalize();
-                    toMouse *= speed;
+                    toMouse *= Speed;
                 }
                 else
                 {
                     projectile.timeLeft -= 4;
                 }
                 projectile.velocity = toMouse;
-                lastMove = projectile.velocity.SafeNormalize(lastMove);
             }
             else
             {
-                channeling = false;
-                projectile.velocity = lastMove * speed;
+                projectile.Kill();
             }
-            Vector2 dustPos = projectile.Center + Vector2.UnitX.RotatedBy(timer / 45f) * projectile.ai[0] * projectile.width / 2;
+            Vector2 dustPos = projectile.Center + Vector2.UnitX.RotatedBy(projectile.timeLeft / 45f) * projectile.ai[0] * projectile.width / 2;
             Dust d = Dust.NewDustDirect(dustPos + projectile.velocity, 1, 1, 6, 0, 0);
             d.noGravity = true;
             d.scale = projectile.ai[0];
-            dustPos = projectile.Center + Vector2.UnitX.RotatedBy(timer / 45f + Math.PI) * projectile.ai[0] * projectile.width / 2;
+            dustPos = projectile.Center + Vector2.UnitX.RotatedBy(projectile.timeLeft / 45f + Math.PI) * projectile.ai[0] * projectile.width / 2;
             d = Dust.NewDustDirect(dustPos + projectile.velocity, 1, 1, 75, 0, 0);
             d.noGravity = true;
             d.scale = projectile.ai[0];
@@ -105,6 +101,11 @@ namespace Necromancy.Projectiles
         {
             Lighting.AddLight(projectile.position, .6f, .8f, 0f);
             return true;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            damage = (int)(damage * projectile.ai[0]);
         }
     }
 }

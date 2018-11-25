@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,7 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class AquaticHornDoot : ModProjectile
 	{
-        int dustType = 61;
+        // basic projectile, bounces
+        readonly int dustType = 61;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Aquatic Horn Doot");
@@ -25,7 +27,7 @@ namespace Necromancy.Projectiles
             projectile.extraUpdates = 3;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentRangedDamage>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.RangedDamage;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

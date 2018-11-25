@@ -10,34 +10,34 @@ namespace Necromancy.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Eldritch Scroll");
-            Tooltip.SetDefault("15% increased necrotic damage" +
-                    "\n-2 necrotic life cost" +
-                    "\n10% increased life steal");
+            Tooltip.SetDefault("10% increased necrotic damage" +
+                    "\n50% increased life steal" +
+                    "\n100% increased blood purification rate");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 36;
-			item.height = 36;
-            item.value = Item.sellPrice(0, 3, 20, 0);
-			item.rare = 8;
+			item.height = 40;
+            item.value = Item.sellPrice(0, 5);
+            item.rare = 8;
 			item.accessory = true;
 		}
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult *= 1.15f;
-            player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 2;
-            player.GetModPlayer<NecromancyPlayer>(mod).lifeStealMult += 0.1f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.10f;
+            player.GetModPlayer<NecromancyPlayer>(mod).lifeStealMult += 0.5f;
+            player.GetModPlayer<NecromancyPlayer>(mod).healCDLength -= 2;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod, "NecromancerEmblem");
+            recipe.AddIngredient(ItemID.AvengerEmblem);
             recipe.AddIngredient(mod, "SanguineContract");
             recipe.AddIngredient(mod, "Parchment");
-            recipe.AddIngredient(ItemID.SpookyWood, 200);
+            recipe.AddIngredient(ItemID.Ectoplasm, 10);
             recipe.AddTile(TileID.TinkerersWorkbench);
             recipe.SetResult(this);
             recipe.AddRecipe();

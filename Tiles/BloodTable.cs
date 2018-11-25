@@ -8,7 +8,7 @@ namespace Necromancy.Tiles
 {
 	public class BloodTable : ModTile
 	{
-        private bool active = false;
+        // buff table for necrotic damage
 		public override void SetDefaults()
         {
             Main.tileFrameImportant[Type] = true;

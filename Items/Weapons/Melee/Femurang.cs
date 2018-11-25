@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Melee
         {
             item.magic = true;
             item.damage = 20;
-            item.crit = 4;
             item.width = 48;
 			item.height = 48;
 			item.useTime = 18;
@@ -25,7 +25,7 @@ namespace Necromancy.Items.Weapons.Melee
             item.noMelee = true;
             item.noUseGraphic = true;
             item.knockBack = 3;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+			item.value = Item.sellPrice(0, 0, 80);
 			item.rare = 2;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
@@ -34,25 +34,19 @@ namespace Necromancy.Items.Weapons.Melee
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).melee = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 1;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeSteal = 2;
         }
 
         public override bool CanUseItem(Player player)
         {
-            foreach (Projectile proj in Main.projectile)
-            {
-                if (proj != null && proj.active && proj.owner == player.whoAmI && proj.type == item.shoot)
-                {
-                    return false;
-                }
-            }
-            return true;
+            // can only use if there are no existing projectiles from this item
+            return player.ownedProjectileCounts[item.shoot] == 0;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(player.Center, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI, 2f, -1f);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 

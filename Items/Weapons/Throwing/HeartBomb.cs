@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Necromancy.Projectiles;
 
 namespace Necromancy.Items.Weapons.Throwing
 {
@@ -11,13 +12,14 @@ namespace Necromancy.Items.Weapons.Throwing
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Heart Bomb");
+            Tooltip.SetDefault("Destroys tiles and sticks to walls" +
+                "\nSafe for mining");
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 15;
-            item.crit = 4;
             item.width = 8;
 			item.height = 8;
 			item.useTime = 15;
@@ -41,7 +43,7 @@ namespace Necromancy.Items.Weapons.Throwing
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
@@ -50,7 +52,7 @@ namespace Necromancy.Items.Weapons.Throwing
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod, "BeatingHeart", 5);
             recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this, 5);
+            recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }

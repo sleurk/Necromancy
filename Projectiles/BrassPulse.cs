@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class BrassPulse : ModProjectile
 	{
+        // basic projectile that moves slowly
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Brass Pulse");
@@ -23,7 +25,7 @@ namespace Necromancy.Projectiles
 			projectile.timeLeft = 1200;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentDamage>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.Damage;
         }
 
 		public override void AI()

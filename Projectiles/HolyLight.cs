@@ -6,6 +6,9 @@ namespace Necromancy.Projectiles
 {
 	public class HolyLight : ModProjectile
 	{
+        // basic projectile
+        // rained down from above screen to mouse
+        // high damage to vampires
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Holy Light");

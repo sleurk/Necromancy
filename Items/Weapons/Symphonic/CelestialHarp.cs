@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -12,19 +13,19 @@ namespace Necromancy.Items.Weapons.Symphonic
 
         private int holdTimer = 0;
 
-        private float[] pitchModifiers = { 1f, (float) Math.Pow(2, 5.0/12), (float)Math.Pow(2, 8.0 / 12), 2f };
+        // frequency multipliers to get base, third, fifth, and octave
+        private readonly float[] pitchModifiers = { 1f, (float) Math.Pow(2, 5.0/12), (float)Math.Pow(2, 8.0 / 12), 2f };
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Celestial Harp");
-            Tooltip.SetDefault("Empowers allies with stacking flight time");
+            Tooltip.SetDefault("Empowers allies with bonus flight time");
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 31;
-            item.crit = 4;
             item.width = 48;
 			item.height = 48;
             item.useStyle = 5;
@@ -33,7 +34,7 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.noUseGraphic = true;
 			item.noMelee = true;
 			item.knockBack = 5;
-			item.value = Item.sellPrice(0, 12, 75, 0);
+			item.value = Item.sellPrice(0, 2);
 			item.rare = 4; 
 			item.autoReuse = true;
 			item.shoot = mod.ProjectileType("CelestialNote");
@@ -41,11 +42,12 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 4;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 6;
         }
 
         public override void HoldItem(Player player)
         {
+            // resets the note being shot if the player is not shooting
             if (holdTimer > 0)
             {
                 holdTimer--;
@@ -56,30 +58,33 @@ namespace Necromancy.Items.Weapons.Symphonic
             }
         }
 
+        // plays 4 notes (one at a time) with increasing pitch and speed, then resets
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            if (player.whoAmI == Main.myPlayer) // test
-            {
-                Main.PlaySound(2, -1, -1, mod.GetSoundSlot(SoundType.Item, "Sounds/Item/HarpPluck"), 1, pitchModifiers[shootNum]);
-                holdTimer = 20;
-                Vector2 toMouse = Main.MouseWorld - player.Center;
-                Vector2 velocity = toMouse / 15f / (4 - shootNum);
-                speedX = velocity.X;
-                speedY = velocity.Y;
-                Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-                proj.netUpdate = true;
-                proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
-                proj.spriteDirection = -player.direction;
-                shootNum++;
-                shootNum = shootNum % 4;
-            }
+            // plays the harp sound with a specific pitch to play specific notes
+            Main.PlaySound(2, -1, -1, mod.GetSoundSlot(SoundType.Item, "Sounds/Item/HarpPluck"), 1, pitchModifiers[shootNum]);
+            holdTimer = 20; // tells the item that it is being used and not to reset the note being played
+            Vector2 toMouse = Main.MouseWorld - player.Center;
+            Vector2 velocity = toMouse / 15f / (4 - shootNum); // this makes all notes reach the mouse at the same time (assuming the player and mouse are still)
+            speedX = velocity.X;
+            speedY = velocity.Y;
+            Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
+            shootNum = (shootNum + 1) % 4; // increments the note being played
+            /* 
+              Projectile's state was modified after it was created, and Shoot is client-only besides the creation (Projectile.NewProjectileDirect),
+              so netUpdate is flagged. This tells the server and other clients to match the projectile's state with the state of the projectile
+              on the projectile's owner's client.
+            */
+            proj.spriteDirection = -player.direction;
+            proj.netUpdate = true;
             return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "CelestialBar", 8);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
+            recipe.AddIngredient(mod, "CelestialBar", 8);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

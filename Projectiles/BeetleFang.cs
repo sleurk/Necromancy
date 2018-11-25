@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class BeetleFang : ModProjectile
 	{
+        // basic thrown projectile with gravity
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Beetle Fang");

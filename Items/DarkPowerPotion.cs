@@ -25,9 +25,10 @@ namespace Necromancy.Items
             item.useTime = refItem.useTime;
             item.useAnimation = refItem.useAnimation;
             item.UseSound = refItem.UseSound;
-			item.value = Item.sellPrice(0, 0, 2, 0);
+			item.value = Item.sellPrice(0, 0, 2);
 			item.rare = 2;
             item.potion = true;
+            item.buffType = mod.BuffType<Buffs.DarkPower>();
             item.consumable = true;
         }
 

@@ -19,8 +19,8 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 22;
 			item.height = 18;
-			item.value = Item.sellPrice(0, 0, 60, 0);
-			item.rare = 2;
+            item.value = Item.sellPrice(0, 1);
+            item.rare = 2;
 			item.defense = 3;
 		}
 

@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,7 +18,6 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 40;
-            item.crit = 4;
             item.width = 64;
 			item.height = 64;
 			item.useTime = 45;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Magic
 			Item.staff[item.type] = true;
 			item.noMelee = true;
 			item.knockBack = 5;
-			item.value = Item.sellPrice(0, 3, 20, 0);
+			item.value = Item.sellPrice(0, 6);
 			item.rare = 8;
 			item.UseSound = SoundID.Item20;
 			item.autoReuse = true;
@@ -35,34 +35,34 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 50;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 50;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
-            player.GetModPlayer<NecromancyPlayer>(mod).magnets.Add(proj);
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override bool AltFunctionUse(Player player)
         {
-            if (!player.GetModPlayer<NecromancyPlayer>(mod).magnetsActive)
+            foreach (Projectile proj in Main.projectile)
             {
-                foreach (Projectile proj in player.GetModPlayer<NecromancyPlayer>(mod).magnets)
+                // right click 'activates' all MagneticPulse projectiles, creating MagneticPulseActive projectiles (see MagneticPulse.cs)
+                if (proj != null && proj.active && proj.owner == player.whoAmI)
                 {
-                    proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).magnetActivated = true;
-                    player.GetModPlayer<NecromancyPlayer>(mod).magnetsActive = true;
+                    proj.ai[0] = 1f;
+                    proj.netUpdate = true;
                 }
             }
-            player.GetModPlayer<NecromancyPlayer>(mod).magnets = new List<Projectile>();
             return false;
         }
 
         public override bool CanUseItem(Player player)
         {
-            return !player.GetModPlayer<NecromancyPlayer>(mod).magnetsActive;
+            // cannot shoot more MagneticPulse projectiles while there are some active in the world
+            return player.ownedProjectileCounts[mod.ProjectileType("MagneticPulseActive")] == 0;
         }
     }
 }

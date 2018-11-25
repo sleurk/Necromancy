@@ -6,6 +6,8 @@ namespace Necromancy.Projectiles.Minions
 {
 	public class PainElemental : HoverShooter
 	{
+        // flies near player and shoots at enemies, basic summon code
+        // when summoning this, the player modifies how much damage it does
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Pain Elemental");
@@ -28,7 +30,9 @@ namespace Necromancy.Projectiles.Minions
 			inertia = 20f;
 			shoot = mod.ProjectileType("Pain");
 			shootSpeed = 12f;
-		}
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).summon = true;
+        }
 
 		public override void CheckActive()
 		{

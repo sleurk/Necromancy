@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class SeepingTune : ModProjectile
 	{
+        // weird bouncy projectile
+        // when hitting an enemy it shoots straight up to try to bounce on the enemy
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Seeping Tune");
@@ -18,14 +21,14 @@ namespace Necromancy.Projectiles
             projectile.width = 6;
 			projectile.height = 12;
 			projectile.friendly = true;
-			projectile.penetrate = 5;
+			projectile.penetrate = 10;
 			projectile.timeLeft = 2400;
             projectile.hide = true;
-            projectile.extraUpdates = 10;
+            projectile.extraUpdates = 5;
             projectile.aiStyle = 1;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentLifeSteal>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.LifeSteal;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -47,13 +50,13 @@ namespace Necromancy.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             target.immune[projectile.owner] = 4;
-            projectile.velocity.Y *= -1f;
+            projectile.velocity = -Vector2.UnitY * projectile.velocity.Length();
             projectile.damage += 10;
         }
 
         public override void AI()
 		{
-            projectile.velocity.Y += 0.1f;
+            projectile.velocity.Y += 0.05f;
             for (int k = 0; k < 15; k++)
             {
                 Dust.NewDustPerfect(projectile.Center, 135, projectile.velocity / 4f).noGravity = true;

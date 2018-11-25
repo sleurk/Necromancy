@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class GluttonyRing : ModProjectile
 	{
+        // large projectile, black-hole enemy attraction effect
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Gluttony Ring");
@@ -32,7 +33,7 @@ namespace Necromancy.Projectiles
 		{
             foreach (NPC npc in Necromancy.NearbyNPCs(projectile.Center, 200f, true))
             {
-                npc.velocity += (projectile.Center - npc.Center) / 128f * npc.knockBackResist;
+                Necromancy.DoCustomKnockback(npc, (projectile.Center - npc.Center) / 128f);
             }
             for (int i = 0; i < 6; i++)
             {

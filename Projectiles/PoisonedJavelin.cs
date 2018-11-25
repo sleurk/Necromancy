@@ -7,6 +7,8 @@ namespace Necromancy.Projectiles
 {
 	public class PoisonedJavelin : ModProjectile
 	{
+        // basic thrown spear projectile
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Poisoned Javelin");

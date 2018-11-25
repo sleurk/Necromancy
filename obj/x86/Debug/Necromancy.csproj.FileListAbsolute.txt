@@ -1,0 +1,10 @@
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\x86\Debug\ClassLibrary.dll.config
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\x86\Debug\ClassLibrary.dll
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\x86\Debug\ClassLibrary.pdb
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\x86\Debug\ReLogic.dll
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\bin\x86\Debug\Terraria.exe
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\x86\Debug\Necromancy.csprojAssemblyReference.cache
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\x86\Debug\Necromancy.csproj.CoreCompileInputs.cache
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\x86\Debug\Necromancy.csproj.CopyComplete
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\x86\Debug\ClassLibrary.dll
+C:\Users\Bennett\Documents\My Games\Terraria\ModLoader\Mod Sources\Necromancy\obj\x86\Debug\ClassLibrary.pdb

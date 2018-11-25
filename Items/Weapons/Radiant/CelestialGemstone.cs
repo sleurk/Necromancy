@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,7 +17,6 @@ namespace Necromancy.Items.Weapons.Radiant
         {
             item.magic = true;
             item.damage = 41;
-            item.crit = 4;
             item.width = 48;
 			item.height = 48;
 			item.useTime = 18;
@@ -25,7 +25,7 @@ namespace Necromancy.Items.Weapons.Radiant
             item.noMelee = true;
             item.noUseGraphic = true;
             item.knockBack = 5;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+			item.value = Item.sellPrice(0, 2);
 			item.rare = 4;
 			item.UseSound = SoundID.Item15;
 			item.autoReuse = true;
@@ -35,21 +35,20 @@ namespace Necromancy.Items.Weapons.Radiant
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 6;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 5;
-
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 7;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "CelestialBar", 8);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
+            recipe.AddIngredient(mod, "CelestialBar", 8);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

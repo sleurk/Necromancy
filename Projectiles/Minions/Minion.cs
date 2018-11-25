@@ -4,6 +4,7 @@ namespace Necromancy.Projectiles.Minions
 {
     public abstract class Minion : ModProjectile
     {
+        // base minion projectile, shamelessly ripped from examplemod
         public override void AI()
         {
             CheckActive();

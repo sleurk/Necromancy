@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class TrueHolyLightPink : ModProjectile
 	{
+        // TrueHolyLight but the other way
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("True Holy Light");

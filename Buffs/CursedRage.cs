@@ -14,7 +14,7 @@ namespace Necromancy.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += 0.1f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.1f;
         }
 	}
 }

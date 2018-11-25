@@ -7,6 +7,8 @@ namespace Necromancy.Projectiles
 {
 	public class HungerOrb : ModProjectile
 	{
+        // homing projectile that lasts a short while
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hunger Orb");
@@ -19,7 +21,8 @@ namespace Necromancy.Projectiles
 			projectile.height = 16;
 			projectile.friendly = true;
             projectile.netImportant = true;
-			projectile.penetrate = 3;
+            ProjectileID.Sets.Homing[projectile.type] = true;
+            projectile.penetrate = 3;
 			projectile.timeLeft = 300;
             projectile.alpha = 100;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
@@ -28,6 +31,9 @@ namespace Necromancy.Projectiles
 
 		public override void AI()
 		{
+            projectile.ai[0] += Main.rand.NextFloat(0f, 0.05f);
+            projectile.alpha = Main.rand.Next(256);
+            projectile.rotation += projectile.ai[0];
             bool targeting = false;
             projectile.velocity *= 0.95f;
             NPC target = Necromancy.NearestNPC(projectile.Center);
@@ -43,9 +49,9 @@ namespace Necromancy.Projectiles
             if (!targeting)
             {
                 projectile.netUpdate = true;
-                projectile.velocity += Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(360));
+                projectile.velocity += Main.rand.NextVector2CircularEdge(1f, 1f);
             }
-		    Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 60, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);
+            Dust.QuickDust(projectile.Center, new Color(Main.rand.NextFloat(0.4f, 0.6f), Main.rand.NextFloat(0.26f, 0.46f), Main.rand.NextFloat(0.8f, 1f))).velocity = projectile.velocity;
 		}
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -71,14 +77,14 @@ namespace Necromancy.Projectiles
         public override void Kill(int timeLeft)
 		{
 			for (int k = 0; k < 5; k++)
-			{
-				Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 60, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f);
-			}
+            {
+                Dust.QuickDust(projectile.Center + Main.rand.NextVector2Circular(projectile.width / 2, projectile.height / 2), new Color(0.5f, 0.36f, 1f)).velocity = Main.rand.NextVector2Circular(12f, 12f);
+            }
 		}
 
         public override bool PreAI()
         {
-            Lighting.AddLight(projectile.position, .6f, .2f, .2f);
+            Lighting.AddLight(projectile.position, .5f, .36f, 1f);
             return true;
         }
     }

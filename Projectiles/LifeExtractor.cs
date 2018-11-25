@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class LifeExtractor : ModProjectile
 	{
+        // spear projectile, lots of healing
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Life Extractor");
@@ -26,15 +27,16 @@ namespace Necromancy.Projectiles
             projectile.ownerHitCheck = true; //so you can't hit enemies through walls
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).radiant = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).healPower = 4;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).healPower = 40;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             target.immune[projectile.owner] = 4;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).healPower = Math.Max(0, projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).healPower - 10);
         }
 
-        public float movementFactor // Change this value to alter how fast the spear moves
+        public float MovementFactor // Change this value to alter how fast the spear moves
 		{
 			get { return projectile.ai[0]; }
 			set { projectile.ai[0] = value; }
@@ -57,22 +59,22 @@ namespace Necromancy.Projectiles
 			// As long as the player isn't frozen, the spear can move
 			if (!projOwner.frozen)
 			{
-				if (movementFactor == 0f) // When intially thrown out, the ai0 will be 0f
+				if (MovementFactor == 0f) // When intially thrown out, the ai0 will be 0f
 				{
-					movementFactor = 3f; // Make sure the spear moves forward when initially thrown out
+					MovementFactor = 3f; // Make sure the spear moves forward when initially thrown out
 					projectile.netUpdate = true; // Make sure to netUpdate this spear
 				}
 				if (projOwner.itemAnimation < projOwner.itemAnimationMax / 3) // Somewhere along the item animation, make sure the spear moves back
 				{
-					movementFactor -= 2.4f;
+					MovementFactor -= 2.4f;
 				}
 				else // Otherwise, increase the movement factor
 				{
-					movementFactor += 2.1f;
+					MovementFactor += 2.1f;
 				}
 			}
 			// Change the spear position based off of the velocity and the movementFactor
-			projectile.position += projectile.velocity * movementFactor;
+			projectile.position += projectile.velocity * MovementFactor;
 			// When we reach the end of the animation, we can kill the spear projectile
 			if (projOwner.itemAnimation == 0)
 			{

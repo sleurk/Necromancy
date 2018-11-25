@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -18,7 +19,6 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 70;
-            item.crit = 4;
             item.width = 36;
 			item.height = 36;
 			item.useTime = 60;
@@ -28,7 +28,7 @@ namespace Necromancy.Items.Weapons.Magic
 			item.noMelee = true;
 			item.knockBack = 5;
             item.channel = true;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+			item.value = Item.sellPrice(0, 5);
 			item.rare = 6;
 			item.UseSound = SoundID.Item20;
 			item.shoot = mod.ProjectileType("LichSoul");
@@ -36,13 +36,13 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 100;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 100;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
     }

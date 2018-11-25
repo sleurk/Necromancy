@@ -18,8 +18,8 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 30;
 			item.height = 18;
-			item.value = Item.sellPrice(0, 0, 20, 0);
-			item.rare = 1;
+            item.value = Item.sellPrice(0, 0, 20);
+            item.rare = 1;
 			item.defense = 2;
 		}
 
@@ -32,7 +32,7 @@ namespace Necromancy.Items.Armor
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod, "BloodEssence", 6);
-            recipe.AddIngredient(ItemID.Silk, 12);
+            recipe.AddIngredient(ItemID.Silk, 5);
             recipe.AddTile(TileID.Loom);
             recipe.SetResult(this);
             recipe.AddRecipe();

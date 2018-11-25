@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class SpaceBassPulse : ModProjectile
 	{
+        // basic projectile, slows to a stop
+        // shot in a ring
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Space Bass Pulse");
@@ -23,7 +26,7 @@ namespace Necromancy.Projectiles
             projectile.tileCollide = false;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType("EmpowermentMoveSpeed");
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.Dodge;
         }
 
         public override void AI()
@@ -36,7 +39,7 @@ namespace Necromancy.Projectiles
 		{
 			for (int k = 0; k < 2; k++)
 			{
-                Main.dust[Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 6, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f)].noGravity = true;
+                Dust.NewDustDirect(projectile.position + projectile.velocity, projectile.width, projectile.height, 6, projectile.oldVelocity.X * 0.5f, projectile.oldVelocity.Y * 0.5f).noGravity = true;
 			}
 		}
     }

@@ -8,7 +8,7 @@ namespace Necromancy.Projectiles.Minions
 {
     public class Pain : ModProjectile
     {
-
+        // projectile shot by Pain Elemental
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Pain");

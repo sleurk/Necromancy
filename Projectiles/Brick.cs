@@ -1,3 +1,4 @@
+using Necromancy.NPCs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class Brick : ModProjectile
 	{
+        // basic projectile with gravity
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Brick");
@@ -43,7 +45,8 @@ namespace Necromancy.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (!target.boss) target.GetGlobalNPC<NPCs.NecromancyNPC>().brick = 30;
+            // flag for 30 frames - if an enemy suddenly stops (hits a wall) they take more damage
+            if (!target.boss) target.GetGlobalNPC<NecromancyNPC>().brick = 30;
         }
     }
 }

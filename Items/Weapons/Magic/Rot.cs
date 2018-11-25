@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
@@ -18,15 +19,14 @@ namespace Necromancy.Items.Weapons.Magic
         {
             item.magic = true;
             item.damage = 10;
-            item.crit = 4;
             item.width = 28;
 			item.height = 30;
 			item.useTime = 23;
 			item.useAnimation = 23;
             item.useStyle = 5;
             item.knockBack = 0;
-			item.value = Item.sellPrice(0, 2, 0, 0);
-			item.rare = 2;
+            item.value = Item.sellPrice(0, 0, 80);
+            item.rare = 2;
             item.noMelee = true;
 			item.UseSound = SoundID.Item20;
 			item.autoReuse = false;
@@ -35,19 +35,23 @@ namespace Necromancy.Items.Weapons.Magic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 30;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 30;
         }
         
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
-            if (Main.LocalPlayer == player)
-            {
-                proj.ai[0] = Main.MouseWorld.X;
-                proj.ai[1] = Main.MouseWorld.Y;
-                proj.netUpdate = true;
-            }
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
+
+            /* 
+              Projectile's state was modified after it was created, and Shoot is client-only besides the creation (Projectile.NewProjectileDirect),
+              so netUpdate is flagged. This tells the server and other clients to match the projectile's state with the state of the projectile
+              on the projectile's owner's client.
+             */
+            proj.ai[0] = Main.MouseWorld.X;
+            proj.ai[1] = Main.MouseWorld.Y;
+            proj.netUpdate = true;
+
             return false;
         }
 

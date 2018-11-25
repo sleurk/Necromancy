@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,14 +9,14 @@ namespace Necromancy.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Astral Contract");
-            Tooltip.SetDefault("Non-ranged life costs can be spent with mana at 10x the cost");
+            Tooltip.SetDefault("Non-ranged life costs can be spent with mana at 15x the cost");
         }
 
         public override void SetDefaults()
 		{
 			item.width = 36;
 			item.height = 40;
-            item.value = Item.sellPrice(0, 3, 20, 0);
+            item.value = Item.sellPrice(0, 1);
 			item.rare = 2;
 			item.accessory = true;
 		}
@@ -27,6 +26,15 @@ namespace Necromancy.Items.Accessories
             player.GetModPlayer<NecromancyPlayer>(mod).manaAcc = true;
         }
 
-        // recipe in BloodAlchemyStation.cs
+        public override void AddRecipes()
+        {
+            BloodAlchemyRecipe recipe = new BloodAlchemyRecipe(mod);
+            recipe.AddIngredient(mod, "Brimstone", 5);
+            recipe.AddIngredient(ItemID.FallenStar, 20);
+            recipe.AddIngredient(mod, "Parchment");
+            recipe.AddTile(mod, "BloodAlchemyStation");
+            recipe.SetResult(mod, "AstralContract");
+            recipe.AddRecipe();
+        }
     }
 }

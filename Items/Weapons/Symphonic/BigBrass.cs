@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -12,14 +13,13 @@ namespace Necromancy.Items.Weapons.Symphonic
         {
             DisplayName.SetDefault("Big Brass");
             Tooltip.SetDefault("Creates a blast of deep bass brass doom" +
-                "\nEmpowers allies with stacking damage");
+                "\nEmpowers allies with bonus damage");
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 85;
-            item.crit = 4;
             item.width = 34;
             item.height = 54;
             item.useTime = 60;
@@ -27,7 +27,7 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.useStyle = 5;
             item.noMelee = true;
             item.knockBack = 4;
-            item.value = Item.sellPrice(0, 2, 0, 0);
+            item.value = Item.sellPrice(0, 3);
             item.rare = 5;
             item.UseSound = SoundID.Item38;
             item.shoot = mod.ProjectileType("BrassPulse");
@@ -35,16 +35,17 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 20;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 25;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            // shoots projectile horizontally only
             speedX = speedX / Math.Abs(speedX) * item.shootSpeed;
             speedY = 0;
-            position.Y -= 20f;
+            position.Y -= 20f; // moves projectile up to line up with bell
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
@@ -60,7 +61,7 @@ namespace Necromancy.Items.Weapons.Symphonic
             Mod thorium = ModLoader.GetMod("ThoriumMod");
             if (thorium != null)
             {
-                ModRecipe recipe = new ModRecipe(mod);
+                ThoriumRecipe recipe = new ThoriumRecipe(mod);
                 recipe.AddIngredient(thorium, "StrangePlating", 12);
                 recipe.AddIngredient(ItemID.HallowedBar, 8);
                 recipe.AddTile(TileID.MythrilAnvil);

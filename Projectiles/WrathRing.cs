@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class WrathRing : ModProjectile
 	{
+        // shot in a completely random direction, moves slightly to mouse
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Wrath Ring");

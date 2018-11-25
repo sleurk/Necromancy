@@ -20,22 +20,21 @@ namespace Necromancy.Items.Armor
 		{
 			item.width = 34;
 			item.height = 20;
-            item.value = Item.sellPrice(0, 1, 0, 0);
+            item.value = Item.sellPrice(0, 2, 50);
             item.rare = 8;
 			item.defense = 14;
 		}
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>().necroticCritBonus += 25;
+            player.GetModPlayer<NecromancyPlayer>().necroticCrit += 25;
         }
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpookyWood, 150);
-            recipe.AddIngredient(ItemID.Ectoplasm, 25);
-            recipe.AddIngredient(ItemID.GraniteBlock, 40);
+            recipe.AddIngredient(ItemID.SpookyWood, 60);
+            recipe.AddIngredient(ItemID.Ectoplasm, 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

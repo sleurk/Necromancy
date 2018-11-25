@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class CursedBlade : ModProjectile
 	{
+        // slow projectile, moves towards mouse and spins
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cursed Blade");
@@ -20,7 +21,7 @@ namespace Necromancy.Projectiles
 			projectile.height = 40;
 			projectile.friendly = true;
             projectile.netImportant = true;
-			projectile.penetrate = 1;
+			projectile.penetrate = 3;
 			projectile.timeLeft = 600;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
@@ -48,7 +49,7 @@ namespace Necromancy.Projectiles
             {
                 Vector2 toMouse = Main.MouseWorld - projectile.Center;
                 toMouse.Normalize();
-                projectile.velocity = toMouse;
+                projectile.velocity = toMouse * 1f;
             }
             projectile.rotation += 0.5f * projectile.ai[1];
             Dust.NewDust(projectile.position + projectile.velocity, projectile.width, projectile.height, 107, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f);

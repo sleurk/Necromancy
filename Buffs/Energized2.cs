@@ -8,13 +8,13 @@ namespace Necromancy.Buffs
 		public override void SetDefaults()
 		{
             DisplayName.SetDefault("Energized");
-            Description.SetDefault("100% critical strike chance");
+            Description.SetDefault("+25% critical strike chance");
 			Main.buffNoSave[Type] = true;
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-            player.GetModPlayer<NecromancyPlayer>(mod).allCritBonus += 100;
+            player.GetModPlayer<NecromancyPlayer>(mod).allCritBonus += 25;
             Dust.NewDustPerfect(player.Center, 27, Main.rand.NextVector2Circular(2.5f, 2.5f));
         }
 	}

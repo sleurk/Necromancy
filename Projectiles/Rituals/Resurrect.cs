@@ -14,12 +14,24 @@ namespace Necromancy.Projectiles.Rituals
             DisplayName.SetDefault("Resurrect");
         }
 
+        protected override int TileType
+        {
+            get { return mod.TileType("ResurrectAltar"); }
+        }
+
         public override void Tick()
         {
-            foreach (Player player in Necromancy.NearbyAllies(projectile.Center, null, 600f, false, true))
+            foreach (Player player in Necromancy.NearbyAllies(projectile.Center, null, 600f, false, false))
             {
                 player.AddBuff(mod.BuffType<Buffs.Resurrect>(), 2);
-                player.GetModPlayer<NecromancyPlayer>().resurrect = power;
+                player.GetModPlayer<NecromancyPlayer>().resurrect = (int)Power + 1;
+
+                if (player.dead)
+                {
+                    Dust d = Dust.NewDustDirect(player.position, player.width, player.height, DustType);
+                    d.noGravity = true;
+                    d.velocity = new Vector2(0f, -10f);
+                }
             }
         }
     }

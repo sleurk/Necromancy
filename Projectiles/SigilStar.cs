@@ -8,8 +8,9 @@ namespace Necromancy.Projectiles
 {
     public class SigilStar : ModProjectile
     {
-        int radius = 72;
-        bool exploded = false;
+        // weird circle projectile that makes a random star for visuals
+        readonly int radius = 72;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("SigilStar");
@@ -31,12 +32,12 @@ namespace Necromancy.Projectiles
 
         public override void AI()
         {
-            if (!exploded) Explode();
+            if (projectile.ai[0] == 0f) Explode();
         }
 
         private void Explode()
         {
-            exploded = true;
+            projectile.ai[0] = 1f;
             CreateStar();
         }
 

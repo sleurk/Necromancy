@@ -1,3 +1,4 @@
+using Necromancy.Empowerments;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -7,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class LuteBlast : ModProjectile
 	{
+        // medium-sized projectile that lasts one frame over an area
+        // shot with more damage, range, and speed when player is moving
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lute Blast");
@@ -21,11 +24,11 @@ namespace Necromancy.Projectiles
             projectile.tileCollide = false;
             projectile.netImportant = true;
 			projectile.penetrate = -1;
-			projectile.timeLeft = 1;
+			projectile.timeLeft = 2;
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).symphonic = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).buffType = mod.BuffType<Buffs.EmpowermentImmortality>();
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).empowermentType = EmpType.Immortality;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

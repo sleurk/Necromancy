@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -10,14 +11,13 @@ namespace Necromancy.Items.Weapons.Symphonic
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Seeping Song");
-            Tooltip.SetDefault("Empowers allies with stacking life steal");
+            Tooltip.SetDefault("Empowers allies with life steal");
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 52;
-            item.crit = 4;
             item.width = 40;
 			item.height = 44;
 			item.useTime = 20;
@@ -26,7 +26,7 @@ namespace Necromancy.Items.Weapons.Symphonic
 			item.noMelee = true;
             item.noUseGraphic = true;
 			item.knockBack = 1;
-			item.value = Item.sellPrice(0, 0, 80, 0);
+			item.value = Item.sellPrice(0, 10);
 			item.rare = 8;
 			item.UseSound = SoundID.Item20;
 			item.autoReuse = true;
@@ -35,20 +35,19 @@ namespace Necromancy.Items.Weapons.Symphonic
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).symphonic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 3;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 9;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.netUpdate = true;
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            ThoriumRecipe recipe = new ThoriumRecipe(mod);
             recipe.AddIngredient(ItemID.SpectreBar, 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);

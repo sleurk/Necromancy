@@ -11,6 +11,8 @@ namespace Necromancy.Projectiles
 {
     public class Deathblast : ModProjectile
     {
+        // sustained laser, copied from examplemod mostly
+        // drains health while charging, lasts one second after charging
         private const int MAX_CHARGE = 60;
         private const float MOVE_DISTANCE = 48f;       //The distance charge particle from the player center
 
@@ -123,7 +125,7 @@ namespace Necromancy.Projectiles
             Player owner = Main.player[projectile.owner];
             if (Charge != MAX_CHARGE)
             {
-                Necromancy.DrainLife(owner, 2);
+                Necromancy.BroadcastDrainLife(owner, 1);
             }
             if (!owner.channel)
             {

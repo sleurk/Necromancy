@@ -6,15 +6,19 @@ namespace Necromancy.Projectiles.Minions
 {
     public abstract class HoverShooter : Minion
     {
+        // base minion that flies and shoots - shamelessly ripped from examplemod but not used very much
+
         protected float idleAccel = 0.05f;
         protected float spacingMult = 1f;
         protected float viewDist = 400f;
         protected float chaseDist = 200f;
         protected float chaseAccel = 6f;
         protected float inertia = 40f;
-        protected float shootCool = 90f;
+        protected float shootCool = 30f;
         protected float shootSpeed;
         protected int shoot;
+        protected bool target = false;
+        protected float distanceTo = -1f;
 
         public virtual void CreateDust()
         {
@@ -26,6 +30,7 @@ namespace Necromancy.Projectiles.Minions
 
         public override void Behavior()
         {
+            distanceTo = -1f;
             Player player = Main.player[projectile.owner];
             float spacing = projectile.width * spacingMult;
             for (int k = 0; k < 1000; k++)
@@ -53,7 +58,7 @@ namespace Necromancy.Projectiles.Minions
             }
             Vector2 targetPos = projectile.position;
             float targetDist = viewDist;
-            bool target = false;
+            target = false;
             projectile.tileCollide = true;
             for (int k = 0; k < 200; k++)
             {
@@ -116,7 +121,7 @@ namespace Necromancy.Projectiles.Minions
                 }
                 direction.X -= (float)((10 + num * 40) * player.direction);
                 direction.Y -= 70f;
-                float distanceTo = direction.Length();
+                distanceTo = direction.Length();
                 if (distanceTo > 200f && speed < 9f)
                 {
                     speed = 9f;
@@ -175,7 +180,7 @@ namespace Necromancy.Projectiles.Minions
                     {
                         projectile.spriteDirection = (projectile.direction = 1);
                     }
-                    if (projectile.ai[1] == 0f)
+                    if (projectile.ai[1] == 0f && distanceTo < 200f)
                     {
                         projectile.ai[1] = 1f;
                         if (Main.myPlayer == projectile.owner)
@@ -188,7 +193,6 @@ namespace Necromancy.Projectiles.Minions
                             shootVel.Normalize();
                             shootVel *= shootSpeed;
                             int proj = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, shootVel.X, shootVel.Y, shoot, projectile.damage, projectile.knockBack, Main.myPlayer, 0f, 0f);
-                            Main.projectile[proj].timeLeft = 300;
                             Main.projectile[proj].netUpdate = true;
                             projectile.netUpdate = true;
                         }

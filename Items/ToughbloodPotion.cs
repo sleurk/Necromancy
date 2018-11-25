@@ -27,8 +27,9 @@ namespace Necromancy.Items
             item.useTime = refItem.useTime;
             item.useAnimation = refItem.useAnimation;
             item.UseSound = refItem.UseSound;
-            item.value = Item.sellPrice(0, 0, 2, 0);
-			item.rare = 3;
+            item.value = Item.sellPrice(0, 0, 2);
+            item.buffType = mod.BuffType<Buffs.Toughblood>();
+            item.rare = 3;
             item.consumable = true;
         }
 

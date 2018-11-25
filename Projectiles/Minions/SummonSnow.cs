@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles.Minions
 {
     public class SummonSnow : ModProjectile
     {
+        // snow projectile shot by snowcloud summon
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Snow");

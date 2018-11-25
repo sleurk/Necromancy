@@ -8,6 +8,8 @@ namespace Necromancy.Projectiles
 {
 	public class WarBullet : ModProjectile
 	{
+        // basic bullet projectile
+        // all these comments are leftover from examplemod
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Famine Bullet");
@@ -32,7 +34,7 @@ namespace Necromancy.Projectiles
 			aiType = ProjectileID.Bullet;           //Act exactly like default Bullet
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).ranged = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 6;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 9;
         }
 
         public override void AI()

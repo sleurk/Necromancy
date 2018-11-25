@@ -27,7 +27,7 @@ namespace Necromancy.Items.Placeable
 			item.useTime = 10;
 			item.useStyle = 1;
 			item.consumable = true;
-			item.value = Item.sellPrice(0, 2, 0, 0);
+			item.value = 5;
             item.rare = 2;
             item.createTile = mod.TileType("BloodAlchemyStation");
 		}
@@ -41,19 +41,6 @@ namespace Necromancy.Items.Placeable
             tableRecipe.AddTile(TileID.Anvils);
             tableRecipe.SetResult(this);
             tableRecipe.AddRecipe();
-
-            foreach (Recipe recipe in Main.recipe)
-            {
-                int index = Array.IndexOf(recipe.requiredTile, TileID.Bottles);
-                if (index > -1)
-                {
-                    BloodAlchemyRecipe newRecipe = new BloodAlchemyRecipe(mod);
-                    newRecipe.requiredItem = recipe.requiredItem;
-                    newRecipe.AddTile(mod, "BloodAlchemyStation");
-                    newRecipe.createItem = recipe.createItem;
-                    newRecipe.AddRecipe();
-                }
-            }
 
             BloodAlchemyRecipe bRecipe;
             /* Advanced Alchemy */
@@ -364,23 +351,9 @@ namespace Necromancy.Items.Placeable
 
 
             /* Other Artifacts */
-            // Sanguine Contract
-            bRecipe = new BloodAlchemyRecipe(mod);
-            bRecipe.AddIngredient(mod, "Brimstone", 5);
-            bRecipe.AddIngredient(mod, "BloodEssence", 20);
-            bRecipe.AddIngredient(mod, "Parchment");
-            bRecipe.AddTile(mod, "BloodAlchemyStation");
-            bRecipe.SetResult(mod, "SanguineContract");
-            bRecipe.AddRecipe();
+            // Sanguine Contract in SanguineContract.cs
 
-            // Astral Contract
-            bRecipe = new BloodAlchemyRecipe(mod);
-            bRecipe.AddIngredient(mod, "Brimstone", 5);
-            bRecipe.AddIngredient(ItemID.FallenStar, 20);
-            bRecipe.AddIngredient(mod, "Parchment");
-            bRecipe.AddTile(mod, "BloodAlchemyStation");
-            bRecipe.SetResult(mod, "AstralContract");
-            bRecipe.AddRecipe();
+            // Astral Contract in AstralContract.cs
 
             // Money Trough
             bRecipe = new BloodAlchemyRecipe(mod);

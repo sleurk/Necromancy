@@ -6,6 +6,7 @@ namespace Necromancy.Projectiles
 {
     public class GoreSpike : ModProjectile
     {
+        // basic projectile, slows to a stop
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Gore Spike");

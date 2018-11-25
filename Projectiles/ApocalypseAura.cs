@@ -7,6 +7,7 @@ namespace Necromancy.Projectiles
 {
 	public class ApocalypseAura : ModProjectile
 	{
+        // large projectile around a player with apocalypse armor, for set bonus effects & visuals
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Apocalypse Aura");
@@ -28,19 +29,19 @@ namespace Necromancy.Projectiles
             Player player = Main.player[projectile.owner];
             foreach (Player p in Necromancy.NearbyAllies(player.Center, player, 204f, false))
             {
-                p.AddBuff(mod.BuffType<Buffs.Apocalypse>(), 1);
+                p.AddBuff(mod.BuffType<Buffs.Apocalypse>(), 2);
             }
             foreach (NPC npc in Necromancy.NearbyNPCs(player.Center, 204f))
             {
-                npc.AddBuff(mod.BuffType<Buffs.Apocalypse>(), 1);
+                npc.AddBuff(mod.BuffType<Buffs.Apocalypse>(), 2);
             }
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Dust d = Dust.NewDustPerfect(Main.rand.NextVector2CircularEdge(202, 202) + projectile.Center, 57, Vector2.Zero);
                 d.noGravity = true;
                 d.scale = Main.rand.NextFloat(0.5f, 1.5f);
-                d.velocity = (player.Center - d.position) * 0.05f * Main.rand.NextFloat() + player.velocity;
+                d.velocity = (player.Center - d.position).RotatedBy(MathHelper.ToRadians(30f))* 0.05f * Main.rand.NextFloat() + player.velocity;
                 d.noLight = true;
             }
         }

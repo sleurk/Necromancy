@@ -6,7 +6,10 @@ using Terraria.ModLoader;
 namespace Necromancy.Projectiles
 {
 	public class TridentBlast : ModProjectile
-	{
+    {
+        // projectile that is shot in threes
+        // middle projectile moves straight
+        // other projectiles curve inwards
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Trident Blast");
@@ -24,6 +27,7 @@ namespace Necromancy.Projectiles
             projectile.aiStyle = 0;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).melee = true;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).burn = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 1;
         }
 

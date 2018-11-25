@@ -10,7 +10,13 @@ namespace Necromancy.Projectiles
 {
     public class ThrowingDice : ModProjectile
     {
-        private bool exploded;
+        // thrown projectile that explodes into one of six effects
+        // one - pulls enemies towards the dice
+        // two - stuns hit enemies
+        // three - sets fire to enemies
+        // four - makes bouncy projectiles
+        // five - creates lasting damage in the explosion area
+        // six - randomly teleports hit enemies
 
         public override void SetStaticDefaults()
         {
@@ -28,18 +34,17 @@ namespace Necromancy.Projectiles
             projectile.timeLeft = 120;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).throwing = true;
-            exploded = false;
         }
 
         public override void AI()
         {
             projectile.rotation += projectile.velocity.X / 30f;
-            if (!exploded) projectile.velocity.Y += 0.3f;
+            if (projectile.ai[1] == 0f) projectile.velocity.Y += 0.3f;
             if (Main.rand.NextBool())
             {
                 Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, 53).scale = 0.5f;
             }
-            if (exploded && projectile.ai[0] == 5f)
+            if ((projectile.ai[1] == 1f) && projectile.ai[0] == 5f)
             {
                 for (int i = 0; i < 12; i++)
                 {
@@ -50,7 +55,7 @@ namespace Necromancy.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            if (!exploded) Explode();
+            if (projectile.ai[1] == 0f) Explode();
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -76,7 +81,7 @@ namespace Necromancy.Projectiles
                 target.Teleport(teleportTo, 1);
                 target.netUpdate = true;
             }
-            if (!exploded) Explode();
+            if (projectile.ai[1] == 0f) Explode();
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -95,7 +100,7 @@ namespace Necromancy.Projectiles
 
         private void Explode()
         {
-            exploded = true;
+            projectile.ai[1] = 1f;
             projectile.hide = true;
             Vector2 center = projectile.Center;
             projectile.width = 104;
@@ -123,11 +128,6 @@ namespace Necromancy.Projectiles
                         {
                             target.velocity += 0.1f * (projectile.Center - target.Center);
                         }
-                        break;
-                    }
-                case 3:
-                    {
-
                         break;
                     }
                 case 4:

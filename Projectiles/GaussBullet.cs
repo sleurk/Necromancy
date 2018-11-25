@@ -8,6 +8,7 @@ namespace Necromancy.Projectiles
 {
 	public class GaussBullet : ModProjectile
 	{
+        // bullet projectile, damage increases with each pierce
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Gauss Bullet");
@@ -21,7 +22,7 @@ namespace Necromancy.Projectiles
 			projectile.aiStyle = 1;
 			projectile.friendly = true;
 			projectile.hostile = false;
-			projectile.timeLeft = 60;
+			projectile.timeLeft = 120;
 			projectile.alpha = 255;
 			projectile.light = 0.5f;
 			projectile.ignoreWater = true;
@@ -33,7 +34,7 @@ namespace Necromancy.Projectiles
 			aiType = ProjectileID.Bullet;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).ranged = true;
-            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 50;
+            projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).lifeSteal = 25;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).fire = true;
         }
 

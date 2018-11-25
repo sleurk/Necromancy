@@ -1,3 +1,4 @@
+using Necromancy.Projectiles;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -10,36 +11,36 @@ namespace Necromancy.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Nature");
+            Tooltip.SetDefault("Creates spore mines that activate after a delay");
         }
 
         public override void SetDefaults()
         {
             item.magic = true;
             item.damage = 30;
-            item.crit = 4;
             item.width = 28;
 			item.height = 30;
 			item.useTime = 30;
 			item.useAnimation = 30;
             item.useStyle = 5;
             item.knockBack = 6;
-			item.value = Item.sellPrice(0, 2, 0, 0);
+			item.value = Item.sellPrice(0, 0, 80);
 			item.rare = 3;
             item.noMelee = true;
 			item.UseSound = SoundID.Item20;
 			item.autoReuse = true;
             item.shoot = mod.ProjectileType("NatureMine");
-            item.shootSpeed = 16f;
+            item.shootSpeed = 8f;
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).baseLifeCost = 6;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 6;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI);
-            proj.GetGlobalProjectile<Projectiles.NecromancyGlobalProjectile>(mod).shotFrom = item;
+            proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;
             return false;
         }
 

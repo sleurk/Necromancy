@@ -19,7 +19,7 @@ namespace Necromancy.Items.Armor
         {
             item.width = 20;
             item.height = 28;
-            item.value = Item.sellPrice(0, 1, 0, 0);
+            item.value = Item.sellPrice(0, 3);
             item.rare = 10;
             item.defense = 15;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).thoriumRarity = true;
@@ -27,7 +27,7 @@ namespace Necromancy.Items.Armor
 
         public override void UpdateEquip(Player player)
         {
-            player.GetModPlayer<NecromancyPlayer>(mod).necroticMult += 0.6f;
+            player.GetModPlayer<NecromancyPlayer>(mod).necroticDamage += 0.6f;
             player.GetModPlayer<NecromancyPlayer>(mod).lifeCostModifier -= 10;
         }
 
@@ -39,7 +39,7 @@ namespace Necromancy.Items.Armor
         public override void UpdateArmorSet(Player player)
         {
             player.setBonus = "+500 Max Life" +
-                "\nNecrotic ranged hits steal 1 extra life" +
+                "\nNecrotic ranged hits steal double the cost" +
                 "\nNecrotic summon costs are halved";
             player.statLifeMax2 += 500;
             player.GetModPlayer<NecromancyPlayer>().demonCowl = true;

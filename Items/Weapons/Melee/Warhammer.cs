@@ -16,7 +16,6 @@ namespace Necromancy.Items.Weapons.Melee
         {
             item.magic = true;
             item.damage = 28;
-            item.crit = 4;
             item.width = 54;
             item.height = 54;
             item.useTime = 20;
@@ -24,6 +23,7 @@ namespace Necromancy.Items.Weapons.Melee
             item.useStyle = 1;
             item.knockBack = 9;
             item.rare = 3;
+            item.value = Item.sellPrice(0, 1);
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
