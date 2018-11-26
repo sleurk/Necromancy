@@ -51,7 +51,7 @@ namespace Necromancy.Items.Armor
 
             string button = Main.ReversedUpDownArmorSetBonuses ? "UP" : "DOWN";
             player.setBonus = "+300 Max Life" +
-                "\nDouble tap " + button + " to switch between defense and offense";
+                "\nDouble tap " + button + " to switch between defense and recovery";
         }
 
 		public override void AddRecipes()
