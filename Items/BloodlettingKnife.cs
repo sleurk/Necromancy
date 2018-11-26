@@ -11,7 +11,7 @@ namespace Necromancy.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bloodletting Knife");
+            DisplayName.SetDefault("(NYI) Bloodletting Knife");
             Tooltip.SetDefault("Drains half of your life" +
                         "\nPurifies your blood" +
                         "\n'I really should clean this...'");
@@ -52,13 +52,13 @@ namespace Necromancy.Items
             recipe.AddIngredient(ItemID.SilverBar, 8);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
-            recipe.AddRecipe();
+            // recipe.AddRecipe();
             recipe = new ModRecipe(mod);
             recipe.AddIngredient(mod, "BloodEssence", 5);
             recipe.AddIngredient(ItemID.TungstenBar, 8);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
-            recipe.AddRecipe();
+            // recipe.AddRecipe();
         }
     }
 }

@@ -19,10 +19,13 @@ Some regular radiant/symphonic weapons are also planned to be added (to complete
 
 Bonuses to necrotic damage are not specific to a subtype, so you can specialize into one class while still having a large variety of playstyles.
 
+Some more specific information on this mod is on the Github wiki: https://github.com/sleurk/Necromancy/wiki
+
 Every part of this mod is open-source, so if you're making your own mod and are wondering how to go about making a weapon class, or otherwise want to see how something in here is made, feel free to take a look!
-You can use tModReader to unpack the .tmod file. Google can help you if you don't know what that means.
+Github: https://github.com/sleurk/Necromancy
+Alternatively, you can use tModReader to unpack the .tmod file. Google can help you if you don't know what that means.
 
 Credit to Thorium for the basis of necrotic radiant/symphonic weapons.
 Credit for quite a bit of content of this mod (sprites, some items) goes to Crypt of the NecroDancer by Brace Yourself Games.
 Credit for a little bit of content of this mod goes to Overwatch by Blizzard Entertainment.
-(Something something imitation is the sincerest form of flattery. These are cool things that I like <3)
+(Something something imitation is the sincerest form of flattery. These are cool things that I like. If there's legal issues or something I can remove/rework them into something different)

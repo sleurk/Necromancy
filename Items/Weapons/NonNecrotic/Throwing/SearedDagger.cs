@@ -16,7 +16,7 @@ namespace Necromancy.Items.Weapons.NonNecrotic.Throwing
         public override void SetDefaults()
         {
             item.thrown = true;
-            item.damage = 55;
+            item.damage = 65;
             item.width = 18;
 			item.height = 36;
             item.useTime = 15;

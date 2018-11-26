@@ -10,6 +10,15 @@ namespace Necromancy.Items
 
         public override void NPCLoot(NPC npc)
         {
+            if (npc.type == NPCID.PirateShip && !NPC.AnyNPCs(mod.NPCType("Shopkeeper")))
+            {
+                int shopkeeper = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType("Shopkeeper"));
+                Main.npc[shopkeeper].homeTileX = Main.spawnTileX + 5;
+                Main.npc[shopkeeper].homeTileY = Main.spawnTileY;
+                Main.npc[shopkeeper].direction = 1;
+                Main.npc[shopkeeper].homeless = true;
+            }
+
             if (npc.type == NPCID.CultistBoss)
             {
                 Item.NewItem((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height, mod.ItemType("Sigil"), 1);
