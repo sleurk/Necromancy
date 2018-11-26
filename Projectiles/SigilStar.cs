@@ -9,7 +9,6 @@ namespace Necromancy.Projectiles
     public class SigilStar : ModProjectile
     {
         // weird circle projectile that makes a random star for visuals
-        readonly int radius = 72;
 
         public override void SetStaticDefaults()
         {
@@ -19,25 +18,24 @@ namespace Necromancy.Projectiles
         public override void SetDefaults()
         {
             projectile.magic = true;
-            projectile.width = (int)(radius * 2.6f);
-            projectile.height = (int)(radius * 2.6f);
+            projectile.width = (int)(72 * 2.6f);
+            projectile.height = (int)(72 * 2.6f);
             projectile.friendly = true;
             projectile.hide = true;
             projectile.netImportant = true;
             projectile.tileCollide = false;
             projectile.penetrate = -1;
-            projectile.timeLeft = 2;
+            projectile.timeLeft = 3;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
         }
 
         public override void AI()
         {
-            if (projectile.ai[0] == 0f) Explode();
+            if (projectile.timeLeft == 3) Explode();
         }
 
         private void Explode()
         {
-            projectile.ai[0] = 1f;
             CreateStar();
         }
 
@@ -49,9 +47,9 @@ namespace Necromancy.Projectiles
 
         private void DustCircle()
         {
-            for (int i = 0; i < radius * 2; i += 2)
+            for (int i = 0; i < 72 * 2; i += 2)
             {
-                CreateDust(projectile.Center + new Vector2(radius, 0).RotatedBy(MathHelper.ToRadians(i * 180 / radius)));
+                CreateDust(projectile.Center + new Vector2(72, 0).RotatedBy(MathHelper.ToRadians(i * 180 / 72)));
             }
         }
 
@@ -65,14 +63,14 @@ namespace Necromancy.Projectiles
                 pointJump = Main.rand.Next(2, numPoints - 1);
             }
             Vector2[] points = new Vector2[numPoints];
-            points[0] = projectile.Center + new Vector2(radius, 0).RotatedByRandom(MathHelper.TwoPi);
+            points[0] = projectile.Center + new Vector2(72, 0).RotatedByRandom(MathHelper.TwoPi);
             for (int i = 1; i < numPoints; i++)
             {
                 points[i] = projectile.Center + (points[i - 1] - projectile.Center).RotatedBy(MathHelper.ToRadians(360f / numPoints));
             }
             for (int i = 0; i < numPoints; i++)
             {
-                for (int j = 0; j < radius / 3; j++)
+                for (int j = 0; j < 72 / 3; j++)
                 {
                     CreateDustLine(points[i], points[(i + pointJump) % numPoints]);
                 }
