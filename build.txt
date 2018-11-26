@@ -1,5 +1,5 @@
 author = sleurk
-version = 0.1
+version = 0.1.1
 displayName = Necromancy
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
 includePDB = true
