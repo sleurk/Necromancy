@@ -17,7 +17,7 @@ namespace Necromancy.Items.Weapons.Radiant
         public override void SetDefaults()
         {
             item.magic = true;
-            item.damage = 45;
+            item.damage = 35;
             item.width = 48;
             item.height = 26;
             item.useTime = 3;
@@ -34,7 +34,7 @@ namespace Necromancy.Items.Weapons.Radiant
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).radiant = true;
-            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 7;
+            item.GetGlobalItem<NecromancyGlobalItem>(mod).lifeCost = 6;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).healPower = 3;
         }
 

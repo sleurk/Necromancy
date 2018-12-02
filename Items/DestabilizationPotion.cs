@@ -43,7 +43,6 @@ namespace Necromancy.Items
 
         public override bool UseItem(Player player)
         {
-            Necromancy.BroadcastDrainLife(player, 50);
             player.AddBuff(mod.BuffType<Buffs.Destabilized>(), 21600); // 6 minutes
             return true;
         }
