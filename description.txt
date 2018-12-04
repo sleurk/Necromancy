@@ -6,18 +6,9 @@ Instead of harnessing the power of mana, Necromancers utilize the energy of life
 A Necromancer can act as a tank, a damage-dealer, or a support, depending on your equipment.
 New weapons deal necrotic damage, and they come in several types, based on the original 5 classes:
 
-Necrotic melee weapons have much a more limited range than your average melee weapons that shoot projectiles everywhere, but steal life from hit enemies.
-Necrotic ranged weapons require no ammo and instead cost life to use, but will give the life back exactly if you hit your targets.
-Necrotic magic weapons cost life, but are also very powerful and can deal massive damage.
-Necrotic summon weapons cost a portion of your max life for each summon, but otherwise have no limit to the number of minions you have.
-Necrotic throwing weapons cost no life to shoot, but you can spend life to "reload" by right clicking.
-
 This mod also features integration with Thorium, including extra equipment from strange plating, the Fallen Beholder, the Strider, the Lich, Abyssion, and the Ragnarök, as well as necrotic radiant and symphonic weapons!
-Necrotic radiant weapons cost life, but heal allies every time they hit an enemy.
-Necrotic symphonic weapons cost life, but give you and all allies buffs that increase in power with every hit.
-Some regular radiant/symphonic weapons are also planned to be added (to complete weapon sets for each normal class), but I need to talk with the Thorium development team before I add anything myself.
 
-Bonuses to necrotic damage are not specific to a subtype, so you can specialize into one class while still having a large variety of playstyles.
+Bonuses to necrotic damage are not specific to a subtype, so you can specialize into only this one class while still having a large variety of playstyles.
 
 Some more specific information on this mod is on the Github wiki: https://github.com/sleurk/Necromancy/wiki
 

@@ -55,7 +55,7 @@ namespace Necromancy.Projectiles.Minions
 
                     Vector2 newCenter = projectile.Center + projectile.velocity;
                     Vector2 toNewCenter = newCenter - other.Center;
-                    if (toNewCenter.Length() > maxLength)
+                    if (toNewCenter.LengthSquared() > maxLength * maxLength)
                     {
                         newCenter = other.Center + toNewCenter.SafeNormalize(Vector2.Zero) * maxLength;
                         projectile.velocity = newCenter - projectile.Center;

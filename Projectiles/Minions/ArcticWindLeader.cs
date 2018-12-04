@@ -32,10 +32,10 @@ namespace Necromancy.Projectiles.Minions
 
             targetPos = Owner.Center; // position it will try to move towards
 
-            float distanceToPlayer = (Owner.Center - projectile.Center).Length();
-            if (distanceToPlayer > 2000f) projectile.Center = Owner.Center;
+            float distanceToPlayerSq = (Owner.Center - projectile.Center).LengthSquared();
+            if (distanceToPlayerSq > 2000f * 2000f) projectile.Center = Owner.Center;
             NPC target = GetTarget();
-            if (distanceToPlayer < 1000f && target != null)
+            if (distanceToPlayerSq < 1000f * 1000f && target != null)
             {
                 targetPos = target.Center;
             }

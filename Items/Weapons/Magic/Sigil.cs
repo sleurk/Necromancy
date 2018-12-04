@@ -43,7 +43,7 @@ namespace Necromancy.Items.Weapons.Magic
             {
                 Vector2 pos1 = Main.MouseWorld - player.Center;
                 Vector2 pos2 = 360f * pos1.SafeNormalize(Vector2.Zero);
-                position = pos1.Length() < pos2.Length() ? pos1 : pos2; // Created at cursor, maximum distnace of 360px from player
+                position = pos1.LengthSquared() < pos2.LengthSquared() ? pos1 : pos2; // Created at cursor, maximum distnace of 360px from player
                 position += player.Center;
                 Projectile proj = Projectile.NewProjectileDirect(position, new Vector2(speedX, speedY), type, damage, knockBack, player.whoAmI, Main.rand.NextBool() ? -1 : 1, Main.rand.NextFloat(5f, 8f));
                 proj.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom = item;

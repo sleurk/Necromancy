@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System;
 
 namespace Necromancy.Items.Weapons.Magic
 {
@@ -43,8 +44,7 @@ namespace Necromancy.Items.Weapons.Magic
             // creates two projectiles that move in a circle to meet again at the cursor's position
             if (Main.myPlayer == player.whoAmI)
             {
-                // i got this number from measuring. i don't know what it actually means but it works to get the curvature right with the rotation rate of the projectile
-                float shootSpeed = (Main.MouseWorld - player.Center).Length() / 22.9259f;
+                float shootSpeed = (float)Math.Sqrt((Main.MouseWorld - player.Center).LengthSquared() * 2 * (1 - Math.Cos(MathHelper.ToRadians(5))));
                 position = player.Center;
                 Vector2 speed = new Vector2(speedX, speedY);
                 Projectile proj1 = Projectile.NewProjectileDirect(position, speed.RotatedBy(MathHelper.PiOver2).SafeNormalize(Vector2.UnitX * player.direction) * shootSpeed, type, 

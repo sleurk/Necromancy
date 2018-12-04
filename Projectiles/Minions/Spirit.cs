@@ -19,7 +19,7 @@ namespace Necromancy.Projectiles.Minions
         protected float shootSpeed = 32f;
         protected int shoot;
         protected bool target = false;
-        protected float distanceTo = -1f;
+        protected float distanceToSq = -1f;
 
         public override void SetStaticDefaults()
         {
@@ -67,7 +67,7 @@ namespace Necromancy.Projectiles.Minions
 
         public void SelectFrame()
         {
-            if (target && distanceTo != 1f && distanceTo < 200f) projectile.frame = 5;
+            if (target && distanceToSq != 1f && distanceToSq < 200f * 200f) projectile.frame = 5;
             else
             {
                 projectile.frameCounter++;
@@ -113,7 +113,7 @@ namespace Necromancy.Projectiles.Minions
                 }
             }
             Vector2 targetPos = projectile.position;
-            float targetDist = viewDist;
+            float targetDistSq = viewDist * viewDist;
             target = false;
             projectile.tileCollide = true;
             for (int k = 0; k < 200; k++)
@@ -121,16 +121,16 @@ namespace Necromancy.Projectiles.Minions
                 NPC npc = Main.npc[k];
                 if (npc.CanBeChasedBy(this, false))
                 {
-                    float distance = Vector2.Distance(npc.Center, projectile.Center);
-                    if ((distance < targetDist || !target) && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
+                    float distanceSq = Vector2.DistanceSquared(npc.Center, projectile.Center);
+                    if ((distanceSq < targetDistSq || !target) && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height))
                     {
-                        targetDist = distance;
+                        targetDistSq = distanceSq;
                         targetPos = npc.Center;
                         target = true;
                     }
                 }
             }
-            if (Vector2.Distance(player.Center, projectile.Center) > (target ? 1000f : 500f))
+            if (Vector2.DistanceSquared(player.Center, projectile.Center) > (target ? 1000f * 1000f : 500f * 500f))
             {
                 projectile.ai[0] = 1f;
                 projectile.netUpdate = true;
@@ -142,7 +142,7 @@ namespace Necromancy.Projectiles.Minions
             if (target && projectile.ai[0] == 0f)
             {
                 Vector2 direction = targetPos - projectile.Center;
-                if (direction.Length() > chaseDist)
+                if (direction.LengthSquared() > chaseDist * chaseDist)
                 {
                     direction.Normalize();
                     projectile.velocity = (projectile.velocity * inertia + direction * chaseAccel) / (inertia + 1);
@@ -177,21 +177,21 @@ namespace Necromancy.Projectiles.Minions
                 }
                 direction.X -= (float)((10 + num * 40) * player.direction);
                 direction.Y -= 70f;
-                distanceTo = direction.Length();
-                if (distanceTo > 200f && speed < 9f)
+                distanceToSq = direction.LengthSquared();
+                if (distanceToSq > 200f * 200f && speed < 9f)
                 {
                     speed = 9f;
                 }
-                if (distanceTo < 100f && projectile.ai[0] == 1f && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
+                if (distanceToSq < 100f * 100f && projectile.ai[0] == 1f && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
                 {
                     projectile.ai[0] = 0f;
                     projectile.netUpdate = true;
                 }
-                if (distanceTo > 2000f)
+                if (distanceToSq > 2000f * 2000f)
                 {
                     projectile.Center = player.Center;
                 }
-                if (distanceTo > 48f)
+                if (distanceToSq > 48f * 48f)
                 {
                     direction.Normalize();
                     direction *= speed;
@@ -236,7 +236,7 @@ namespace Necromancy.Projectiles.Minions
                     {
                         projectile.spriteDirection = (projectile.direction = 1);
                     }
-                    if (projectile.ai[1] == 0f && distanceTo < 200f)
+                    if (projectile.ai[1] == 0f && distanceToSq < 200f * 200f)
                     {
                         projectile.ai[1] = 1f;
                         if (Main.myPlayer == projectile.owner)

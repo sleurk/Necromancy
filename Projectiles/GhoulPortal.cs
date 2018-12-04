@@ -39,7 +39,7 @@ namespace Necromancy.Projectiles
                 projectile.velocity += (target.Center - projectile.Center) * 0.01f;
             }
             float maxSpeed = projectile.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom.shootSpeed;
-            if (projectile.velocity.Length() > maxSpeed)
+            if (projectile.velocity.LengthSquared() > maxSpeed * maxSpeed)
             {
                 projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * maxSpeed;
             }

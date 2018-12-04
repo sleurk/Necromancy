@@ -52,7 +52,7 @@ namespace Necromancy.Items.Weapons.Symphonic
             for (int i = 0; i < 200; i++)
             {
                 NPC npc = Main.npc[i];
-                if (npc.active && Vector2.Distance(player.position, npc.position) < 20 * 16f)
+                if (npc.active && Vector2.DistanceSquared(player.position, npc.position) < 320f * 320f)
                 {
                     Projectile p = Main.projectile[Projectile.NewProjectile(npc.Center, new Vector2(), type, damage + 6 * use, 0f, player.whoAmI, use == 7 ? 1 : 0)];
                     p.Center = npc.Center;

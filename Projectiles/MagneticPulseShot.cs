@@ -33,7 +33,7 @@ namespace Necromancy.Projectiles
             if (target != null)
             {
                 Vector2 toTarget = target.Center - projectile.Center;
-                if (toTarget.Length() > 0 && toTarget.Length() < 200)
+                if (toTarget.LengthSquared() > 0 && toTarget.LengthSquared() < 200f * 200f)
                 {
                     projectile.velocity.X = 0.95f * projectile.velocity.X + toTarget.X * 0.1f;
                     projectile.velocity.Y = 0.95f * projectile.velocity.Y + toTarget.Y * 0.1f;

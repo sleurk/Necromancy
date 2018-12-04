@@ -51,7 +51,7 @@ namespace Necromancy.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             projectile.velocity = target.velocity;
-            if (projectile.velocity.Length() > 32f) projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 32f;
+            if (projectile.velocity.LengthSquared() > 32f * 32f) projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 32f;
             target.AddBuff(mod.BuffType("Goo"), 300);
         }
     }

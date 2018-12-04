@@ -44,7 +44,7 @@ namespace Necromancy.Projectiles
                     Vector2 other = new Vector2(projectile.ai[0], projectile.ai[1]);
                     Vector2 toOther = other - projectile.Center;
                     if (Main.player[projectile.owner].ownedProjectileCounts[mod.ProjectileType("PylonCreator")] == 0
-                     && other != new Vector2(-1f, -1f) && toOther.Length() < 600f)
+                     && other != new Vector2(-1f, -1f) && toOther.LengthSquared() < 600f * 600f)
                     {
                         toOther = toOther.SafeNormalize(Vector2.Zero);
                         Projectile proj = Projectile.NewProjectileDirect(projectile.Center, toOther, mod.ProjectileType("PHarmBolt"), projectile.damage, projectile.knockBack, projectile.owner);
@@ -62,7 +62,7 @@ namespace Necromancy.Projectiles
                 Vector2 other = new Vector2(projectile.ai[0], projectile.ai[1]);
                 Vector2 toOther = other - projectile.Center;
                 if (Main.player[projectile.owner].ownedProjectileCounts[mod.ProjectileType("PylonCreator")] == 0
-                 && other != new Vector2(-1f, -1f) && toOther.Length() < 600f)
+                 && other != new Vector2(-1f, -1f) && toOther.LengthSquared() < 600f * 600f)
                 {
                     ElectricBolt.PreDrawLightning(projectile.Center, other, spriteBatch, mod);
                 }

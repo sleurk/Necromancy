@@ -72,12 +72,12 @@ namespace Necromancy.Projectiles.Minions
                 projectile.timeLeft = 2;
             }
 
-            float distanceToPlayer = (projectile.Center - player.Center).Length();
+            float distanceToPlayerSq = (projectile.Center - player.Center).LengthSquared();
 
             // start flying
-            if (distanceToPlayer > 1000f && !flying)
+            if (distanceToPlayerSq > 1000f * 1000f && !flying)
             {
-                if (distanceToPlayer > 3000f)
+                if (distanceToPlayerSq > 3000f * 3000f)
                 {
                     projectile.Center = player.Center;
                 }
@@ -97,9 +97,9 @@ namespace Necromancy.Projectiles.Minions
                 projectile.frame = 4;
                 projectile.tileCollide = false;
                 projectile.velocity = projectile.velocity * 0.995f + ((player.Center + new Vector2(0, -16f)) - projectile.Center) * 0.005f;
-                if (projectile.velocity.Length() > 20f) projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 20f;
+                if (projectile.velocity.LengthSquared() > 20f * 20f) projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 20f;
                 // stop flying
-                if (distanceToPlayer < 50f && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
+                if (distanceToPlayerSq < 50f * 50f && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
                 {
                     projectile.tileCollide = true;
                     flying = false;
@@ -138,7 +138,8 @@ namespace Necromancy.Projectiles.Minions
                 NPC[] targets = Necromancy.NearbyNPCs(projectile.Center, 600f, true);
                 foreach (NPC t in targets)
                 {
-                    if (target == null || (target.Center - projectile.Center).Length() > (t.Center - projectile.Center).Length() && target.CanBeChasedBy(this, false) && !target.friendly
+                    if (target == null || (target.Center - projectile.Center).LengthSquared() > (t.Center - projectile.Center).LengthSquared() 
+                     && target.CanBeChasedBy(this, false) && !target.friendly
                      && !Collision.CanHitLine(projectile.Center, 1, 1, t.Center, 1, 1))
                     {
                         target = t;
@@ -159,7 +160,7 @@ namespace Necromancy.Projectiles.Minions
                     projectile.velocity.Y = -16f;
                 }
             }
-            else if (distanceToPlayer > 50f)
+            else if (distanceToPlayerSq > 50f * 50f)
             {
                 if (projectile.velocity.X == 0f) projectile.velocity.Y = -5f;
                 projectile.velocity.X = projectile.velocity.X * 0.95f + 0.001f * (player.Center.X - projectile.Center.X);
@@ -200,7 +201,7 @@ namespace Necromancy.Projectiles.Minions
         {
             Collision.StepUp(ref projectile.position, ref projectile.velocity, projectile.width, projectile.height, ref projectile.stepSpeed, ref projectile.gfxOffY, 1, false, 0);
 
-            if (projectile.velocity.Length() > 32f)
+            if (projectile.velocity.LengthSquared() > 32f * 32f)
             {
                 projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 32f;
             }

@@ -32,20 +32,21 @@ namespace Necromancy.Projectiles
 		public override void AI()
         {
             Projectile orbiting = null;
-            float minDist = -1;
+            float minDistSq = -1;
             for (int i = 0; i < Main.projectile.Length; i++)
             {
                 if (Main.projectile[i].active && Main.projectile[i].type == mod.ProjectileType("SlimeCenter") && Main.projectile[i].owner == projectile.owner 
-                 && (Main.projectile[i].Center - projectile.Center).Length() < 600f && (minDist == -1 || minDist > (Main.projectile[i].Center - projectile.Center).Length()))
+                 && (Main.projectile[i].Center - projectile.Center).LengthSquared() < 600f * 600f 
+                 && (minDistSq == -1 || minDistSq > (Main.projectile[i].Center - projectile.Center).LengthSquared()))
                 {
                     orbiting = Main.projectile[i];
-                    minDist = (Main.projectile[i].Center - projectile.Center).Length();
+                    minDistSq = (Main.projectile[i].Center - projectile.Center).LengthSquared();
                 }
             }
             if (orbiting != null)
             {
                 Vector2 toTarget = orbiting.Center - projectile.Center;
-                if (toTarget.Length() < 600f)
+                if (toTarget.LengthSquared() < 600f * 600f)
                 {
                     projectile.velocity += toTarget * 0.01f;
                 }

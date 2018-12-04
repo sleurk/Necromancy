@@ -31,7 +31,7 @@ namespace Necromancy.Items.Weapons.Magic
             item.UseSound = SoundID.Item8;
 			item.autoReuse = true;
 			item.shoot = mod.ProjectileType("SlothRing");
-			item.shootSpeed = 32f;
+			item.shootSpeed = 0f;
             item.prefix = 0;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).necrotic = true;
             item.GetGlobalItem<NecromancyGlobalItem>(mod).magic = true;

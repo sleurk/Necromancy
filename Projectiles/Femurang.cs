@@ -38,7 +38,7 @@ namespace Necromancy.Projectiles
             {
                 projectile.penetrate = -1;
                 Vector2 toPlayer = Main.player[projectile.owner].Center - projectile.Center;
-                if (toPlayer.Length() < 32f)
+                if (toPlayer.LengthSquared() < 32f * 32f)
                 {
                     projectile.Kill();
                 }
@@ -58,7 +58,7 @@ namespace Necromancy.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if ((oldVelocity - projectile.velocity).Length() > 12f)
+            if ((oldVelocity - projectile.velocity).LengthSquared() > 12f * 12f)
             {
                 projectile.ai[0] = 1f;
             }

@@ -305,17 +305,17 @@ namespace Necromancy
         // nearest player within [maxDistance] pixels of [pos], ally to [ally] if [ally] is not null
         public static Player NearestPlayer(Vector2 pos, float maxDistance = -1, Player ally = null)
         {
-            float shortestDistance = -1;
+            float shortestDistanceSq = -1;
             Player closestPlayer = null;
             foreach (Player p in Main.player)
             {
                 if (p != null && p.active && ally == null || IsAlly(p, ally))
                 {
                     Vector2 toPlayer = p.Center - pos;
-                    if ((maxDistance == -1 || toPlayer.Length() < maxDistance) && (shortestDistance == -1 || shortestDistance > toPlayer.Length()))
+                    if ((maxDistance == -1 || toPlayer.LengthSquared() < maxDistance * maxDistance) && (shortestDistanceSq == -1 || shortestDistanceSq > toPlayer.LengthSquared()))
                     {
                         closestPlayer = p;
-                        shortestDistance = toPlayer.Length();
+                        shortestDistanceSq = toPlayer.LengthSquared();
                     }
                 }
             }
@@ -337,7 +337,7 @@ namespace Necromancy
                     if (p.active && (!p.dead || !alive) && (ally == null || (countSelf && (p == ally)) || IsAlly(p, ally)))
                     {
                         Vector2 toPlayer = p.Center - pos;
-                        if (toPlayer.Length() < maxDistance)
+                        if (toPlayer.LengthSquared() < maxDistance * maxDistance)
                         {
                             players.Add(p);
                         }
@@ -358,7 +358,7 @@ namespace Necromancy
                 if (npc != null && npc.active && npc.type != NPCID.TargetDummy && (!hostile || !npc.friendly))
                 {
                     Vector2 toPlayer = npc.Center - pos;
-                    if (toPlayer.Length() < maxDistance
+                    if (toPlayer.LengthSquared() < maxDistance * maxDistance
                         && (!lineOfSight || Collision.CanHit(pos, 1, 1, npc.Center, 1, 1)))
                     {
                         npcs.Add(npc);
@@ -378,7 +378,7 @@ namespace Necromancy
                 if (p != null && p != ally && p.active && IsAlly(p, ally))
                 {
                     Vector2 toPlayer = p.Center - pos;
-                    if (p.statLife < p.statLifeMax2 && (maxDistance == -1 || toPlayer.Length() < maxDistance) && (lowestHealth == -1 || lowestHealth > p.statLife))
+                    if (p.statLife < p.statLifeMax2 && (maxDistance == -1 || toPlayer.LengthSquared() < maxDistance * maxDistance) && (lowestHealth == -1 || lowestHealth > p.statLife))
                     {
                         lowestPlayer = p;
                         lowestHealth = p.statLife;
@@ -400,7 +400,7 @@ namespace Necromancy
         // [lineOfSight] checks if there is a clear line of sight from [pos] to the npc
         public static NPC NearestNPC(Vector2 pos, float distance = -1f, bool lightning = false, bool lineOfSight = true)
         {
-            float shortestDistance = -1;
+            float shortestDistanceSq = -1;
             NPC closestNPC = null;
             for (int i = 0; i < 200; i++)
             {
@@ -410,12 +410,12 @@ namespace Necromancy
                     && npc.type != NPCID.TargetDummy
                     && !npc.friendly && npc.type != NPCID.TargetDummy
                     && (!lightning || !npc.GetGlobalNPC<NecromancyNPC>().lightningHit)
-                    && (shortestDistance == -1 || shortestDistance > toNPC.Length())
-                    && (toNPC.Length() < distance || distance == -1f)
+                    && (shortestDistanceSq == -1 || shortestDistanceSq > toNPC.LengthSquared())
+                    && (toNPC.LengthSquared() < distance * distance || distance == -1f)
                     && (!lineOfSight || Collision.CanHit(pos, 1, 1, npc.Center, 1, 1)))
                 {
                     closestNPC = npc;
-                    shortestDistance = toNPC.Length();
+                    shortestDistanceSq = toNPC.LengthSquared();
                 }
             }
             return closestNPC;

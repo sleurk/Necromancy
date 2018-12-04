@@ -72,7 +72,7 @@ namespace Necromancy.Projectiles
                 projectile.netUpdate = true;
                 projectile.timeLeft += 2;
                 Vector2 toMouse = Main.MouseWorld - projectile.Center;
-                if (toMouse.Length() > Speed)
+                if (toMouse.LengthSquared() > Speed * Speed)
                 {
                     toMouse.Normalize();
                     toMouse *= Speed;

@@ -87,9 +87,9 @@ namespace Necromancy.Projectiles
         private void CreateDustLine(Vector2 pos1, Vector2 pos2)
         {
             Vector2 unit = pos2 - pos1;
-            float dist = unit.Length();
+            float distSq = unit.LengthSquared();
             unit.Normalize();
-            for (int i = 0; i < dist; i += 8)
+            for (int i = 0; i * i < distSq; i += 8)
             {
                 CreateDust(pos1 + unit * i);
             }

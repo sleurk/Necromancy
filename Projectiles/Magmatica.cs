@@ -41,7 +41,7 @@ namespace Necromancy.Projectiles
             if (projectile.ai[0] == 1f)
             {
                 Vector2 toPlayer = player.Center - projectile.Center;
-                if (toPlayer.Length() > 1200f || toPlayer.Length() < 32f) projectile.Kill();
+                if (toPlayer.LengthSquared() > 1200f * 1200f || toPlayer.LengthSquared() < 32f * 32f) projectile.Kill();
                 projectile.velocity = toPlayer.SafeNormalize(Vector2.Zero) * 16f;
             }
         }
@@ -68,15 +68,15 @@ namespace Necromancy.Projectiles
             Vector2 center = projectile.Center;
             Vector2 distToProj = playerCenter - projectile.Center;
             float projRotation = distToProj.ToRotation() - 1.57f;
-            float distance = distToProj.Length();
+            float distanceSq = distToProj.LengthSquared();
             center -= distToProj.SafeNormalize(Vector2.Zero) * 12f;
-            while (distance > 12f && !float.IsNaN(distance))
+            while (distanceSq > 12f * 12f && !float.IsNaN(distanceSq))
             {
                 distToProj.Normalize();
                 distToProj *= 12f;
                 center += distToProj;
                 distToProj = playerCenter - center;
-                distance = distToProj.Length();
+                distanceSq = distToProj.LengthSquared();
                 Color drawColor = lightColor;
 
                 //Draw chain

@@ -463,7 +463,7 @@ namespace Necromancy
                 Necromancy.BroadcastDrainLife(player, 1);
                 Vector2 vel = 0.1f * (Main.MouseWorld - player.Center);
                 player.direction = vel.X.CompareTo(0);
-                if (vel.Length() > 16f)
+                if (vel.LengthSquared() > 16f * 16f)
                 {
                     vel = 16f * vel.SafeNormalize(Vector2.Zero);
                 }

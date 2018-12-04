@@ -38,15 +38,15 @@ namespace Necromancy.Projectiles
             Vector2 center = proj1;
             Vector2 distToProj = targetCenter - proj1;
             float projRotation = distToProj.ToRotation() - 1.57f;
-            float distance = distToProj.Length();
+            float distanceSq = distToProj.LengthSquared();
             center -= distToProj.SafeNormalize(Vector2.Zero) * height;
-            while (distance > height && !float.IsNaN(distance))
+            while (distanceSq > height * height && !float.IsNaN(distanceSq))
             {
                 distToProj.Normalize();
                 distToProj *= height;
                 center += distToProj;
                 distToProj = targetCenter - center;
-                distance = distToProj.Length();
+                distanceSq = distToProj.LengthSquared();
                 Color drawColor = new Color(1f, 1f, 1f);
 
                 // Draw chain

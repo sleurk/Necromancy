@@ -33,7 +33,7 @@ namespace Necromancy.Projectiles
 		public override void AI()
         {
             projectile.velocity = projectile.velocity.RotatedBy(projectile.ai[0] * 0.005f);
-            for (int i = 0; i < projectile.velocity.Length(); i += 8)
+            for (int i = 0; i * i < projectile.velocity.LengthSquared(); i += 8)
             {
                 Dust d = Dust.QuickDust(projectile.position + projectile.velocity.SafeNormalize(Vector2.Zero) * i, new Color(1f, 1f, 0.5f));
                 d.velocity = 0.08f * (Main.player[projectile.owner].Center - d.position);

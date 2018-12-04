@@ -29,7 +29,7 @@ namespace Necromancy.Projectiles
             Player owner = Main.player[projectile.owner];
             NPC target = Main.npc[(int)projectile.ai[0]];
             Lighting.AddLight(projectile.Center, new Vector3(0f, 0f, 0.6f));
-            if (target.active && owner.channel && Vector2.Distance(projectile.Center, owner.Center) < 1000f)
+            if (target.active && owner.channel && Vector2.DistanceSquared(projectile.Center, owner.Center) < 1000f * 1000f)
             {
                 if (projectile.timeLeft <= 1)
                 {

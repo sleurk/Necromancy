@@ -51,7 +51,7 @@ namespace Necromancy.Projectiles
                     else
                     {
                         Vector2 toHere = Main.MouseWorld - Main.projectile[createdProjectiles[(int)projectile.ai[1]]].Center;
-                        if (toHere.Length() > 200f)
+                        if (toHere.LengthSquared() > 200f * 200f)
                         {
                             toHere = toHere.SafeNormalize(Vector2.Zero) * 200f;
                             CreatePylon(Main.projectile[createdProjectiles[(int)projectile.ai[1]]].Center + toHere);

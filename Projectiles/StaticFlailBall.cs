@@ -39,7 +39,7 @@ namespace Necromancy.Projectiles
             }
 
             Vector2 toPlayer = player.Center - projectile.Center;
-            if (toPlayer.Length() > 1200f) projectile.Kill();
+            if (toPlayer.LengthSquared() > 1200f * 1200f) projectile.Kill();
             if (player.channel)
             {
                 projectile.timeLeft = 300;
@@ -47,14 +47,14 @@ namespace Necromancy.Projectiles
             else
             {
                 projectile.velocity = projectile.velocity * 0.95f + toPlayer * 0.05f;
-                if (toPlayer.Length() < 30f) projectile.Kill();
+                if (toPlayer.LengthSquared() < 30f * 30f) projectile.Kill();
                 projectile.tileCollide = false;
                 return;
             }
 
             if (Main.myPlayer == projectile.owner)
             {
-                if (toPlayer.Length() > 320f)
+                if (toPlayer.LengthSquared() > 320f * 320f)
                 {
                     projectile.velocity = projectile.velocity * 0.97f + toPlayer * 0.05f;
                 }

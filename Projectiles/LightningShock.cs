@@ -11,12 +11,12 @@ namespace Necromancy.Projectiles
         // lightning-esque projectile
         // splits randomly after a certain distance
         // bounces
-        public int length
+        public int Length
         {
             get { return (int)projectile.ai[0]; }
             set { projectile.ai[0] = value; }
         }
-        public int timeUntilTurn
+        public int TimeUntilTurn
         {
             get { return (int)projectile.ai[1]; }
             set { projectile.ai[1] = value; }
@@ -40,8 +40,8 @@ namespace Necromancy.Projectiles
             projectile.hide = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).necrotic = true;
             projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shock = true;
-            length = 0;
-            timeUntilTurn = 0;
+            Length = 0;
+            TimeUntilTurn = 0;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -60,33 +60,33 @@ namespace Necromancy.Projectiles
 
         public float Factor
         {
-            get { return (1f - 1f / length); }
+            get { return (1f - 1f / Length); }
         }
 
         public override void AI()
         {
             if (projectile.timeLeft % 6 == 0) Dust.QuickDust(projectile.Center, new Color(1f, 1f, 0.5f));
-            if (projectile.velocity.Length() > 1f)
+            if (projectile.velocity.LengthSquared() > 1f)
             {
-                length = (int)projectile.velocity.Length();
-                timeUntilTurn = length;
+                Length = (int)projectile.velocity.Length();
+                TimeUntilTurn = Length;
                 projectile.velocity = projectile.velocity.RotatedByRandom(MathHelper.Pi * Factor / 8f);
                 projectile.velocity.Normalize();
             }
-            if (timeUntilTurn == 0)
+            if (TimeUntilTurn == 0)
             {
                 projectile.velocity = projectile.velocity.RotatedByRandom(MathHelper.Pi * Factor / 8f);
-                timeUntilTurn = length;
+                TimeUntilTurn = Length;
                 projectile.netUpdate = true;
                 if (Main.rand.NextFloat() < Math.Pow(Factor, 24))
                 {
-                    Projectile proj = Projectile.NewProjectileDirect(projectile.Center, projectile.velocity.RotatedByRandom(MathHelper.Pi * Factor / 8f) * length, projectile.type, projectile.damage, projectile.knockBack, projectile.owner, Main.rand.NextBool() ? 1f : 0f);
+                    Projectile proj = Projectile.NewProjectileDirect(projectile.Center, projectile.velocity.RotatedByRandom(MathHelper.Pi * Factor / 8f) * Length, projectile.type, projectile.damage, projectile.knockBack, projectile.owner, Main.rand.NextBool() ? 1f : 0f);
                     proj.GetGlobalProjectile<NecromancyGlobalProjectile>().shotFrom = projectile.GetGlobalProjectile<NecromancyGlobalProjectile>(mod).shotFrom;
                     proj.timeLeft = (int)(projectile.timeLeft * Main.rand.NextFloat());
                     proj.netUpdate = true;
                 }
             }
-            timeUntilTurn--;
+            TimeUntilTurn--;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

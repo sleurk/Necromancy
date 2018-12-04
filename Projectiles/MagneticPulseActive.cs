@@ -47,7 +47,7 @@ namespace Necromancy.Projectiles
             {
                 NPC target = Necromancy.NearestNPC(projectile.Center);
 
-                if (target != null && Vector2.Distance(target.Center, projectile.Center) < 200)
+                if (target != null && Vector2.DistanceSquared(target.Center, projectile.Center) < 200 * 200)
                 {
                     float targetX = (target.Center - projectile.Center).X * 0.2f;
                     float targetY = (target.Center - projectile.Center).Y * 0.2f;

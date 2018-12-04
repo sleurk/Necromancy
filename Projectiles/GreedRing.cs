@@ -36,7 +36,7 @@ namespace Necromancy.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if ((target.GetGlobalNPC<NecromancyNPC>().oldCenter - Main.player[projectile.owner].Center).Length() < projectile.ai[0])
+            if ((target.GetGlobalNPC<NecromancyNPC>().oldCenter - Main.player[projectile.owner].Center).LengthSquared() < projectile.ai[0] * projectile.ai[0])
             {
                 Necromancy.DoCustomKnockback(target, (target.Center - Main.player[projectile.owner].Center) / 12f);
             }
@@ -49,9 +49,9 @@ namespace Necromancy.Projectiles
 
         public override void AI()
 		{
-            float dist = (Main.player[projectile.owner].Center - projectile.Center).Length();
+            float distSq = (Main.player[projectile.owner].Center - projectile.Center).LengthSquared();
             projectile.timeLeft = 2;
-            if (dist < 1f)
+            if (distSq < 1f)
             {
                 projectile.Kill();
             }

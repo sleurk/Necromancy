@@ -34,12 +34,12 @@ namespace Necromancy.Projectiles
             if (projectile.ai[0] == 1f)
             {
                 Vector2 toPlayer = Main.player[projectile.owner].Center - projectile.Center;
-                if (toPlayer.Length() < 32f)
+                if (toPlayer.LengthSquared() < 32f * 32f)
                 {
                     projectile.ai[0] = 0f;
                 }
                 projectile.velocity = projectile.velocity * 0.999f + toPlayer * 0.001f;
-                if (projectile.velocity.Length() > 16f)
+                if (projectile.velocity.LengthSquared() > 16f * 16f)
                 {
                     projectile.velocity.Normalize();
                     projectile.velocity *= 16f;

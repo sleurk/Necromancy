@@ -39,7 +39,7 @@ namespace Necromancy.Projectiles
             {
                 projectile.penetrate = -1;
                 Vector2 toPlayer = Main.player[projectile.owner].Center - projectile.Center;
-                if (toPlayer.Length() < 32f)
+                if (toPlayer.LengthSquared() < 32f * 32f)
                 {
                     projectile.Kill();
                 }

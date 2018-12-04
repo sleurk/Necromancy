@@ -60,7 +60,7 @@ namespace Necromancy.Projectiles
             {
                 Vector2 toMouse = Main.MouseWorld - projectile.Center;
                 projectile.velocity = toMouse;
-                if (projectile.velocity.Length() > 8f) projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 8f;
+                if (projectile.velocity.LengthSquared() > 8f * 8f) projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 8f;
             }
 
             if (Main.rand.NextFloat() < 0.3f) Dust.QuickDust(projectile.Center + Main.rand.NextVector2CircularEdge(projectile.width / 2f, projectile.height / 2f), new Color(0f, 0.8f, 1f));

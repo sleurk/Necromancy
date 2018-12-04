@@ -41,7 +41,7 @@ namespace Necromancy.Projectiles
             }
 
             Vector2 toPlayer = player.Center - projectile.Center;
-            if (toPlayer.Length() > 640f) projectile.Kill();
+            if (toPlayer.LengthSquared() > 640f * 640f) projectile.Kill();
             if (player.channel)
             {
                 projectile.timeLeft = 300;
@@ -50,14 +50,14 @@ namespace Necromancy.Projectiles
             {
                 projectile.penetrate = -1;
                 projectile.velocity = projectile.velocity * 0.95f + toPlayer * 0.05f;
-                if (toPlayer.Length() < 64f) projectile.Kill();
+                if (toPlayer.LengthSquared() < 64f * 64f) projectile.Kill();
                 projectile.tileCollide = false;
                 return;
             }
 
             if (Main.myPlayer == projectile.owner)
             {
-                if (toPlayer.Length() > 480f)
+                if (toPlayer.LengthSquared() > 480f * 480f)
                 {
                     projectile.velocity = projectile.velocity * 0.97f + toPlayer * 0.05f;
                 }
@@ -68,7 +68,7 @@ namespace Necromancy.Projectiles
 
 
                     projectile.velocity = projectile.velocity * 0.95f + toMouse * 0.05f + Main.rand.NextVector2Circular(0.1f, 0.1f);
-                    if (projectile.velocity.Length() > 32f)
+                    if (projectile.velocity.LengthSquared() > 32f * 32f)
                     {
                         projectile.velocity = projectile.velocity.SafeNormalize(Vector2.Zero) * 32f;
                     }
@@ -101,15 +101,15 @@ namespace Necromancy.Projectiles
             Vector2 center = projectile.Center;
             Vector2 distToProj = playerCenter - projectile.Center;
             float projRotation = distToProj.ToRotation() - 1.57f;
-            float distance = distToProj.Length();
+            float distanceSq = distToProj.LengthSquared();
             center -= distToProj.SafeNormalize(Vector2.Zero) * 12f;
-            while (distance > 12f && !float.IsNaN(distance))
+            while (distanceSq > 12f * 12f && !float.IsNaN(distanceSq))
             {
                 distToProj.Normalize();                 //get unit vector
                 distToProj *= 12f;                      //speed = 24
                 center += distToProj;                   //update draw position
                 distToProj = playerCenter - center;    //update distance
-                distance = distToProj.Length();
+                distanceSq = distToProj.LengthSquared();
                 Color drawColor = lightColor;
 
                 //Draw chain
